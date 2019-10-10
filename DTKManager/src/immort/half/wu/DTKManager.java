@@ -124,6 +124,15 @@ public class DTKManager {
         }
     }
 
+    public static void getProductForUserKey(SimpleCallBack<JsonProductUserSaveBean> callback, String userAppKey, String pageIndex) {
+        if (checkManager()) {
+            dtkManager.mHttpClient.sendGet(
+                    FinalString.URL_PRODUCT_USER_SAVE + "&type=www_quan&appkey=" + userAppKey + "&v=2" + "&page=" + pageIndex,
+                    callback
+            );
+        }
+    }
+
     private static Map<String, String> createParams(Object params) {
         return SignMD5Util.getSignMap(params, dtkManager.appSecret, dtkManager.appKey);
     }

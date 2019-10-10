@@ -1,13 +1,6 @@
 package cn;
 
 import immort.half.wu.DTKManager;
-import immort.half.wu.beans.params.builds.*;
-import immort.half.wu.beans.results.*;
-import immort.half.wu.http.SimpleCallBack;
-import immort.half.wu.utils.JsonUtil;
-import okhttp3.Call;
-
-import java.io.IOException;
 
 public class DTKTest {
 
@@ -99,18 +92,18 @@ public class DTKTest {
 //        }, new ParamsProductRefreshBeanBuilder().createParamsProductRefreshBean(10, 1));
 
 
-        DTKManager.getProductFor9(new SimpleCallBack<JsonProduct9Bean>() {
-            @Override
-            public void onResponse(Call call, JsonProduct9Bean resultBean, String resultString) throws IOException {
-                System.out.println(resultString);
-                System.out.println(JsonUtil.toJson(resultBean));
-            }
-
-            @Override
-            public void onFail(Call call, IOException e) {
-
-            }
-        }, new ParamsProduct9BeanBuilder().createParamsProduct9Bean("100", "2", "2"));
+//        DTKManager.getProductFor9(new SimpleCallBack<JsonProduct9Bean>() {
+//            @Override
+//            public void onResponse(Call call, JsonProduct9Bean resultBean, String resultString) throws IOException {
+//                System.out.println(resultString);
+//                System.out.println(JsonUtil.toJson(resultBean));
+//            }
+//
+//            @Override
+//            public void onFail(Call call, IOException e) {
+//
+//            }
+//        }, new ParamsProduct9BeanBuilder().createParamsProduct9Bean("100", "2", "2"));
 
 
 //        DTKManager.getProductForSearch(new SimpleCallBack<JsonProductSearchBean>() {
@@ -139,7 +132,20 @@ public class DTKTest {
 //
 //            }
 //        }, new ParamsUrlConveterBeanBuilder().createParamsUrlConveterBean("577326998857"));
+
+
+//        DTKManager.getProductForUserKey(new SimpleCallBack<JsonProductUserSaveBean>() {
+//            @Override
+//            public void onResponse(Call call, JsonProductUserSaveBean resultBean, String resultString) throws IOException {
+//                System.out.println(resultString);
+//                System.out.println(JsonUtil.toJson(resultBean));
+//            }
 //
+//            @Override
+//            public void onFail(Call call, IOException e) {
+//
+//            }
+//        }, Util.UserKey, "1");
     }
 
 

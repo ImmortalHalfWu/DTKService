@@ -21,4 +21,6 @@ public class FinalString {
     // 9.9元
     public final static String URL_PRODUCT_9 = "goods/nine/op-goods-list";
 
+    public final static String URL_PRODUCT_USER_SAVE = "http://api.dataoke.com/index.php?r=goodsLink/www";
+
 }
