@@ -127,7 +127,7 @@ public class DTKManager {
     public static void getProductForUserKey(SimpleCallBack<JsonProductUserSaveBean> callback, String userAppKey, String pageIndex) {
         if (checkManager()) {
             dtkManager.mHttpClient.sendGet(
-                    FinalString.URL_PRODUCT_USER_SAVE + "&type=www_quan&appkey=" + userAppKey + "&v=2" + "&page=" + pageIndex,
+                    FinalString.URL_PRODUCT_USER_SAVE + userAppKey + "&v=2&page=" + pageIndex,
                     callback
             );
         }

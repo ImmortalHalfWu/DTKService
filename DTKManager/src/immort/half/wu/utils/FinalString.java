@@ -20,7 +20,7 @@ public class FinalString {
     public final static String URL_PRODUCT_SAVE = "goods/get-collection-list";
     // 9.9元
     public final static String URL_PRODUCT_9 = "goods/nine/op-goods-list";
-
-    public final static String URL_PRODUCT_USER_SAVE = "http://api.dataoke.com/index.php?r=goodsLink/www";
+    // 指定Key的收藏商品
+    public final static String URL_PRODUCT_USER_SAVE = "http://api.dataoke.com/index.php?r=goodsLink/www&type=www_quan&appkey=";
 
 }
