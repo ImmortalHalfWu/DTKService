@@ -11,7 +11,7 @@ public class ADB {
         ADBManager.getInstance().createBuild().addCallBack(new ADBRunnable() {
             @Override
             public void run(ADBProcess adbProcess) {
-                String[] strings = adbProcess.adbFindAllDevice();
+                String strings = adbProcess.adbFindAllDevice();
             }
         });
 

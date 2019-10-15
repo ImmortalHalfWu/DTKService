@@ -84,7 +84,7 @@ public class ADBProcess implements IADBProcess {
     }
 
     @Override
-    public String[] adbFindAllDevice() {
+    public String adbFindAllDevice() {
         return ADBUtils.adbFindAllDevice();
     }
 

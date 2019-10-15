@@ -28,7 +28,7 @@ public interface IADBProcess {
 
     boolean adbFindDevice(String deviceAddr) ;
 
-    String[] adbFindAllDevice() ;
+    String adbFindAllDevice() ;
 
     boolean adbInputText(String deviceAddr, String text) ;
 

@@ -7,7 +7,6 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 
 class ADBUtils {
 
@@ -19,9 +18,11 @@ class ADBUtils {
     private final static String ADB_START_IDLE_FISH_MAIN_ACTIVITY = " shell am start -n com.taobao.idlefish/com.taobao.fleamarket.home.activity.InitActivity";
     private final static String ADB_IDLE_FISH_IS_RUNNING = " shell dumpsys activity activities | grep ResumedActivity";
     private final static String ADB_IDLE_FISH_IS_INSTANCES = " shell pm list packages | grep com.taobao.idlefish";
+    private final static String ADB_ALL_APP_PACKAGE = " shell pm list packages";
     private final static String ADB_KEY_BOARD_IS_INSTANCES = " shell pm list packages | grep adbKeyBoardIsInstance";
-    private final static String ADB_IDLE_FISH_INSTANCES = " install -r";
+    private final static String ADB_INSTANCES = " install -r ";
     private final static String ADB_IDLE_FISH_UNINSTANCES = " uninstall com.taobao.idlefish";
+    private final static String ADB_UNINSTALL = " uninstall ";
     private final static String ADB_INPUT_TAP = " shell input tap ";
     private final static String ADB_CONNECT = " connect ";
     private final static String ADB_FIND_DEVICES = "adb devices ";
@@ -34,6 +35,10 @@ class ADBUtils {
 
     synchronized static boolean adbStartIdleFishMainActivity(String deviceAddr) {
         return runInCmd(ADB + deviceAddr + ADB_START_IDLE_FISH_MAIN_ACTIVITY, "Stringing:");
+    }
+
+    synchronized static String adbAllAppPackage(String deviceAddr) {
+        return runInCmd(ADB + deviceAddr + ADB_ALL_APP_PACKAGE);
     }
 
     synchronized static boolean adbIdleFishIsResume(String deviceAddr) {
@@ -52,11 +57,19 @@ class ADBUtils {
     }
 
     synchronized static boolean adbIdleFishInstance(String deviceAddr, String apkPath) {
-        return runInCmd(ADB + deviceAddr + ADB_IDLE_FISH_INSTANCES + apkPath, "com.taobao.idlefish");
+        return runInCmd(ADB + deviceAddr + ADB_INSTANCES + apkPath, "com.taobao.idlefish");
     }
 
     synchronized static boolean adbKeyBoardInstance(String deviceAddr, String apkPath) {
-        return runInCmd(ADB + deviceAddr + ADB_IDLE_FISH_INSTANCES + apkPath, "com.android.adbkeyboard");
+        return runInCmd(ADB + deviceAddr + ADB_INSTANCES + apkPath, "com.android.adbkeyboard");
+    }
+
+    synchronized static boolean adbInstallApk(String deviceAddr, String apkPath, String packageName) {
+        return runInCmd(ADB + deviceAddr + ADB_INSTANCES + apkPath, packageName);
+    }
+
+    synchronized static boolean adbUNInstallApk(String deviceAddr, String packageName) {
+        return runInCmd(ADB + deviceAddr + ADB_UNINSTALL + packageName, packageName);
     }
 
     synchronized static boolean adbGetAndroidUIXML(String deviceAddr, String phoneFileName, String saveFileName) {
@@ -86,25 +99,8 @@ class ADBUtils {
         return runInCmd(ADB_FIND_DEVICES, deviceAddr);
     }
 
-    public synchronized static String[] adbFindAllDevice() {
-
-        String s = runInCmd(ADB_FIND_DEVICES);
-
-        s = s.replace("List of devices attached\n", "").replace("\n\n", "\n");
-        String[] split = s.split("\n");
-
-        ArrayList<String> returnStrings = new ArrayList<>(split.length);
-
-        for (String nn :
-                split) {
-            if (nn.contains("offline")) {
-                continue;
-            }
-            String address = nn.split("\t")[0];
-            returnStrings.add(address);
-        }
-
-        return returnStrings.toArray(new String[0]);
+    public synchronized static String adbFindAllDevice() {
+        return runInCmd(ADB_FIND_DEVICES);
     }
 
     synchronized static boolean adbInputText(String deviceAddr, String text) {
