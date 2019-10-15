@@ -1,0 +1,188 @@
+package immortal.half.wu.adbs;
+
+import immortal.half.wu.FileUtils;
+import immortal.half.wu.utils.MLog;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+
+class ADBUtils {
+
+    private final static String ADB_PHONE_ROOT_DIR = "/sdcard/";
+    private final static String ADB = "adb -s ";
+    private final static String ADB_UI_AUTO_MATOR = " shell uiautomator dump " + ADB_PHONE_ROOT_DIR;
+    private final static String ADB_PULL_FILE = " pull " + ADB_PHONE_ROOT_DIR;
+    private final static String ADB_PUSH_FILE = " push " ;
+    private final static String ADB_START_IDLE_FISH_MAIN_ACTIVITY = " shell am start -n com.taobao.idlefish/com.taobao.fleamarket.home.activity.InitActivity";
+    private final static String ADB_IDLE_FISH_IS_RUNNING = " shell dumpsys activity activities | grep ResumedActivity";
+    private final static String ADB_IDLE_FISH_IS_INSTANCES = " shell pm list packages | grep com.taobao.idlefish";
+    private final static String ADB_KEY_BOARD_IS_INSTANCES = " shell pm list packages | grep adbKeyBoardIsInstance";
+    private final static String ADB_IDLE_FISH_INSTANCES = " install -r";
+    private final static String ADB_IDLE_FISH_UNINSTANCES = " uninstall com.taobao.idlefish";
+    private final static String ADB_INPUT_TAP = " shell input tap ";
+    private final static String ADB_CONNECT = " connect ";
+    private final static String ADB_FIND_DEVICES = "adb devices ";
+    private final static String ADB_INPUT_KEY = " shell input keyevent ";
+    private final static String ADB_SWIPE = " shell input swipe ";
+    private final static String ADB_DELETE_FILE = " shell rm ";
+    private final static String ADB_TOP_ACTIVITY = " shell dumpsys activity top ";
+    private final static String ADB_SCAN_FILE = " shell am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file://";
+    private final static String ADB_CHANGE_KEY_BOARD = " shell ime set com.android.adbkeyboard/.AdbIME";
+
+    synchronized static boolean adbStartIdleFishMainActivity(String deviceAddr) {
+        return runInCmd(ADB + deviceAddr + ADB_START_IDLE_FISH_MAIN_ACTIVITY, "Stringing:");
+    }
+
+    synchronized static boolean adbIdleFishIsResume(String deviceAddr) {
+        return runInCmd(ADB + deviceAddr + ADB_IDLE_FISH_IS_RUNNING, "com.taobao.idlefish/com.taobao.fleamarket.home.activity.MainActivity");
+    }
+
+    synchronized static boolean adbIdleFishIsInstance(String deviceAddr) {
+        return runInCmd(ADB + deviceAddr + ADB_IDLE_FISH_IS_INSTANCES, "com.taobao.idlefish");
+    }
+    synchronized static boolean adbKeyBoardIsInstance(String deviceAddr) {
+        return runInCmd(ADB + deviceAddr + ADB_KEY_BOARD_IS_INSTANCES, "com.android.adbkeyboard");
+    }
+
+    synchronized static boolean adbIdleFishUNInstance(String deviceAddr) {
+        return runInCmd(ADB + deviceAddr + ADB_IDLE_FISH_UNINSTANCES, "com.taobao.idlefish");
+    }
+
+    synchronized static boolean adbIdleFishInstance(String deviceAddr, String apkPath) {
+        return runInCmd(ADB + deviceAddr + ADB_IDLE_FISH_INSTANCES + apkPath, "com.taobao.idlefish");
+    }
+
+    synchronized static boolean adbKeyBoardInstance(String deviceAddr, String apkPath) {
+        return runInCmd(ADB + deviceAddr + ADB_IDLE_FISH_INSTANCES + apkPath, "com.android.adbkeyboard");
+    }
+
+    synchronized static boolean adbGetAndroidUIXML(String deviceAddr, String phoneFileName, String saveFileName) {
+        return runInCmd(ADB + deviceAddr + ADB_UI_AUTO_MATOR + phoneFileName, "UI hierchary dumped to: ") &&
+                runInCmd(ADB + deviceAddr + ADB_PULL_FILE + phoneFileName + " " + saveFileName, phoneFileName);
+    }
+
+    synchronized static boolean adbPushFile(String deviceAddr, String fromPath, String toFileName) {
+        return runInCmd(ADB + deviceAddr + ADB_PUSH_FILE + fromPath + " " + ADB_PHONE_ROOT_DIR + toFileName, fromPath);
+    }
+
+    synchronized static boolean adbScanFile(String deviceAddr, String fileName) {
+//        "adb shell am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file:///sdcard/1231.jpg";
+        return runInCmd(ADB + deviceAddr + ADB_SCAN_FILE + "/sdcard/" + fileName, "result=0");
+    }
+
+    synchronized static boolean adbInputTap(String deviceAddr, int x, int y) {
+        return runInCmd(ADB + deviceAddr + ADB_INPUT_TAP + x + " " + y, "");
+    }
+
+    public synchronized static boolean adbConnectDevice(String deviceAddr) {
+        runInCmd(ADB + ADB_CONNECT + deviceAddr, "");
+        return adbFindDevice(deviceAddr);
+    }
+
+    synchronized static boolean adbFindDevice(String deviceAddr) {
+        return runInCmd(ADB_FIND_DEVICES, deviceAddr);
+    }
+
+    public synchronized static String[] adbFindAllDevice() {
+
+        String s = runInCmd(ADB_FIND_DEVICES);
+
+        s = s.replace("List of devices attached\n", "").replace("\n\n", "\n");
+        String[] split = s.split("\n");
+
+        ArrayList<String> returnStrings = new ArrayList<>(split.length);
+
+        for (String nn :
+                split) {
+            if (nn.contains("offline")) {
+                continue;
+            }
+            String address = nn.split("\t")[0];
+            returnStrings.add(address);
+        }
+
+        return returnStrings.toArray(new String[0]);
+    }
+
+    synchronized static boolean adbInputText(String deviceAddr, String text) {
+        return runInCmd(ADB + deviceAddr + " shell am broadcast -a ADB_INPUT_B64 --es msg `echo '"+text+"' | base64`", "Broadcast completed");
+    }
+
+    synchronized static boolean adbSwipe(String deviceAddr, int startX, int startY, int endX, int endY, int time) {
+        return runInCmd(ADB + deviceAddr + ADB_SWIPE + startX + " " + startY + " " + endX + " " + endY + " " + time, "");
+    }
+
+    synchronized static String findTopActivity(String deviceAddr) {
+        return runInCmd(ADB + deviceAddr + ADB_TOP_ACTIVITY);
+    }
+
+    synchronized static boolean adbDeleteFile(String deviceAddr, String filePath) {
+        return !runInCmd(ADB + deviceAddr + ADB_DELETE_FILE + ADB_PHONE_ROOT_DIR + filePath, "No Such");
+    }
+
+    synchronized static boolean adbSendBackKeyEvent(String deviceAddr) {
+        return adbSendKeyEvent(deviceAddr, "4");
+    }
+
+    private synchronized static boolean adbSendKeyEvent(String deviceAddr, String key) {
+        return runInCmd(ADB + deviceAddr + ADB_INPUT_KEY + key, "");
+    }
+
+    synchronized static boolean adbChangeKeyBoard(String deviceAddr) {
+        return runInCmd(ADB + deviceAddr + ADB_CHANGE_KEY_BOARD, "selected");
+    }
+
+    synchronized static boolean runInCmd(String cmd, String resultIsSuc) {
+        return runInCmd(cmd).contains(resultIsSuc);
+    }
+
+    synchronized static String runInCmd(String cmd) {
+
+        try {
+            MLog.logi("执行ADB：" + cmd);
+            Process process = Runtime.getRuntime().exec(cmd);
+//            process.waitFor();
+
+            String erroResult = readCMDResult(process.getErrorStream());
+
+            if (!FileUtils.isEmpty(erroResult)) {
+                MLog.logi("执行结果：" + erroResult);
+                return erroResult;
+            }
+
+            String result = readCMDResult(process.getInputStream());
+            MLog.logi("执行结果：" + result);
+            return result;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            MLog.logi("执行结果：" + e.getMessage());
+            return e.getMessage();
+        }
+    }
+
+    private static String readCMDResult(InputStream inputStream) throws IOException {
+
+        if (inputStream == null) {
+            return "inputStream == null";
+        }
+
+        byte[] readBytes = new byte[1024];
+        StringBuilder stringBuilder = new StringBuilder();
+
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
+
+        while (bis.read(readBytes) > -1) {
+            String s = new String(readBytes, StandardCharsets.UTF_8);
+            stringBuilder.append(s, 0, s.indexOf('\u0000') < 0 ? s.length() : s.indexOf('\u0000'));
+        }
+
+        bis.close();
+        return stringBuilder.toString();
+
+    }
+
+}
