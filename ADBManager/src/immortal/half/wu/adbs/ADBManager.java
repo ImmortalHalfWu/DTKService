@@ -4,6 +4,7 @@ import immortal.half.wu.FileUtils;
 import immortal.half.wu.OSInfo;
 import immortal.half.wu.utils.ZIPUtil;
 
+import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -100,5 +101,13 @@ public class ADBManager {
 
     public void choiceTextInputKeyBoard(String deviceId) {
         ADBUtils.adbChangeKeyBoard(deviceId);
+    }
+
+    public Point getDxSize(String deviceId) {
+        String size = ADBUtils.adbWmSize(deviceId)
+                .replace("Physical size: ", "")
+                .replace("\r\n", "");
+        String[] xes = size.split("x");
+        return new Point(Integer.parseInt(xes[0]), Integer.parseInt(xes[1]));
     }
 }

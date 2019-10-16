@@ -3,12 +3,10 @@ package immortal.half.wu;
 import com.sun.istack.internal.NotNull;
 import immortal.half.wu.adbs.ADBManager;
 import immortal.half.wu.apps.SimpleAndroidAppFactory;
-import immortal.half.wu.apps.interfaces.IAndroidApp;
 import immortal.half.wu.apps.interfaces.IAndroidAppFactory;
 import immortal.half.wu.devices.interfaces.IAndroidDevice;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.*;
 
 public class BaseAndroidDevice implements IAndroidDevice {
 
@@ -24,29 +22,13 @@ public class BaseAndroidDevice implements IAndroidDevice {
     }
 
     @Override
-    public List<IAndroidApp> getAllApps(@NotNull IAndroidAppFactory androidAppFactory) {
-
-        if (androidAppFactory == null) {
-            return new ArrayList<>();
-        }
-
-        String[] allAppPackage = ADBManager.getInstance().adbAllAppPackage(deviceId);
-        ArrayList<IAndroidApp> androidApps = new ArrayList<>(allAppPackage.length);
-
-        for (String packageName :
-                allAppPackage) {
-            IAndroidApp androidApp = androidAppFactory.createAndroidApp(deviceId, packageName.replace("package:", ""));
-            if (androidApp != null) {
-                androidApps.add(androidApp);
-            }
-        }
-
-        return androidApps;
+    public String[] getAllAppsPackage(@NotNull IAndroidAppFactory androidAppFactory) {
+        return ADBManager.getInstance().adbAllAppPackage(deviceId);
     }
 
     @Override
-    public List<IAndroidApp> getAllApps() {
-        return getAllApps(SimpleAndroidAppFactory.instance());
+    public String[] getAllAppsPackage() {
+        return getAllAppsPackage(SimpleAndroidAppFactory.instance());
     }
 
     @Override
@@ -67,6 +49,11 @@ public class BaseAndroidDevice implements IAndroidDevice {
     @Override
     public void choiceTextInputKeyBoard() {
         ADBManager.getInstance().choiceTextInputKeyBoard(deviceId);
+    }
+
+    @Override
+    public Point getDxSize() {
+        return ADBManager.getInstance().getDxSize(deviceId);
     }
 
     @Override

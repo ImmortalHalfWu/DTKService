@@ -1,9 +1,9 @@
 package cn;
 
 import immortal.half.wu.DeviceManager;
-import immortal.half.wu.apps.interfaces.IAndroidApp;
 import immortal.half.wu.devices.interfaces.IAndroidDevice;
 
+import java.awt.*;
 import java.util.List;
 
 public class Device {
@@ -12,17 +12,14 @@ public class Device {
         List<IAndroidDevice> allAndroidDevice = DeviceManager.getInstance().getAllAndroidDevice();
         for (IAndroidDevice androidDevice :
                 allAndroidDevice) {
-            List<IAndroidApp> allApps = androidDevice.getAllApps();
-            for (IAndroidApp app :
-                    allApps) {
-                System.out.println(app.getPackageName());
-            }
+            Point dxSize = androidDevice.getDxSize();
+            System.out.println(dxSize);
         }
 //        BaseAndroidDevice baseAndroidDevice = new BaseAndroidDevice("0123456789ABCDEF");
 //
 //        baseAndroidDevice.uninstallApp("com.android.adbkeyboard");
 //
-//        List<IAndroidApp> allApps = baseAndroidDevice.getAllApps(null);
+//        List<IAndroidApp> allApps = baseAndroidDevice.getAllAppsPackage(null);
 //
 //        baseAndroidDevice.installApp(
 //                FileUtils.DIR_PATH_OTHER + FileUtils.FILE_NAME_KEY_BOARD_APK,

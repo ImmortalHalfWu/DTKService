@@ -32,6 +32,7 @@ class ADBUtils {
     private final static String ADB_TOP_ACTIVITY = " shell dumpsys activity top ";
     private final static String ADB_SCAN_FILE = " shell am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file://";
     private final static String ADB_CHANGE_KEY_BOARD = " shell ime set com.android.adbkeyboard/.AdbIME";
+    private final static String ADB_WM_SIZE = " shell wm size";
 
     synchronized static boolean adbStartIdleFishMainActivity(String deviceAddr) {
         return runInCmd(ADB + deviceAddr + ADB_START_IDLE_FISH_MAIN_ACTIVITY, "Stringing:");
@@ -90,7 +91,7 @@ class ADBUtils {
         return runInCmd(ADB + deviceAddr + ADB_INPUT_TAP + x + " " + y, "");
     }
 
-    public synchronized static boolean adbConnectDevice(String deviceAddr) {
+    synchronized static boolean adbConnectDevice(String deviceAddr) {
         runInCmd(ADB + ADB_CONNECT + deviceAddr, "");
         return adbFindDevice(deviceAddr);
     }
@@ -99,7 +100,7 @@ class ADBUtils {
         return runInCmd(ADB_FIND_DEVICES, deviceAddr);
     }
 
-    public synchronized static String adbFindAllDevice() {
+    synchronized static String adbFindAllDevice() {
         return runInCmd(ADB_FIND_DEVICES);
     }
 
@@ -129,6 +130,10 @@ class ADBUtils {
 
     synchronized static boolean adbChangeKeyBoard(String deviceAddr) {
         return runInCmd(ADB + deviceAddr + ADB_CHANGE_KEY_BOARD, "selected");
+    }
+
+    synchronized static String adbWmSize(String deviceId) {
+        return runInCmd(ADB + deviceId + ADB_WM_SIZE);
     }
 
     synchronized static boolean runInCmd(String cmd, String resultIsSuc) {
