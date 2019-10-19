@@ -11,6 +11,7 @@ public interface IADBBuilder {
     IADBBuilder addText(String text);
     IADBBuilder addBackClick();
     IADBBuilder addCallBack(ADBRunnable runnable);
-    void send(String deviceId) throws Exception;
+    IADBBuilder delayTime(long ms);
+    void send(String deviceId);
 
 }

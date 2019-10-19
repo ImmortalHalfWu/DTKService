@@ -4,8 +4,10 @@ public class TestMain {
 
 
     public static void main(String[] args) {
-        Device.test();
-    }
+//        Device.test();
+        APP.test();
 
+
+    }
 
 }

@@ -60,7 +60,16 @@ public class ADBManager {
     }
 
     public String findTopActivity(String deviceAddr) {
-        return ADBUtils.findTopActivity(deviceAddr);
+        /*
+    mResumedActivity: ActivityRecord{69d26d4 u0 com.taobao.idlefish/.post.activity.publishEntry.PublishEntryActivity t844}
+  ResumedActivity: ActivityRecord{69d26d4 u0 com.taobao.idlefish/.post.activity.publishEntry.PublishEntryActivity t844}
+         */
+        try {
+            String[] s =  ADBUtils.findTopActivity(deviceAddr).split("/")[1].split(" ")[0].split("\\.");
+            return s[s.length - 1];
+        } catch (Exception ignored) {}
+
+        return "";
     }
 
     public String[] adbFindAllDevice() {
@@ -110,4 +119,9 @@ public class ADBManager {
         String[] xes = size.split("x");
         return new Point(Integer.parseInt(xes[0]), Integer.parseInt(xes[1]));
     }
+
+    public boolean androidUIXML(String deviceAddr, String phoneFileName, String saveFileName) {
+        return ADBUtils.adbGetAndroidUIXML(deviceAddr, phoneFileName, saveFileName);
+    }
+
 }

@@ -4,12 +4,12 @@ import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
-class ADBBuilder implements IADBBuilder {
+public class ADBBuilder implements IADBBuilder {
 
 
     private final List<ADBMessageBean> adbMessageBeans;
 
-    ADBBuilder() {
+    public ADBBuilder() {
         adbMessageBeans = new LinkedList<>();
     }
 
@@ -73,6 +73,19 @@ class ADBBuilder implements IADBBuilder {
     }
 
     @Override
+    public IADBBuilder delayTime(long ms) {
+        addCallBack(adbProcess -> {
+            try {
+                Thread.sleep(ms);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        return this;
+    }
+
+
+    @Override
     public void send(String deviceId) {
         IADBProcess iadbProcess = ADBProcess.getInstance();
         for (ADBMessageBean adbMessage :
@@ -97,7 +110,7 @@ class ADBBuilder implements IADBBuilder {
                     break;
                 case ADBMessageBean.TYPE_CALL_BACK:
                     try {
-                        adbMessage.callback.run(ADBProcess.getInstance());
+                        adbMessage.callback.run(ADBManager.getInstance());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

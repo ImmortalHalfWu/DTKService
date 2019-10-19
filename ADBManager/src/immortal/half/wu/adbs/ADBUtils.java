@@ -29,7 +29,7 @@ class ADBUtils {
     private final static String ADB_INPUT_KEY = " shell input keyevent ";
     private final static String ADB_SWIPE = " shell input swipe ";
     private final static String ADB_DELETE_FILE = " shell rm ";
-    private final static String ADB_TOP_ACTIVITY = " shell dumpsys activity top ";
+    private final static String ADB_TOP_ACTIVITY = " shell dumpsys activity activities | grep ResumedActivity ";
     private final static String ADB_SCAN_FILE = " shell am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file://";
     private final static String ADB_CHANGE_KEY_BOARD = " shell ime set com.android.adbkeyboard/.AdbIME";
     private final static String ADB_WM_SIZE = " shell wm size";
