@@ -135,4 +135,8 @@ public class ADBManager {
     public boolean startActivity(String deviceAddr, String packageName, String mainActivityPath) {
         return ADBUtils.adbStartActivity(deviceAddr, packageName, mainActivityPath);
     }
+
+    public boolean closeApp(String deviceAddr, String packageName) {
+        return ADBUtils.closeApp(deviceAddr, packageName);
+    }
 }

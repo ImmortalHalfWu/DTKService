@@ -120,6 +120,8 @@ public class APP {
 //
 //            });
 
+            long startTime = System.currentTimeMillis();
+
             IAndroidApp idleFishAndroidApp = AppManager.getInstance().createIdleFishAndroidApp(deviceId);
             idleFishAndroidApp.startApp();
 
@@ -243,7 +245,19 @@ public class APP {
                             AppManager.getInstance().createIdleFishAndroidApp(deviceId).toMainActivity();
                         }
                     })
+                    .delayTime(5000)
+                    .addCallBack(new ADBRunnable() {
+                        @Override
+                        public void run(ADBManager adbProcess) {
+                            ADBManager.getInstance().closeApp(
+                                    deviceId.getDeviceId(),
+                                    idleFishAndroidApp.getPackageName());
+                        }
+                    })
                     .send(deviceId.getDeviceId());
+
+            long l = System.currentTimeMillis() - startTime;
+            System.out.println(l / 1000);
 
         }).start();
 

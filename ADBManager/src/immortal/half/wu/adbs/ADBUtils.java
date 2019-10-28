@@ -142,6 +142,10 @@ class ADBUtils {
         return runInCmd(ADB + deviceId + ADB_WM_SIZE);
     }
 
+    public static boolean closeApp(String deviceAddr, String packageName) {
+        return runInCmd(ADB + deviceAddr + " shell am force-stop " + packageName, "");
+    }
+
     synchronized static boolean runInCmd(String cmd, String resultIsSuc) {
         return runInCmd(cmd).contains(resultIsSuc);
     }
