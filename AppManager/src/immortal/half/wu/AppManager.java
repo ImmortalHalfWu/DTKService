@@ -1,15 +1,20 @@
 package immortal.half.wu;
 
-import immortal.half.wu.adbs.ADBManager;
+import com.sun.istack.internal.Nullable;
 import immortal.half.wu.apps.AndroidAppFactory;
 import immortal.half.wu.apps.interfaces.IAndroidApp;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class AppManager {
 
     private static AppManager appManager;
 
+    private Map<String, IAndroidApp> androidAppMap;
+
     private AppManager() {
-        ADBManager.getInstance();
+        androidAppMap = new HashMap<>();
     }
 
     public static AppManager getInstance() {
@@ -23,8 +28,18 @@ public class AppManager {
         return appManager;
     }
 
-    public IAndroidApp createAndroidApp(String deviceID, String appPackageName) {
-        return AndroidAppFactory.createAndroidApp(deviceID, appPackageName);
+    public @Nullable IAndroidApp createIdleFishAndroidApp(String deviceID) {
+
+        String key = deviceID + "idleFish";
+        IAndroidApp iAndroidApp = androidAppMap.get(key);
+
+        if (iAndroidApp == null && (iAndroidApp = AndroidAppFactory.createIdleFishAndroidApp(deviceID)) == null) {
+            return null;
+        }
+
+        androidAppMap.put(key, iAndroidApp);
+        return iAndroidApp;
+
     }
 
 }

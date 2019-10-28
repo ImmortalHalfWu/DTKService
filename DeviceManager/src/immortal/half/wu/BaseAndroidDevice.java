@@ -2,8 +2,6 @@ package immortal.half.wu;
 
 import com.sun.istack.internal.NotNull;
 import immortal.half.wu.adbs.ADBManager;
-import immortal.half.wu.apps.SimpleAndroidAppFactory;
-import immortal.half.wu.apps.interfaces.IAndroidAppFactory;
 import immortal.half.wu.devices.interfaces.IAndroidDevice;
 
 import java.awt.*;
@@ -22,13 +20,8 @@ public class BaseAndroidDevice implements IAndroidDevice {
     }
 
     @Override
-    public String[] getAllAppsPackage(@NotNull IAndroidAppFactory androidAppFactory) {
-        return ADBManager.getInstance().adbAllAppPackage(deviceId);
-    }
-
-    @Override
     public String[] getAllAppsPackage() {
-        return getAllAppsPackage(SimpleAndroidAppFactory.instance());
+        return ADBManager.getInstance().adbAllAppPackage(deviceId);
     }
 
     @Override

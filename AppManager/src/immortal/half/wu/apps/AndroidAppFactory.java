@@ -1,30 +1,34 @@
 package immortal.half.wu.apps;
 
 
+import com.sun.istack.internal.Nullable;
+import immortal.half.wu.adbs.ADBManager;
+import immortal.half.wu.apps.IdleFish.IdleFishAndroidApp;
 import immortal.half.wu.apps.interfaces.IAndroidApp;
+
 
 public class AndroidAppFactory {
 
-    private final static String IDLE_FISH_PACKAGE_NAME = "com.taobao.idlefish";
-    private final static String IDLE_FISH_MAIN_PATH = "com.taobao.idlefish";
+    private static AndroidAppFactory instance;
 
-
-    public static IAndroidApp createAndroidApp(String deviceID, String appPackageName) {
-
-        if (appPackageName.equals(IDLE_FISH_PACKAGE_NAME)) {
-            return new BaseAndroidApp(deviceID, appPackageName, IDLE_FISH_MAIN_PATH);
+    public static AndroidAppFactory getInstance() {
+        if (instance == null) {
+            synchronized (AndroidAppFactory.class) {
+                if (instance == null) {
+                    instance = new AndroidAppFactory();
+                }
+            }
         }
-
-        return new BaseAndroidApp(deviceID, "", "");
+        return instance;
     }
 
-    public static IAndroidApp createIdleFishAndroidApp(String deviceID, String appPackageName) {
 
-        if (appPackageName.equals(IDLE_FISH_PACKAGE_NAME)) {
-            return new BaseAndroidApp(deviceID, appPackageName, IDLE_FISH_MAIN_PATH);
-        }
-
-        return new BaseAndroidApp(deviceID, "", "");
+    public static @Nullable IAndroidApp createIdleFishAndroidApp(String deviceID) {
+        return ADBManager.getInstance().isInstallApp(deviceID, IdleFishAndroidApp.IDLE_FISH_PACKAGE_NAME) ?
+                new IdleFishAndroidApp(deviceID) :
+                SimpleAndroidApp.getInstance();
     }
+
+
 
 }

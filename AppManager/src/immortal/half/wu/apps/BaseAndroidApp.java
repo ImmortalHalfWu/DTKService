@@ -1,8 +1,15 @@
 package immortal.half.wu.apps;
 
+import immortal.half.wu.adbs.ADBBuilder;
+import immortal.half.wu.adbs.ADBManager;
+import immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerFactory;
+import immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerName;
 import immortal.half.wu.apps.interfaces.IAndroidApp;
+import immortal.half.wu.apps.interfaces.IAndroidPager;
 
-public class BaseAndroidApp implements IAndroidApp {
+import static immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerFactory.PAGE_POINT_KEY_HOME_UPDATE;
+
+public abstract class BaseAndroidApp<T> implements IAndroidApp<T> {
 
     private String deviceId;
     private String packageName;
@@ -30,34 +37,51 @@ public class BaseAndroidApp implements IAndroidApp {
     }
 
     @Override
-    public String getShowingActivity() {
-        return null;
+    public boolean startApp() {
+
+        if (mainActivityShowing()) {
+            return true;
+        }
+
+        ADBManager.getInstance().startActivity(deviceId, packageName, mainActivityPath);
+
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        toMainActivity();
+
+        IAndroidPager androidPager = AndroidIdleFishPagerFactory.instance().getAndroidPager(deviceId, AndroidIdleFishPagerName.PAGER_NAME_MAIN);
+        new ADBBuilder()
+                .addClick(androidPager.getUIPoint(PAGE_POINT_KEY_HOME_UPDATE))
+                .send(deviceId);
+
+        return toMainActivity();
     }
 
     @Override
-    public void startApp() {
+    public boolean toMainActivity() {
+
+        while (true) {
+            if (!mainActivityShowing()) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                ADBManager.getInstance().startActivity(deviceId, packageName, mainActivityPath);
+                continue;
+            }
+            return true;
+        }
 
     }
 
-    @Override
-    public boolean isLogin() {
-        return false;
+    private boolean mainActivityShowing() {
+        String topActivity = ADBManager.getInstance().findTopActivity(deviceId);
+        return topActivity != null && topActivity.length() != 0 && mainActivityPath.endsWith(topActivity);
     }
-
-    @Override
-    public void postProduct(Object product) {
-
-    }
-
-    @Override
-    public String[] getPostedProductsName() {
-        return new String[0];
-    }
-
-    @Override
-    public String getUserName() {
-        return null;
-    }
-
 
 }

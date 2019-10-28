@@ -35,7 +35,13 @@ class ADBUtils {
     private final static String ADB_WM_SIZE = " shell wm size";
 
     synchronized static boolean adbStartIdleFishMainActivity(String deviceAddr) {
-        return runInCmd(ADB + deviceAddr + ADB_START_IDLE_FISH_MAIN_ACTIVITY, "Stringing:");
+        return runInCmd(ADB + deviceAddr + ADB_START_IDLE_FISH_MAIN_ACTIVITY, "Starting:");
+    }
+
+    synchronized static boolean adbStartActivity(String deviceAddr, String packageName, String mainActivityPath) {
+        return runInCmd(ADB +
+                deviceAddr +
+                " shell am start -n " + packageName + "/" + mainActivityPath, "Starting:");
     }
 
     synchronized static String adbAllAppPackage(String deviceAddr) {

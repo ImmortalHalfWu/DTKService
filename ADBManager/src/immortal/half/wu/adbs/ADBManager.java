@@ -72,6 +72,14 @@ public class ADBManager {
         return "";
     }
 
+    public String findTopActivityPath(String deviceAddr) {
+        /*
+    mResumedActivity: ActivityRecord{69d26d4 u0 com.taobao.idlefish/.post.activity.publishEntry.PublishEntryActivity t844}
+  ResumedActivity: ActivityRecord{69d26d4 u0 com.taobao.idlefish/.post.activity.publishEntry.PublishEntryActivity t844}
+         */
+        return ADBUtils.findTopActivity(deviceAddr);
+    }
+
     public String[] adbFindAllDevice() {
 
         String s = ADBProcess.getInstance().adbFindAllDevice();
@@ -115,7 +123,7 @@ public class ADBManager {
     public Point getDxSize(String deviceId) {
         String size = ADBUtils.adbWmSize(deviceId)
                 .replace("Physical size: ", "")
-                .replace("\r\n", "");
+                .replace("\n", "").replace("\t", "");
         String[] xes = size.split("x");
         return new Point(Integer.parseInt(xes[0]), Integer.parseInt(xes[1]));
     }
@@ -124,4 +132,7 @@ public class ADBManager {
         return ADBUtils.adbGetAndroidUIXML(deviceAddr, phoneFileName, saveFileName);
     }
 
+    public boolean startActivity(String deviceAddr, String packageName, String mainActivityPath) {
+        return ADBUtils.adbStartActivity(deviceAddr, packageName, mainActivityPath);
+    }
 }

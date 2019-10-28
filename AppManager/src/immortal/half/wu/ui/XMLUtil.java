@@ -261,7 +261,11 @@ public class XMLUtil {
 
                 Attribute attribute = rootElement.attribute(QName.get(filterKey));
 
-                if (attribute == null || !attribute.getValue().equals(filterMaps.get(filterKey))) {
+//                if (attribute != null) {
+//                    System.out.println(attribute.getValue());
+//                }
+
+                if (attribute == null || !attribute.getValue().startsWith(filterMaps.get(filterKey))) {
                     break;
                 }
 
