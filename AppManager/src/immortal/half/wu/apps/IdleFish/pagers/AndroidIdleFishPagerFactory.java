@@ -2,8 +2,8 @@ package immortal.half.wu.apps.IdleFish.pagers;
 
 import immortal.half.wu.FileUtils;
 import immortal.half.wu.adbs.ADBBuilder;
-import immortal.half.wu.apps.AndroidDeviceSize;
 import immortal.half.wu.apps.interfaces.IAndroidPager;
+import immortal.half.wu.apps.interfaces.IDevice;
 import immortal.half.wu.apps.interfaces.ProcessPostedProductCallBack;
 import immortal.half.wu.ui.PointFilterBean;
 import immortal.half.wu.ui.PointFilterBuilder;
@@ -44,7 +44,7 @@ public class AndroidIdleFishPagerFactory {
 
     public final static String PAGE_POINT_KEY_ADVERT_CLOSE = "关闭广告";
 
-    public IAndroidPager getAdvertActivity(String deviceId) {
+    public IAndroidPager getAdvertActivity(IDevice deviceId) {
 
         String advertActivity = AndroidIdleFishPagerName.PAGER_NAME_ADVERT.NAME_ACTIVITY;
         IAndroidPager iAndroidPager = androidPagerMap.get(createPagerMapKey(deviceId, AndroidIdleFishPagerName.PAGER_NAME_ADVERT));
@@ -63,7 +63,7 @@ public class AndroidIdleFishPagerFactory {
     public final static String PAGE_POINT_KEY_HOME_UPDATE = "暂不升级";
     public final static String PAGE_POINT_KEY_HOME_MY = "我的";
 
-    public IAndroidPager getHomeActivity(String deviceId) {
+    public IAndroidPager getHomeActivity(IDevice deviceId) {
 
         String mainActivity = AndroidIdleFishPagerName.PAGER_NAME_MAIN.NAME_ACTIVITY;
         IAndroidPager iAndroidPager = androidPagerMap.get(createPagerMapKey(deviceId, AndroidIdleFishPagerName.PAGER_NAME_MAIN));
@@ -86,7 +86,7 @@ public class AndroidIdleFishPagerFactory {
 
     public final static String PAGE_POINT_KEY_HOME_MY_POSTED = "我发布的";
 
-    public IAndroidPager getMyActivity(String deviceId) {
+    public IAndroidPager getMyActivity(IDevice deviceId) {
 
         String mainPostedActivity = AndroidIdleFishPagerName.PAGER_NAME_MAIN_MY.NAME_ACTIVITY;
         IAndroidPager iAndroidPager = androidPagerMap.get(createPagerMapKey(deviceId, AndroidIdleFishPagerName.PAGER_NAME_MAIN_MY));
@@ -105,7 +105,7 @@ public class AndroidIdleFishPagerFactory {
     public final static String PAGE_POINT_KEY_POST_CHOICE_POST = "发布闲置";
     public final static String PAGE_POINT_KEY_POST_CHOICE_FREE = "免费送";
 
-    public IAndroidPager getPostChoiceActivity(String deviceId) {
+    public IAndroidPager getPostChoiceActivity(IDevice deviceId) {
 
         String publishEntryActivity = AndroidIdleFishPagerName.PAGER_NAME_POST_CHOICE.NAME_ACTIVITY;
         IAndroidPager iAndroidPager = androidPagerMap.get(createPagerMapKey(deviceId, AndroidIdleFishPagerName.PAGER_NAME_POST_CHOICE));
@@ -126,7 +126,7 @@ public class AndroidIdleFishPagerFactory {
     public final static ArrayList<String> PAGE_POINT_KEY_IMG_CHOICE = new ArrayList<>();
     public final static String PAGE_POINT_KEY_IMG_CHOICE_OK = "完成(1)";
 
-    public IAndroidPager getImgChoiceActivity(String deviceId) {
+    public IAndroidPager getImgChoiceActivity(IDevice deviceId) {
 
         String multiMediaStudioActivity = AndroidIdleFishPagerName.PAGER_NAME_IMAGE_CHOICE.NAME_ACTIVITY;
         IAndroidPager iAndroidPager = androidPagerMap.get(createPagerMapKey(deviceId, AndroidIdleFishPagerName.PAGER_NAME_IMAGE_CHOICE));
@@ -135,7 +135,7 @@ public class AndroidIdleFishPagerFactory {
             return iAndroidPager;
         }
 
-        String xmlString = UIProcessor.androidUIXMLNoCache(deviceId, deviceId);
+        String xmlString = UIProcessor.androidUIXMLNoCache(deviceId.getDeviceId(), deviceId.getDeviceId());
 
         if (!FileUtils.isEmpty(xmlString)) {
 
@@ -153,7 +153,7 @@ public class AndroidIdleFishPagerFactory {
 
                     new ADBBuilder()
                             .addClick(allImgPoint.get(allImgPoint.size() - 1))
-                            .send(deviceId);
+                            .send(deviceId.getDeviceId());
 
                     IAndroidPager imageChoiceSucButton = createHaveCache(
                             deviceId,
@@ -206,7 +206,7 @@ public class AndroidIdleFishPagerFactory {
     public final static String PAGE_POINT_KEY_IMG_PROCESS_TAG = "标签";
     public final static String PAGE_POINT_KEY_IMG_PROCESS_OK = "图像及价签处理完成";
 
-    public IAndroidPager getImagProcessActivity(String deviceId) {
+    public IAndroidPager getImagProcessActivity(IDevice deviceId) {
 
         String multiMediaEditorActivity = AndroidIdleFishPagerName.PAGER_NAME_IMAGE_PROCESS.NAME_ACTIVITY;
         IAndroidPager iAndroidPager = androidPagerMap.get(createPagerMapKey(deviceId, AndroidIdleFishPagerName.PAGER_NAME_IMAGE_PROCESS));
@@ -228,7 +228,7 @@ public class AndroidIdleFishPagerFactory {
     public final static String PAGE_POINT_KEY_POST_PRODUCT_INFO_MONEY = "一口价¥0.00";
     public final static String PAGE_POINT_KEY_POST_PRODUCT_INFO_OTHER = "选项";
 
-    public IAndroidPager getPostProductInfoActivity(String deviceId) {
+    public IAndroidPager getPostProductInfoActivity(IDevice deviceId) {
 
         String fishFlutterActivity = AndroidIdleFishPagerName.PAGER_NAME_POST_PRODUCT_INFO.NAME_ACTIVITY;
         IAndroidPager iAndroidPager = androidPagerMap.get(createPagerMapKey(deviceId, AndroidIdleFishPagerName.PAGER_NAME_POST_PRODUCT_INFO));
@@ -254,7 +254,7 @@ public class AndroidIdleFishPagerFactory {
     public final static String PAGE_POINT_KEY_POST_PRODUCT_MONEY_MILL = "包邮";
     public final static String PAGE_POINT_KEY_POST_PRODUCT_MONEY_OK = "确认";
 
-    public IAndroidPager getPostProductMoneyActivity(String deviceId) {
+    public IAndroidPager getPostProductMoneyActivity(IDevice deviceId) {
 
         String fishFlutterActivity = AndroidIdleFishPagerName.PAGER_NAME_POST_PRODUCT_MONEY.NAME_ACTIVITY;
         IAndroidPager iAndroidPager = androidPagerMap.get(createPagerMapKey(deviceId, AndroidIdleFishPagerName.PAGER_NAME_POST_PRODUCT_MONEY));
@@ -273,7 +273,7 @@ public class AndroidIdleFishPagerFactory {
 
         new ADBBuilder()
                 .addClick(iAndroidPager.getUIPoint(PAGE_POINT_KEY_POST_PRODUCT_MONEY_SELL))
-                .send(deviceId);
+                .send(deviceId.getDeviceId());
 
         PointFilterBuilder pointFilterBuilder = new PointFilterBuilder()
                 .addText(PAGE_POINT_KEY_POST_PRODUCT_MONEY_OK)
@@ -307,7 +307,7 @@ public class AndroidIdleFishPagerFactory {
     public final static String PAGE_POINT_KEY_POST_PRODUCT_OTHER_HOLD_MONEY = "不讲价";
     public final static String PAGE_POINT_KEY_POST_PRODUCT_OTHER_OK = "确认";
 
-    public IAndroidPager getPostProductOtherActivity(String deviceId) {
+    public IAndroidPager getPostProductOtherActivity(IDevice deviceId) {
 
         String mainPostedActivity = AndroidIdleFishPagerName.PAGER_NAME_POST_PRODUCT_OTHER.NAME_ACTIVITY;
         IAndroidPager iAndroidPager = androidPagerMap.get(createPagerMapKey(deviceId, AndroidIdleFishPagerName.PAGER_NAME_POST_PRODUCT_OTHER));
@@ -333,7 +333,7 @@ public class AndroidIdleFishPagerFactory {
     public final static String PAGE_POINT_KEY_POST_PRODUCT_TAG_CANCLE = "取消";
     public final static String PAGE_POINT_KEY_POST_PRODUCT_TAG_FIRST_LINE = "第一行";
 
-    public IAndroidPager getPostProductTagActivity(String deviceId) {
+    public IAndroidPager getPostProductTagActivity(IDevice deviceId) {
 
         String mainPostedActivity = AndroidIdleFishPagerName.PAGER_NAME_POST_PRODUCT_TAG.NAME_ACTIVITY;
         IAndroidPager iAndroidPager = androidPagerMap.get(createPagerMapKey(deviceId, AndroidIdleFishPagerName.PAGER_NAME_POST_PRODUCT_TAG));
@@ -354,11 +354,11 @@ public class AndroidIdleFishPagerFactory {
 
         Point editPoint = iAndroidPager.getUIPoint(PAGE_POINT_KEY_POST_PRODUCT_TAG_EDIT);
 
-        new ADBBuilder().addClick(editPoint).addText("text").send(deviceId);
+        new ADBBuilder().addClick(editPoint).addText("text").send(deviceId.getDeviceId());
 
         try {
             Point firstLinePoint = XMLUtil.findPointByAttrKeyValueEndWith(
-                    XMLUtil.findRootElement(UIProcessor.androidUIXMLNoCache(deviceId, deviceId)),
+                    XMLUtil.findRootElement(UIProcessor.androidUIXMLNoCache(deviceId.getDeviceId(), deviceId.getDeviceId())),
                     "text",
                     "自定义标签");
 
@@ -373,7 +373,7 @@ public class AndroidIdleFishPagerFactory {
 
 
 
-    public IAndroidPager getLoginActivity(String deviceId) {
+    public IAndroidPager getLoginActivity(IDevice deviceId) {
         String loginActivity = AndroidIdleFishPagerName.PAGER_NAME_LOGIN.NAME_ACTIVITY;
         IAndroidPager iAndroidPager = androidPagerMap.get(createPagerMapKey(deviceId, AndroidIdleFishPagerName.PAGER_NAME_LOGIN));
 
@@ -385,7 +385,7 @@ public class AndroidIdleFishPagerFactory {
 
 
 
-    public IAndroidPager getPostedActivity(String deviceId) {
+    public IAndroidPager getPostedActivity(IDevice deviceId) {
 
         String postedActivity = AndroidIdleFishPagerName.PAGER_NAME_POSTED.NAME_ACTIVITY;
 
@@ -399,7 +399,7 @@ public class AndroidIdleFishPagerFactory {
 
 
 
-    public void processPostedProduct(String deviceId, ProcessPostedProductCallBack callBack) {
+    public void processPostedProduct(IDevice deviceId, ProcessPostedProductCallBack callBack) {
 
         if (callBack == null) {
             return;
@@ -407,7 +407,7 @@ public class AndroidIdleFishPagerFactory {
 
         try {
 
-            String uiXmlString = UIProcessor.androidUIXMLNoCache(deviceId, deviceId);
+            String uiXmlString = UIProcessor.androidUIXMLNoCache(deviceId.getDeviceId(), deviceId.getDeviceId());
             Element recyclerView = XMLUtil.findElementByNodeKeyValue(
                     XMLUtil.findRootElement(uiXmlString),
                     "class",
@@ -510,18 +510,18 @@ public class AndroidIdleFishPagerFactory {
 
 
     public final static String PAGE_POINT_KEY_POSTED_DELETE = "删除";
-    public IAndroidPager getPostedMoreActivity(String deviceId) {
+    public IAndroidPager getPostedMoreActivity(IDevice deviceId) {
         return getPostedDeleteActivity(deviceId, PAGE_POINT_KEY_POSTED_DELETE, AndroidIdleFishPagerName.PAGER_NAME_POSTED_MORE);
     }
 
 
     public final static String PAGE_POINT_KEY_POSTED_DELETE_OK = "确认";
-    public IAndroidPager getPostedDeleteOkActivity(String deviceId) {
+    public IAndroidPager getPostedDeleteOkActivity(IDevice deviceId) {
         return getPostedDeleteActivity(deviceId, PAGE_POINT_KEY_POSTED_DELETE_OK, AndroidIdleFishPagerName.PAGER_NAME_POSTED_DELETE);
     }
 
 
-    private IAndroidPager getPostedDeleteActivity(String deviceId, String key, AndroidIdleFishPagerName pagerName) {
+    private IAndroidPager getPostedDeleteActivity(IDevice deviceId, String key, AndroidIdleFishPagerName pagerName) {
         String postedActivity = pagerName.NAME_ACTIVITY;
         IAndroidPager iAndroidPager = androidPagerMap.get(createPagerMapKey(deviceId, pagerName));
 
@@ -535,7 +535,7 @@ public class AndroidIdleFishPagerFactory {
     }
 
 
-    public IAndroidPager getAndroidPager(String deviceId, AndroidIdleFishPagerName pagerName) {
+    public IAndroidPager getAndroidPager(IDevice deviceId, AndroidIdleFishPagerName pagerName) {
         if (pagerName.equals(AndroidIdleFishPagerName.PAGER_NAME_POSTED_DELETE)) {
             return getPostedDeleteOkActivity(deviceId);
         }
@@ -583,7 +583,7 @@ public class AndroidIdleFishPagerFactory {
 
 
     private IAndroidPager createHaveCache(
-            String deviceId,
+            IDevice deviceId,
             AndroidIdleFishPagerName pagerName,
             String activityName,
             PointFilterBean pointFilterBean) {
@@ -591,7 +591,7 @@ public class AndroidIdleFishPagerFactory {
     }
 
     private IAndroidPager createNoCache(
-            String deviceId,
+            IDevice deviceId,
             AndroidIdleFishPagerName pagerName,
             String activityName,
             PointFilterBean pointFilterBean) {
@@ -599,7 +599,7 @@ public class AndroidIdleFishPagerFactory {
     }
 
     private IAndroidPager create(
-            String deviceId,
+            IDevice deviceId,
             AndroidIdleFishPagerName pagerName,
             String activityName,
             PointFilterBean pointFilterBean,
@@ -612,28 +612,27 @@ public class AndroidIdleFishPagerFactory {
                 activityName,
                 pointFilterBean,
                 needCache ?
-                UIProcessor.getPointByUIXML(deviceId, pagerMapKey, pointFilterBean) :
-                        UIProcessor.getPointByUIXMLNoCache(deviceId, pagerMapKey, pointFilterBean)
+                UIProcessor.getPointByUIXML(deviceId.getDeviceId(), pagerMapKey, pointFilterBean) :
+                        UIProcessor.getPointByUIXMLNoCache(deviceId.getDeviceId(), pagerMapKey, pointFilterBean)
         );
         androidPagerMap.put(pagerMapKey, activityPager);
         return activityPager;
     }
 
 
-    private String createPagerMapKey(String deviceId, AndroidIdleFishPagerName pagerName) {
-        Point deviceSize = AndroidDeviceSize.getInstance().getDeviceSize(deviceId);
-        return deviceId + pagerName + deviceSize.x + deviceSize.y;
+    private String createPagerMapKey(IDevice deviceId, AndroidIdleFishPagerName pagerName) {
+        return deviceId.getDeviceId() + pagerName + deviceId.getDxSize().x + deviceId.getDxSize().y;
     }
 
 
     private final static class ActivityPager implements IAndroidPager {
 
-        private final String deviceId;
+        private final IDevice deviceId;
         private final String activityName;
         private final PointFilterBean pointFilterBean;
         private final Map<String, Point> uiPoint;
 
-        private ActivityPager(String deviceId, String activityName, PointFilterBean pointFilterBean, Map<String, Point> uiPoint) {
+        private ActivityPager(IDevice deviceId, String activityName, PointFilterBean pointFilterBean, Map<String, Point> uiPoint) {
             this.deviceId = deviceId;
             this.activityName = activityName;
             this.pointFilterBean = pointFilterBean;
@@ -667,7 +666,7 @@ public class AndroidIdleFishPagerFactory {
             for (int i = 0; i < 10; i++) {
                 try {
                     Thread.sleep(300);
-                    if (UIProcessor.getTopActivity(deviceId).equals(activityName)) {
+                    if (UIProcessor.getTopActivity(deviceId.getDeviceId()).equals(activityName)) {
                         return true;
                     }
                 } catch (InterruptedException e) {
@@ -680,7 +679,7 @@ public class AndroidIdleFishPagerFactory {
         }
 
         public String getDeviceId() {
-            return deviceId;
+            return deviceId.getDeviceId();
         }
     }
 

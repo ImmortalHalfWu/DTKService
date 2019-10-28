@@ -11,16 +11,31 @@ import immortal.half.wu.apps.impls.PostedProductRefresh;
 import immortal.half.wu.apps.impls.PostedProductRemove;
 import immortal.half.wu.apps.interfaces.IAndroidApp;
 import immortal.half.wu.apps.interfaces.IAndroidPager;
+import immortal.half.wu.apps.interfaces.IDevice;
+
+import java.awt.*;
 
 import static immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerFactory.*;
 
 public class APP {
 
-    private final static String deviceId = "5ENDU19214004179";
-    private final static String s = "5ENDU19214004179";
+
+    private static Point dxsize;
 
     public static void test() {
+        dxsize = ADBManager.getInstance().getDxSize("5ENDU19214004179");
 
+        IDevice deviceId = new IDevice() {
+            @Override
+            public String getDeviceId() {
+                return "5ENDU19214004179";
+            }
+
+            @Override
+            public Point getDxSize() {
+                return dxsize;
+            }
+        };
 //        uiCutXML();
 //        postedProductRefresh();
 //        postedProductRemove();
@@ -122,7 +137,7 @@ public class APP {
                                     .delayTime(1000)
                                     .addClick(homeActivity.getUIPoint(PAGE_POINT_KEY_HOME_POST))
                                     .addClick(homeActivity.getUIPoint(PAGE_POINT_KEY_HOME_POST))
-                                    .send(deviceId);
+                                    .send(deviceId.getDeviceId());
 
                         }
                     })
@@ -134,7 +149,7 @@ public class APP {
                                             AndroidIdleFishPagerFactory.instance()
                                                     .getAndroidPager(deviceId, AndroidIdleFishPagerName.PAGER_NAME_POST_CHOICE)
                                                     .getUIPoint(PAGE_POINT_KEY_POST_CHOICE_POST))
-                                    .send(deviceId);
+                                    .send(deviceId.getDeviceId());
                         }
                     })
                     .addCallBack(new ADBRunnable() {
@@ -142,7 +157,7 @@ public class APP {
                         public void run(ADBManager adbProcess) {
                             adbProcess.createBuild()
                                     .addClick(instance().getImgChoiceActivity(deviceId).getUIPoint(PAGE_POINT_KEY_IMG_CHOICE_OK))
-                                    .send(deviceId);
+                                    .send(deviceId.getDeviceId());
                         }
                     })
                     .addCallBack(new ADBRunnable() {
@@ -150,7 +165,7 @@ public class APP {
                         public void run(ADBManager adbProcess) {
                             IAndroidPager imagProcessActivity = instance().getImagProcessActivity(deviceId);
                             adbProcess.createBuild()
-                                    .addClick(imagProcessActivity.getUIPoint(PAGE_POINT_KEY_IMG_PROCESS_TAG)).send(deviceId);
+                                    .addClick(imagProcessActivity.getUIPoint(PAGE_POINT_KEY_IMG_PROCESS_TAG)).send(deviceId.getDeviceId());
                         }
                     })
                     .addCallBack(new ADBRunnable() {
@@ -159,7 +174,7 @@ public class APP {
                             IAndroidPager postProductTagActivity = instance().getPostProductTagActivity(deviceId);
                             adbProcess.createBuild()
                                     .addClick(postProductTagActivity.getUIPoint(PAGE_POINT_KEY_POST_PRODUCT_TAG_CANCLE))
-                                    .send(deviceId);
+                                    .send(deviceId.getDeviceId());
                         }
                     })
                     .addCallBack(new ADBRunnable() {
@@ -171,7 +186,7 @@ public class APP {
                                             instance()
                                                     .getImagProcessActivity(deviceId)
                                                     .getUIPoint(PAGE_POINT_KEY_IMG_PROCESS_OK)
-                                    ).send(deviceId);
+                                    ).send(deviceId.getDeviceId());
                         }
                     })
                     .addCallBack(new ADBRunnable() {
@@ -195,10 +210,10 @@ public class APP {
                                             instance().getPostProductOtherActivity(deviceId);
                                         }
                                     })
-                                    .send(deviceId);
+                                    .send(deviceId.getDeviceId());
                         }
                     })
-                    .send(deviceId);
+                    .send(deviceId.getDeviceId());
 
             idleFishAndroidApp.toMainActivity();
 
@@ -209,7 +224,7 @@ public class APP {
                             instance().getHomeActivity(deviceId);
                             adbProcess.createBuild()
                                     .addClick(instance().getAndroidPager(deviceId, AndroidIdleFishPagerName.PAGER_NAME_MAIN).getUIPoint(PAGE_POINT_KEY_HOME_MY))
-                                    .send(deviceId);
+                                    .send(deviceId.getDeviceId());
                         }
                     })
                     .addCallBack(new ADBRunnable() {
@@ -218,7 +233,7 @@ public class APP {
                             instance().getMyActivity(deviceId);
                             adbProcess.createBuild()
                                     .addClick(instance().getMyActivity(deviceId).getUIPoint(PAGE_POINT_KEY_HOME_MY_POSTED))
-                                    .send(deviceId);
+                                    .send(deviceId.getDeviceId());
                         }
                     })
                     .addCallBack(new ADBRunnable() {
@@ -228,7 +243,7 @@ public class APP {
                             AppManager.getInstance().createIdleFishAndroidApp(deviceId).toMainActivity();
                         }
                     })
-                    .send(deviceId);
+                    .send(deviceId.getDeviceId());
 
         }).start();
 
@@ -391,15 +406,45 @@ public class APP {
     }
 
     private static void postedProductRemove() {
-        new PostedProductRemove(deviceId, "google开发者大会纪念品").start();
+        new PostedProductRemove(new IDevice() {
+            @Override
+            public String getDeviceId() {
+                return "5ENDU19214004179";
+            }
+
+            @Override
+            public Point getDxSize() {
+                return dxsize;
+            }
+        }, "google开发者大会纪念品").start();
     }
 
     private static void postedProductRefresh() {
-        new PostedProductRefresh(deviceId).start();
+        new PostedProductRefresh(new IDevice() {
+            @Override
+            public String getDeviceId() {
+                return "5ENDU19214004179";
+            }
+
+            @Override
+            public Point getDxSize() {
+                return dxsize;
+            }
+        }).start();
     }
 
     private static void postedProductName() {
-        new PostedProductNames(deviceId, System.out::println).start();
+        new PostedProductNames(new IDevice() {
+            @Override
+            public String getDeviceId() {
+                return "5ENDU19214004179";
+            }
+
+            @Override
+            public Point getDxSize() {
+                return dxsize;
+            }
+        }, System.out::println).start();
     }
 
 

@@ -1,6 +1,7 @@
 package immortal.half.wu.apps.impls;
 
 import immortal.half.wu.apps.SimpleProcessPostedProductCallBack;
+import immortal.half.wu.apps.interfaces.IDevice;
 import immortal.half.wu.ui.XMLUtil;
 import org.dom4j.Element;
 
@@ -8,7 +9,7 @@ import java.util.Set;
 
 public class PostedProductRefresh extends SimpleProcessPostedProductCallBack {
 
-    public PostedProductRefresh(String deviceId) {
+    public PostedProductRefresh(IDevice deviceId) {
         super(deviceId);
     }
 

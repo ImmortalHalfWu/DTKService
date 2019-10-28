@@ -1,5 +1,9 @@
 package immortal.half.wu.apps;
 
+import immortal.half.wu.apps.interfaces.IDevice;
+
+import java.awt.*;
+
 public class SimpleAndroidApp extends BaseAndroidApp<Object> {
 
     private static SimpleAndroidApp simpleAndroidApp;
@@ -16,7 +20,17 @@ public class SimpleAndroidApp extends BaseAndroidApp<Object> {
     }
 
     private SimpleAndroidApp() {
-        super(SimpleAndroidApp.class.getName(), SimpleAndroidApp.class.getName(), SimpleAndroidApp.class.getName());
+        super(new IDevice() {
+            @Override
+            public String getDeviceId() {
+                return SimpleAndroidApp.class.getName();
+            }
+
+            @Override
+            public Point getDxSize() {
+                return new Point(0, 0);
+            }
+        }, SimpleAndroidApp.class.getName(), SimpleAndroidApp.class.getName());
     }
 
     @Override

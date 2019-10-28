@@ -4,6 +4,7 @@ import immortal.half.wu.adbs.ADBBuilder;
 import immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerFactory;
 import immortal.half.wu.apps.SimpleProcessPostedProductCallBack;
 import immortal.half.wu.apps.interfaces.IAndroidPager;
+import immortal.half.wu.apps.interfaces.IDevice;
 import immortal.half.wu.ui.XMLUtil;
 import org.dom4j.Element;
 
@@ -14,7 +15,7 @@ public class PostedProductRemove extends SimpleProcessPostedProductCallBack {
 
     private final String removeProduct;
 
-    public PostedProductRemove(String deviceId, String removeProductName) {
+    public PostedProductRemove(IDevice deviceId, String removeProductName) {
         super(deviceId);
         this.removeProduct = removeProductName;
     }
@@ -24,18 +25,18 @@ public class PostedProductRemove extends SimpleProcessPostedProductCallBack {
 
         if (removeProduct.startsWith(productName)) {
             Point point = XMLUtil.getElementBoundsCenter(more);
-            new ADBBuilder().addClick(point).send(deviceId);
+            new ADBBuilder().addClick(point).send(deviceId.getDeviceId());
 
             IAndroidPager postedMoreActivity = AndroidIdleFishPagerFactory.instance().getPostedMoreActivity(deviceId);
             if (postedMoreActivity.isResume()) {
                 Point uiPoint = postedMoreActivity.getUIPoint(AndroidIdleFishPagerFactory.PAGE_POINT_KEY_POSTED_DELETE);
-                new ADBBuilder().addClick(uiPoint).delayTime(100).send(deviceId);
+                new ADBBuilder().addClick(uiPoint).delayTime(100).send(deviceId.getDeviceId());
             }
 
             IAndroidPager postedDeleteOkActivity = AndroidIdleFishPagerFactory.instance().getPostedDeleteOkActivity(deviceId);
             if (postedDeleteOkActivity.isResume()) {
                 Point uiPoint = postedDeleteOkActivity.getUIPoint(AndroidIdleFishPagerFactory.PAGE_POINT_KEY_POSTED_DELETE_OK);
-                new ADBBuilder().addClick(uiPoint).send(deviceId);
+                new ADBBuilder().addClick(uiPoint).send(deviceId.getDeviceId());
             }
 
             return true;

@@ -1,8 +1,8 @@
 package immortal.half.wu.apps;
 
 import immortal.half.wu.adbs.ADBBuilder;
-import immortal.half.wu.adbs.ADBManager;
 import immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerFactory;
+import immortal.half.wu.apps.interfaces.IDevice;
 import immortal.half.wu.apps.interfaces.ProcessPostedProductCallBack;
 import org.dom4j.Element;
 
@@ -13,11 +13,11 @@ import java.util.Set;
 public abstract class SimpleProcessPostedProductCallBack implements ProcessPostedProductCallBack {
 
     protected final Set<String> names;
-    protected final String deviceId;
+    protected final IDevice deviceId;
 
     private int maxCount = 0;
 
-    public SimpleProcessPostedProductCallBack(String deviceId) {
+    public SimpleProcessPostedProductCallBack(IDevice deviceId) {
         this.deviceId = deviceId;
         names = new HashSet<>();
     }
@@ -71,12 +71,12 @@ public abstract class SimpleProcessPostedProductCallBack implements ProcessPoste
     }
 
     private void swipeNext() {
-        Point dxSize = ADBManager.getInstance().getDxSize(deviceId);
+        Point dxSize = deviceId.getDxSize();
         new ADBBuilder().addSwipe(
                 new Point(dxSize.x / 2, dxSize.y - dxSize.y / 3),
                 new Point(dxSize.x / 2, dxSize.y / 3),
                 300)
-                .send(deviceId);
+                .send(deviceId.getDeviceId());
     }
 
 }

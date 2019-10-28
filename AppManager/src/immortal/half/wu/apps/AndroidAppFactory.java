@@ -5,6 +5,8 @@ import com.sun.istack.internal.Nullable;
 import immortal.half.wu.adbs.ADBManager;
 import immortal.half.wu.apps.IdleFish.IdleFishAndroidApp;
 import immortal.half.wu.apps.interfaces.IAndroidApp;
+import immortal.half.wu.apps.interfaces.IDevice;
+
 
 
 public class AndroidAppFactory {
@@ -23,8 +25,8 @@ public class AndroidAppFactory {
     }
 
 
-    public static @Nullable IAndroidApp createIdleFishAndroidApp(String deviceID) {
-        return ADBManager.getInstance().isInstallApp(deviceID, IdleFishAndroidApp.IDLE_FISH_PACKAGE_NAME) ?
+    public static @Nullable IAndroidApp createIdleFishAndroidApp(IDevice deviceID) {
+        return ADBManager.getInstance().isInstallApp(deviceID.getDeviceId(), IdleFishAndroidApp.IDLE_FISH_PACKAGE_NAME) ?
                 new IdleFishAndroidApp(deviceID) :
                 SimpleAndroidApp.getInstance();
     }

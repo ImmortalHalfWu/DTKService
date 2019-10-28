@@ -1,6 +1,7 @@
 package immortal.half.wu.apps.impls;
 
 import immortal.half.wu.apps.SimpleProcessPostedProductCallBack;
+import immortal.half.wu.apps.interfaces.IDevice;
 
 import java.util.Set;
 
@@ -8,7 +9,7 @@ public class PostedProductNames extends SimpleProcessPostedProductCallBack {
 
     private final CallBack callBack;
 
-    public PostedProductNames(String deviceId, CallBack callBack) {
+    public PostedProductNames(IDevice deviceId, CallBack callBack) {
         super(deviceId);
         this.callBack = callBack;
     }

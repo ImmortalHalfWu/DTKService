@@ -6,16 +6,17 @@ import immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerFactory;
 import immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerName;
 import immortal.half.wu.apps.interfaces.IAndroidApp;
 import immortal.half.wu.apps.interfaces.IAndroidPager;
+import immortal.half.wu.apps.interfaces.IDevice;
 
 import static immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerFactory.PAGE_POINT_KEY_HOME_UPDATE;
 
 public abstract class BaseAndroidApp<T> implements IAndroidApp<T> {
 
-    private String deviceId;
-    private String packageName;
-    private String mainActivityPath;
+    private final IDevice deviceId;
+    private final String packageName;
+    private final String mainActivityPath;
 
-    public BaseAndroidApp(String deviceId, String packageName, String mainActivityPath) {
+    public BaseAndroidApp(IDevice deviceId, String packageName, String mainActivityPath) {
         this.deviceId = deviceId;
         this.packageName = packageName;
         this.mainActivityPath = mainActivityPath;
@@ -23,6 +24,11 @@ public abstract class BaseAndroidApp<T> implements IAndroidApp<T> {
 
     @Override
     public String getDeviceId() {
+        return deviceId.getDeviceId();
+    }
+
+    @Override
+    public IDevice getDevice() {
         return deviceId;
     }
 
@@ -43,7 +49,7 @@ public abstract class BaseAndroidApp<T> implements IAndroidApp<T> {
             return true;
         }
 
-        ADBManager.getInstance().startActivity(deviceId, packageName, mainActivityPath);
+        ADBManager.getInstance().startActivity(deviceId.getDeviceId(), packageName, mainActivityPath);
 
         try {
             Thread.sleep(3000);
@@ -56,7 +62,7 @@ public abstract class BaseAndroidApp<T> implements IAndroidApp<T> {
         IAndroidPager androidPager = AndroidIdleFishPagerFactory.instance().getAndroidPager(deviceId, AndroidIdleFishPagerName.PAGER_NAME_MAIN);
         new ADBBuilder()
                 .addClick(androidPager.getUIPoint(PAGE_POINT_KEY_HOME_UPDATE))
-                .send(deviceId);
+                .send(deviceId.getDeviceId());
 
         return toMainActivity();
     }
@@ -71,7 +77,7 @@ public abstract class BaseAndroidApp<T> implements IAndroidApp<T> {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                ADBManager.getInstance().startActivity(deviceId, packageName, mainActivityPath);
+                ADBManager.getInstance().startActivity(deviceId.getDeviceId(), packageName, mainActivityPath);
                 continue;
             }
             return true;
@@ -80,7 +86,7 @@ public abstract class BaseAndroidApp<T> implements IAndroidApp<T> {
     }
 
     private boolean mainActivityShowing() {
-        String topActivity = ADBManager.getInstance().findTopActivity(deviceId);
+        String topActivity = ADBManager.getInstance().findTopActivity(deviceId.getDeviceId());
         return topActivity != null && topActivity.length() != 0 && mainActivityPath.endsWith(topActivity);
     }
 

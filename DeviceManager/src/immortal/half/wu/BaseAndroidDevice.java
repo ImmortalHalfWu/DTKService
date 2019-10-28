@@ -9,6 +9,7 @@ import java.awt.*;
 public class BaseAndroidDevice implements IAndroidDevice {
 
     private String deviceId;
+    private Point dxSize;
 
     BaseAndroidDevice(@NotNull String deviceId) {
         this.deviceId = deviceId;
@@ -46,7 +47,7 @@ public class BaseAndroidDevice implements IAndroidDevice {
 
     @Override
     public Point getDxSize() {
-        return ADBManager.getInstance().getDxSize(deviceId);
+        return dxSize == null ? dxSize = ADBManager.getInstance().getDxSize(deviceId) : dxSize;
     }
 
     @Override

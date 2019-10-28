@@ -3,6 +3,7 @@ package immortal.half.wu;
 import com.sun.istack.internal.Nullable;
 import immortal.half.wu.apps.AndroidAppFactory;
 import immortal.half.wu.apps.interfaces.IAndroidApp;
+import immortal.half.wu.apps.interfaces.IDevice;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +29,7 @@ public class AppManager {
         return appManager;
     }
 
-    public @Nullable IAndroidApp createIdleFishAndroidApp(String deviceID) {
+    public @Nullable IAndroidApp createIdleFishAndroidApp(IDevice deviceID) {
 
         String key = deviceID + "idleFish";
         IAndroidApp iAndroidApp = androidAppMap.get(key);

@@ -3,6 +3,7 @@ package immortal.half.wu.apps.interfaces;
 public interface IAndroidApp<T> {
 
     String getDeviceId();
+    IDevice getDevice();
     String getPackageName();
     String getMainActivityPath();
     boolean startApp();
