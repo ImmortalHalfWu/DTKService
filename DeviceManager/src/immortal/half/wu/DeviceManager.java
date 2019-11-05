@@ -4,13 +4,18 @@ import immortal.half.wu.adbs.ADBManager;
 import immortal.half.wu.devices.interfaces.IAndroidDevice;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DeviceManager {
 
     private static DeviceManager instance;
 
+    private final Map<String, IAndroidDevice> androidDevices;
+
     private DeviceManager() {
+        androidDevices = new HashMap<>();
         ADBManager.getInstance();
     }
 
@@ -29,15 +34,14 @@ public class DeviceManager {
 
         String[] deviceIds = ADBManager.getInstance().adbFindAllDevice();
 
-        ArrayList<IAndroidDevice> androidDevices = new ArrayList<>(deviceIds.length);
-
         for (String deviceId :
                 deviceIds) {
-            androidDevices.add(new BaseAndroidDevice(deviceId));
+            if (!androidDevices.containsKey(deviceId)) {
+                androidDevices.put(deviceId, new BaseAndroidDevice(deviceId));
+            }
         }
-        androidDevices.trimToSize();
 
-        return androidDevices;
+        return new ArrayList<>(androidDevices.values());
     }
 
 }

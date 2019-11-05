@@ -55,8 +55,31 @@ public class UIProcessor {
         return new HashMap<>(0);
     }
 
+    public static Map<String, String> getTextByUIXML(
+            PointFilterBean pointFilterBean,
+            String xmlString) {
 
-    private static String androidUIXMLHaveCache(String deviceId, String fileName) {
+        if (!FileUtils.isEmpty(xmlString) && pointFilterBean.getPointFilter().size() > 0) {
+
+            try {
+
+                return XMLUtil.findTextByAttrKeyValues(
+                        XMLUtil.findRootElement(xmlString),
+                        new HashMap<>(pointFilterBean.getPointFilter().size()),
+                        pointFilterBean.getPointFilter()
+                );
+
+            } catch (DocumentException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        return new HashMap<>(0);
+    }
+
+
+    public static String androidUIXMLHaveCache(String deviceId, String fileName) {
         return androidUIXMLHaveCache(deviceId, fileName, true);
     }
 

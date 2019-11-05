@@ -234,59 +234,85 @@ public class XMLUtil {
     /**
      * 获取文档中的所有指定元素
      * @param rootElement 根元素
+     * @return 文档中的所有指定元素
+     */
+    private static void loopXMLNodes(
+            Element rootElement,
+            LoopXMLNodeCallBack callBack
+    ) {
+
+        callBack.node(rootElement);
+
+        //递归遍历当前节点所有的子节点
+        List<Element> listElement=rootElement.elements();//所有一级子节点的list
+        for(Element e:listElement) {//遍历所有一级子节点
+            loopXMLNodes(e, callBack);//递归
+        }
+
+    }
+
+
+    /**
+     * 获取文档中的所有指定元素
+     * @param rootElement 根元素
      * @param resultMap 存放集合
      * @return 文档中的所有指定元素
      */
-    public static Map<String, Point> findAllPointByAttrKeyValue(
+    static Map<String, Point> findAllPointByAttrKeyValue(
             Element rootElement,
             Map<String, Point> resultMap,
             Map<String, Map<String, String>> filterMap) {
 
-        //当前节点的名称、文本内容和属性
 
-        Set<String> resultKeys = filterMap.keySet();
+        loopXMLNodes(rootElement, new LoopXMLNodeCallBack() {
+            @Override
+            public boolean node(Element element) {
+                //当前节点的名称、文本内容和属性
+                Set<String> resultKeys = filterMap.keySet();
 
-        for (String resultKey :
-                resultKeys) {
+                for (String resultKey :
+                        resultKeys) {
 
-            if (resultMap.get(resultKey) != null) {
-                continue;
-            }
+                    if (resultMap.get(resultKey) != null) {
+                        continue;
+                    }
 
-            Map<String, String> filterMaps = filterMap.get(resultKey);
+                    Map<String, String> filterMaps = filterMap.get(resultKey);
 
-            for (Iterator<String> iterator = filterMaps.keySet().iterator(); ; ) {
+                    for (Iterator<String> iterator = filterMaps.keySet().iterator(); ; ) {
 
-                String filterKey = iterator.next();
+                        String filterKey = iterator.next();
 
-                Attribute attribute = rootElement.attribute(QName.get(filterKey));
+                        Attribute attribute = element.attribute(QName.get(filterKey));
 
 //                if (attribute != null) {
 //                    System.out.println(attribute.getValue());
 //                }
 
-                if (attribute == null || !attribute.getValue().startsWith(filterMaps.get(filterKey))) {
-                    break;
+                        if (attribute == null || !attribute.getValue().startsWith(filterMaps.get(filterKey))) {
+                            break;
+                        }
+
+
+                        if (!iterator.hasNext()) {
+                            resultMap.put(resultKey, getElementBoundsCenter(element));
+                            if (resultMap.size() == filterMap.size()) {
+                                return true;
+                            }
+                            break;
+                        }
+
+                    }
                 }
 
-
-                if (!iterator.hasNext()) {
-                    resultMap.put(resultKey, getElementBoundsCenter(rootElement));
-                    break;
-                }
-
+                return resultMap.size() == filterMap.size();
             }
-        }
 
-        if (resultMap.size() == filterMap.size()) {
-            return resultMap;
-        }
+            @Override
+            public void over() {
+            }
+        });
 
-        //递归遍历当前节点所有的子节点
-        List<Element> listElement=rootElement.elements();//所有一级子节点的list
-        for(Element e:listElement) {//遍历所有一级子节点
-            findAllPointByAttrKeyValue(e, resultMap, filterMap);//递归
-        }
 
         return resultMap;
     }
@@ -300,21 +326,84 @@ public class XMLUtil {
             String key,
             String value) {
 
-        //当前节点的名称、文本内容和属性
+        loopXMLNodes(rootElement, new LoopXMLNodeCallBack() {
+            @Override
+            public boolean node(Element element) {
 
-        Attribute attribute = rootElement.attribute(QName.get(key));
+                Attribute attribute = element.attribute(QName.get(key));
 
-        if (attribute != null && attribute.getValue().equals(value)) {
-            resultPoints.add(getElementBoundsCenter(rootElement));
-        }
+                if (attribute != null && attribute.getValue().equals(value)) {
+                    resultPoints.add(getElementBoundsCenter(element));
+                }
 
-        //递归遍历当前节点所有的子节点
-        List<Element> listElement=rootElement.elements();//所有一级子节点的list
-        for(Element e : listElement) {//遍历所有一级子节点
-            findAllPointByAttrKeyValue(e, resultPoints, key, value);//递归
-        }
+                return false;
+            }
+
+            @Override
+            public void over() {
+
+            }
+        });
 
         return resultPoints;
+    }
+
+    /**
+     * 获取文档中的所有指定元素
+     */
+    public static Map<String, String> findTextByAttrKeyValues(
+            Element rootElement,
+            Map<String, String> resultMap,
+            Map<String, Map<String, String>> filterMap) {
+
+        loopXMLNodes(rootElement, new LoopXMLNodeCallBack() {
+            @Override
+            public boolean node(Element element) {
+
+                //当前节点的名称、文本内容和属性
+                Set<String> resultKeys = filterMap.keySet();
+
+                for (String resultKey :
+                        resultKeys) {
+
+                    if (resultMap.get(resultKey) != null) {
+                        continue;
+                    }
+
+                    Map<String, String> filterMaps = filterMap.get(resultKey);
+
+                    for (Iterator<String> iterator = filterMaps.keySet().iterator(); ; ) {
+
+                        String filterKey = iterator.next();
+
+                        Attribute attribute = element.attribute(QName.get(filterKey));
+
+                        if (attribute == null || !attribute.getValue().startsWith(filterMaps.get(filterKey))) {
+                            break;
+                        }
+
+
+                        if (!iterator.hasNext()) {
+                            resultMap.put(resultKey, element.attributeValue("text"));
+                            if (resultMap.size() == filterMap.size()) {
+                                return true;
+                            }
+                            break;
+                        }
+
+                    }
+                }
+
+                return resultMap.size() == filterMap.size();
+            }
+
+            @Override
+            public void over() {
+
+            }
+        });
+
+        return resultMap;
     }
 
 

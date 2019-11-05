@@ -2,6 +2,7 @@ package immortal.half.wu;
 
 import com.sun.istack.internal.Nullable;
 import immortal.half.wu.apps.AndroidAppFactory;
+import immortal.half.wu.apps.IdleFish.beans.IdleFishProductBean;
 import immortal.half.wu.apps.interfaces.IAndroidApp;
 import immortal.half.wu.apps.interfaces.IDevice;
 
@@ -29,10 +30,10 @@ public class AppManager {
         return appManager;
     }
 
-    public @Nullable IAndroidApp createIdleFishAndroidApp(IDevice deviceID) {
+    public @Nullable IAndroidApp<IdleFishProductBean> createIdleFishAndroidApp(IDevice deviceID) {
 
         String key = deviceID + "idleFish";
-        IAndroidApp iAndroidApp = androidAppMap.get(key);
+        IAndroidApp<IdleFishProductBean> iAndroidApp = androidAppMap.get(key);
 
         if (iAndroidApp == null && (iAndroidApp = AndroidAppFactory.createIdleFishAndroidApp(deviceID)) == null) {
             return null;

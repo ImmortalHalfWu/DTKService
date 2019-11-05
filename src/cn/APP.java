@@ -4,8 +4,10 @@ import immortal.half.wu.AppManager;
 import immortal.half.wu.FileUtils;
 import immortal.half.wu.adbs.ADBManager;
 import immortal.half.wu.adbs.ADBRunnable;
+import immortal.half.wu.apps.IdleFish.beans.IdleFishProductBean;
 import immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerFactory;
 import immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerName;
+import immortal.half.wu.apps.IdleFish.sender.actions.PageActionHomeMy;
 import immortal.half.wu.apps.impls.PostedProductNames;
 import immortal.half.wu.apps.impls.PostedProductRefresh;
 import immortal.half.wu.apps.impls.PostedProductRemove;
@@ -14,16 +16,100 @@ import immortal.half.wu.apps.interfaces.IAndroidPager;
 import immortal.half.wu.apps.interfaces.IDevice;
 
 import java.awt.*;
+import java.util.Map;
+import java.util.Set;
 
 import static immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerFactory.*;
 
 public class APP {
 
+    private static Point dxSize;
 
-    private static Point dxsize;
+    public static void test2() {
+
+        IAndroidApp<IdleFishProductBean> idleFishAndroidApp1 = AppManager.getInstance().createIdleFishAndroidApp(
+                IDevice.create("5ENDU19214004179", ADBManager.getInstance().getDxSize("5ENDU19214004179"))
+        );
+
+        long l = System.currentTimeMillis();
+
+        idleFishAndroidApp1.startApp();
+        idleFishAndroidApp1.postProduct(null);
+        idleFishAndroidApp1.isLogin(new PageActionHomeMy.IsLoginCallBack() {
+            @Override
+            public void isLogin(boolean isLogin) {
+                System.out.println(isLogin);
+            }
+        });
+        idleFishAndroidApp1.getUserName(new PageActionHomeMy.UserInfoCallBack() {
+            @Override
+            public void result(String name, String postedNum) {
+                System.out.println(name + " __ " + postedNum);
+            }
+        });
+        idleFishAndroidApp1.getPostedProductsName(new PostedProductNames.CallBack() {
+            @Override
+            public void names(Set<String> names) {
+                System.out.println(names);
+            }
+        });
+
+
+//        idleFishAndroidApp1.startApp();
+        idleFishAndroidApp1.isLogin(new PageActionHomeMy.IsLoginCallBack() {
+            @Override
+            public void isLogin(boolean isLogin) {
+                System.out.println(isLogin);
+            }
+        });
+        idleFishAndroidApp1.getUserName(new PageActionHomeMy.UserInfoCallBack() {
+            @Override
+            public void result(String name, String postedNum) {
+                System.out.println(name + " __ " + postedNum);
+            }
+        });
+        idleFishAndroidApp1.getPostedProductsName(new PostedProductNames.CallBack() {
+            @Override
+            public void names(Set<String> names) {
+                System.out.println(names);
+            }
+        });
+        idleFishAndroidApp1.refreshPostedProduct();
+
+
+        idleFishAndroidApp1.getUserName(new PageActionHomeMy.UserInfoCallBack() {
+            @Override
+            public void result(String name, String postedNum) {
+                System.out.println(name + " __ " + postedNum);
+            }
+        });
+        idleFishAndroidApp1.refreshPostedProduct();
+        idleFishAndroidApp1.getPostedProductsName(new PostedProductNames.CallBack() {
+            @Override
+            public void names(Set<String> names) {
+                System.out.println(names);
+            }
+        });
+
+
+        idleFishAndroidApp1.isLogin(new PageActionHomeMy.IsLoginCallBack() {
+            @Override
+            public void isLogin(boolean isLogin) {
+                System.out.println(isLogin);
+            }
+        });
+        idleFishAndroidApp1.getUserName(new PageActionHomeMy.UserInfoCallBack() {
+            @Override
+            public void result(String name, String postedNum) {
+                System.out.println(name + " __ " + postedNum);
+            }
+        });
+
+        System.out.println((System.currentTimeMillis() - l) / 1000);
+    }
 
     public static void test() {
-        dxsize = ADBManager.getInstance().getDxSize("5ENDU19214004179");
+        dxSize = ADBManager.getInstance().getDxSize("5ENDU19214004179");
 
         IDevice deviceId = new IDevice() {
             @Override
@@ -33,7 +119,7 @@ public class APP {
 
             @Override
             public Point getDxSize() {
-                return dxsize;
+                return dxSize;
             }
         };
 //        uiCutXML();
@@ -136,7 +222,6 @@ public class APP {
 
                             IAndroidPager homeActivity = instance().getHomeActivity(deviceId);
                             adbProcess.createBuild()
-                                    .delayTime(1000)
                                     .addClick(homeActivity.getUIPoint(PAGE_POINT_KEY_HOME_POST))
                                     .addClick(homeActivity.getUIPoint(PAGE_POINT_KEY_HOME_POST))
                                     .send(deviceId.getDeviceId());
@@ -149,7 +234,7 @@ public class APP {
                             adbProcess.createBuild()
                                     .addClick(
                                             AndroidIdleFishPagerFactory.instance()
-                                                    .getAndroidPager(deviceId, AndroidIdleFishPagerName.PAGER_NAME_POST_CHOICE)
+                                                    .getPostChoiceActivity(deviceId)
                                                     .getUIPoint(PAGE_POINT_KEY_POST_CHOICE_POST))
                                     .send(deviceId.getDeviceId());
                         }
@@ -167,7 +252,9 @@ public class APP {
                         public void run(ADBManager adbProcess) {
                             IAndroidPager imagProcessActivity = instance().getImagProcessActivity(deviceId);
                             adbProcess.createBuild()
-                                    .addClick(imagProcessActivity.getUIPoint(PAGE_POINT_KEY_IMG_PROCESS_TAG)).send(deviceId.getDeviceId());
+                                    .addClick(imagProcessActivity.getUIPoint(PAGE_POINT_KEY_IMG_PROCESS_TAG))
+//                                    .addClick(imagProcessActivity.getUIPoint(PAGE_POINT_KEY_IMG_PROCESS_TAG))
+                                    .send(deviceId.getDeviceId());
                         }
                     })
                     .addCallBack(new ADBRunnable() {
@@ -232,6 +319,13 @@ public class APP {
                     .addCallBack(new ADBRunnable() {
                         @Override
                         public void run(ADBManager adbProcess) {
+                            Map<String, String> myInfoActivity = instance().getMyInfoActivity(deviceId);
+                            System.out.println(myInfoActivity);
+                        }
+                    })
+                    .addCallBack(new ADBRunnable() {
+                        @Override
+                        public void run(ADBManager adbProcess) {
                             instance().getMyActivity(deviceId);
                             adbProcess.createBuild()
                                     .addClick(instance().getMyActivity(deviceId).getUIPoint(PAGE_POINT_KEY_HOME_MY_POSTED))
@@ -245,7 +339,7 @@ public class APP {
                             AppManager.getInstance().createIdleFishAndroidApp(deviceId).toMainActivity();
                         }
                     })
-                    .delayTime(5000)
+                    .delayTime(2000)
                     .addCallBack(new ADBRunnable() {
                         @Override
                         public void run(ADBManager adbProcess) {
@@ -428,7 +522,7 @@ public class APP {
 
             @Override
             public Point getDxSize() {
-                return dxsize;
+                return dxSize;
             }
         }, "google开发者大会纪念品").start();
     }
@@ -442,7 +536,7 @@ public class APP {
 
             @Override
             public Point getDxSize() {
-                return dxsize;
+                return dxSize;
             }
         }).start();
     }
@@ -456,7 +550,7 @@ public class APP {
 
             @Override
             public Point getDxSize() {
-                return dxsize;
+                return dxSize;
             }
         }, System.out::println).start();
     }

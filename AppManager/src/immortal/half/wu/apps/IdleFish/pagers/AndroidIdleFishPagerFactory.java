@@ -68,12 +68,12 @@ public class AndroidIdleFishPagerFactory {
         String mainActivity = AndroidIdleFishPagerName.PAGER_NAME_MAIN.NAME_ACTIVITY;
         IAndroidPager iAndroidPager = androidPagerMap.get(createPagerMapKey(deviceId, AndroidIdleFishPagerName.PAGER_NAME_MAIN));
 
-        return iAndroidPager != null ? iAndroidPager : createNoCache(deviceId, AndroidIdleFishPagerName.PAGER_NAME_MAIN,
+        return createHaveCache(deviceId, AndroidIdleFishPagerName.PAGER_NAME_MAIN,
                 mainActivity,
                 new PointFilterBuilder()
                         .addResourceId("com.taobao.idlefish:id/post_click")
                         .next(PAGE_POINT_KEY_HOME_POST)
-                        .addContentDesc("我的，未选中状态")
+                        .addContentDesc("我的，")
                         .next(PAGE_POINT_KEY_HOME_MY)
                         .addText(PAGE_POINT_KEY_HOME_UPDATE)
                         .addResourceId("com.taobao.idlefish:id/left")
@@ -101,6 +101,27 @@ public class AndroidIdleFishPagerFactory {
     }
 
 
+    public final static String PAGE_POINT_KEY_HOME_MY_POSTED_NUM = "我发布的商品数量";
+    public final static String PAGE_POINT_KEY_HOME_MY_USER_NAME = "用户名称";
+
+    public Map<String, String> getMyInfoActivity(IDevice deviceId) {
+
+        return UIProcessor.getTextByUIXML(
+                new PointFilterBuilder()
+                        .addResourceId("com.taobao.idlefish:id/entry_title")
+                        .addIndex("0")
+                        .next(PAGE_POINT_KEY_HOME_MY_USER_NAME)
+                        .addIndex("2")
+                        .addResourceId("com.taobao.idlefish:id/entry_sub_title")
+                        .next(PAGE_POINT_KEY_HOME_MY_POSTED_NUM)
+                        .create(),
+                UIProcessor.androidUIXMLNoCache(deviceId.getDeviceId(), deviceId.getDeviceId())
+        );
+
+    }
+
+
+//获取我的页面用户名称与已发布数量findTextByAttrKeyValues
 
     public final static String PAGE_POINT_KEY_POST_CHOICE_POST = "发布闲置";
     public final static String PAGE_POINT_KEY_POST_CHOICE_FREE = "免费送";
@@ -155,7 +176,7 @@ public class AndroidIdleFishPagerFactory {
                             .addClick(allImgPoint.get(allImgPoint.size() - 1))
                             .send(deviceId.getDeviceId());
 
-                    IAndroidPager imageChoiceSucButton = createHaveCache(
+                    IAndroidPager imageChoiceSucButton = createNoCache(
                             deviceId,
                             AndroidIdleFishPagerName.PAGER_NAME_IMAGE_CHOICE,
                             multiMediaStudioActivity,
@@ -203,7 +224,7 @@ public class AndroidIdleFishPagerFactory {
     }
 
 
-    public final static String PAGE_POINT_KEY_IMG_PROCESS_TAG = "标签";
+    public final static String PAGE_POINT_KEY_IMG_PROCESS_TAG = "添加说明标签可被更多人看见";
     public final static String PAGE_POINT_KEY_IMG_PROCESS_OK = "图像及价签处理完成";
 
     public IAndroidPager getImagProcessActivity(IDevice deviceId) {
@@ -578,6 +599,7 @@ public class AndroidIdleFishPagerFactory {
         if (pagerName.equals(AndroidIdleFishPagerName.PAGER_NAME_POSTED_MORE)) {
             return getPostedMoreActivity(deviceId);
         }
+
         throw new IllegalStateException(pagerName.toString() + " not found IAndroidPager");
     }
 
@@ -625,7 +647,7 @@ public class AndroidIdleFishPagerFactory {
     }
 
 
-    private final static class ActivityPager implements IAndroidPager {
+    private final static class ActivityPager implements IAndroidPager<Point> {
 
         private final IDevice deviceId;
         private final String activityName;

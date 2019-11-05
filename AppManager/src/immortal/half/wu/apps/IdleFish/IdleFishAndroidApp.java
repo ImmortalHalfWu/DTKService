@@ -1,54 +1,83 @@
 package immortal.half.wu.apps.IdleFish;
 
-import immortal.half.wu.adbs.ADBBuilder;
 import immortal.half.wu.apps.BaseAndroidApp;
 import immortal.half.wu.apps.IdleFish.beans.IdleFishProductBean;
-import immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerFactory;
-import immortal.half.wu.apps.interfaces.IAndroidPager;
+import immortal.half.wu.apps.IdleFish.sender.IdleFishActionController;
+import immortal.half.wu.apps.IdleFish.sender.actions.PageActionHomeMy;
+import immortal.half.wu.apps.impls.PostedProductNames;
 import immortal.half.wu.apps.interfaces.IDevice;
-
-import java.awt.*;
 
 public class IdleFishAndroidApp extends BaseAndroidApp<IdleFishProductBean> {
 
     public final static String IDLE_FISH_PACKAGE_NAME = "com.taobao.idlefish";
-    public final static String IDLE_FISH_MAIN_PATH = "com.taobao.fleamarket.home.activity.MainActivity";
+    private final static String IDLE_FISH_MAIN_PATH = "com.taobao.fleamarket.home.activity.MainActivity";
+
+    private final IdleFishActionController controller;
 
     public IdleFishAndroidApp(IDevice deviceId) {
         super(deviceId, IDLE_FISH_PACKAGE_NAME, IDLE_FISH_MAIN_PATH);
+
+        controller = new IdleFishActionController(deviceId, packageName, mainActivityPath);
+//        startApp();
     }
 
     @Override
-    public boolean isLogin() {
-
-        IAndroidPager homeActivity = AndroidIdleFishPagerFactory.instance().getHomeActivity(getDevice());
-
-        if (homeActivity.isResume()) {
-            Point uiPoint = homeActivity.getUIPoint(AndroidIdleFishPagerFactory.PAGE_POINT_KEY_HOME_MY);
-            new ADBBuilder().addClick(uiPoint).send(getDeviceId());
-            return AndroidIdleFishPagerFactory.instance().getLoginActivity(getDevice()).isResume();
-        }
-
-        return false;
+    public void isLogin(PageActionHomeMy.IsLoginCallBack callBack) {
+        controller.isLogin(callBack);
     }
+
+    @Override
+    public boolean startApp() {
+
+//        super.startApp();
+//
+//        try {
+//            Thread.sleep(1500);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//
+//
+//        IAndroidPager androidPager = AndroidIdleFishPagerFactory.instance().getAndroidPager(deviceId, AndroidIdleFishPagerName.PAGER_NAME_MAIN);
+//        new ADBBuilder()
+//                .addClick(androidPager.getUIPoint(PAGE_POINT_KEY_HOME_UPDATE))
+//                .send(deviceId.getDeviceId());
+//
+//        return toMainActivity();
+
+//        controller.toMainActivity();
+        return toMainActivity();
+    }
+
+    @Override
+    public boolean toMainActivity() {
+        controller.toMainActivity();
+        return true;
+    }
+
 
     @Override
     public void postProduct(IdleFishProductBean product) {
-
+        controller.postProduct(product);
     }
 
     @Override
-    public String[] getPostedProductsName() {
-        return new String[0];
+    public void deleteProduct(String name) {
+        controller.deleteProduct(name);
     }
 
     @Override
-    public String getUserName() {
-        return null;
+    public void getPostedProductsName(PostedProductNames.CallBack callBack) {
+        controller.getPostedProductsName(callBack);
+    }
+
+    @Override
+    public void getUserName(PageActionHomeMy.UserInfoCallBack callBack) {
+        controller.getUserName(callBack);
     }
 
     @Override
     public void refreshPostedProduct() {
-
+        controller.refreshPostedProduct(deviceId);
     }
 }

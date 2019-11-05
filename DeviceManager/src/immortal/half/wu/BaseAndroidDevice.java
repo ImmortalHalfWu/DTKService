@@ -54,6 +54,7 @@ public class BaseAndroidDevice implements IAndroidDevice {
     public String toString() {
         return "BaseAndroidDevice{" +
                 "deviceId='" + deviceId + '\'' +
+                ", dxSize=" + getDxSize() +
                 '}';
     }
 }

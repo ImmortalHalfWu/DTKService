@@ -1,14 +1,17 @@
 package immortal.half.wu.apps;
 
+import immortal.half.wu.apps.IdleFish.sender.actions.PageActionHomeMy;
+import immortal.half.wu.apps.impls.PostedProductNames;
 import immortal.half.wu.apps.interfaces.IDevice;
 
 import java.awt.*;
+import java.util.HashSet;
 
-public class SimpleAndroidApp extends BaseAndroidApp<Object> {
+public class SimpleAndroidApp<T> extends BaseAndroidApp<T> {
 
     private static SimpleAndroidApp simpleAndroidApp;
 
-    public static SimpleAndroidApp getInstance() {
+    public static <T> SimpleAndroidApp<T> getInstance() {
         if (simpleAndroidApp == null) {
             synchronized (SimpleAndroidApp.class) {
                 if (simpleAndroidApp == null) {
@@ -34,23 +37,38 @@ public class SimpleAndroidApp extends BaseAndroidApp<Object> {
     }
 
     @Override
-    public boolean isLogin() {
+    public boolean startApp() {
         return false;
     }
 
     @Override
-    public void postProduct(Object product) {
+    public boolean toMainActivity() {
+        return false;
+    }
+
+    @Override
+    public void isLogin(PageActionHomeMy.IsLoginCallBack callBack) {
+        callBack.isLogin(false);
+    }
+
+    @Override
+    public void postProduct(T product) {
 
     }
 
     @Override
-    public String[] getPostedProductsName() {
-        return new String[0];
+    public void deleteProduct(String name) {
+
     }
 
     @Override
-    public String getUserName() {
-        return "";
+    public void getPostedProductsName(PostedProductNames.CallBack callBack) {
+        callBack.names(new HashSet<>(0));
+    }
+
+    @Override
+    public void getUserName(PageActionHomeMy.UserInfoCallBack callBack) {
+        callBack.result("", "");
     }
 
     @Override
