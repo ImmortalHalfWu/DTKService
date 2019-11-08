@@ -70,7 +70,7 @@ public class IdleFishActionController {
 //                .addAction(PageActionPosted.newRemovePostedProductAction("123"))
 
                 .build(deviceId, e -> System.out.println(e.getMessage()))
-//                .run()
+                .run()
         ;
 
     }
@@ -81,34 +81,35 @@ public class IdleFishActionController {
     };
 
 
-
     public void postProduct(IdleFishProductBean product) {
 
-        new ActionBuilder()
+        ActionBuilder actionBuilder = new ActionBuilder()
                 .addAction(PageActionHome.newGoHomeAction(packageName, mainActivityPath))
 
                 .addAction(PageActionHome.newGoPostChoiceAction())
 
                 .addAction(PageActionPostChoice.newGoPostAction())
 
-                .addAction(PageActionImgChoice.newGoImgProcessAction())
+                .addAction(PageActionImgChoice.newChoiceImgToProcessAction(product.getImageList().size()))
+                ;
 
+        product.getImgTag().forEach(s -> actionBuilder
                 .addAction(PageActionImgProcess.newGoImgTAGAction())
+                .addAction(PageActionTagChoice.newTagChoiceAction(s)));
 
-                .addAction(PageActionTagChoice.newTagChoiceAction())
+        actionBuilder.addAction(PageActionImgProcess.newGoPostProductInfoAction())
 
-                .addAction(PageActionImgProcess.newGoPostProductInfoAction())
-
-                .addAction(PageActionPostProductInfo.newPostProductInfoAction())
+                .addAction(PageActionPostProductInfo.newPostProductInfoAction(product.getInfo()))
 
                 .addAction(PageActionPostProductInfo.newGoPostProductMoneyAction())
 
-                .addAction(PageActionPostProductMoney.newPostProductMoneyAction())
+                .addAction(PageActionPostProductMoney.newPostProductMoneyAction(product.getPrice(), product.getOldPrice()))
 
                 .addAction(PageActionPostProductInfo.newGoPostProductOtherAction())
 
-                .addAction(PageActionPostProductOther.newPostProductOtherAction())
-                .build(deviceId, actionException).run();
+                .addAction(PageActionPostProductOther.newChoiceOtherAction())
+        ;
+        actionBuilder.build(deviceId, actionException).run();
     }
 
     public void deleteProduct(String productName) {

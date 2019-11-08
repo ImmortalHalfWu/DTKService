@@ -7,7 +7,6 @@ import immortal.half.wu.adbs.ADBRunnable;
 import immortal.half.wu.apps.IdleFish.beans.IdleFishProductBean;
 import immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerFactory;
 import immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerName;
-import immortal.half.wu.apps.IdleFish.sender.actions.PageActionHomeMy;
 import immortal.half.wu.apps.impls.PostedProductNames;
 import immortal.half.wu.apps.impls.PostedProductRefresh;
 import immortal.half.wu.apps.impls.PostedProductRemove;
@@ -16,8 +15,9 @@ import immortal.half.wu.apps.interfaces.IAndroidPager;
 import immortal.half.wu.apps.interfaces.IDevice;
 
 import java.awt.*;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Map;
-import java.util.Set;
 
 import static immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerFactory.*;
 
@@ -34,76 +34,90 @@ public class APP {
         long l = System.currentTimeMillis();
 
         idleFishAndroidApp1.startApp();
-        idleFishAndroidApp1.postProduct(null);
-        idleFishAndroidApp1.isLogin(new PageActionHomeMy.IsLoginCallBack() {
-            @Override
-            public void isLogin(boolean isLogin) {
-                System.out.println(isLogin);
-            }
-        });
-        idleFishAndroidApp1.getUserName(new PageActionHomeMy.UserInfoCallBack() {
-            @Override
-            public void result(String name, String postedNum) {
-                System.out.println(name + " __ " + postedNum);
-            }
-        });
-        idleFishAndroidApp1.getPostedProductsName(new PostedProductNames.CallBack() {
-            @Override
-            public void names(Set<String> names) {
-                System.out.println(names);
-            }
-        });
 
-
-//        idleFishAndroidApp1.startApp();
-        idleFishAndroidApp1.isLogin(new PageActionHomeMy.IsLoginCallBack() {
-            @Override
-            public void isLogin(boolean isLogin) {
-                System.out.println(isLogin);
-            }
-        });
-        idleFishAndroidApp1.getUserName(new PageActionHomeMy.UserInfoCallBack() {
-            @Override
-            public void result(String name, String postedNum) {
-                System.out.println(name + " __ " + postedNum);
-            }
-        });
-        idleFishAndroidApp1.getPostedProductsName(new PostedProductNames.CallBack() {
-            @Override
-            public void names(Set<String> names) {
-                System.out.println(names);
-            }
-        });
-        idleFishAndroidApp1.refreshPostedProduct();
-
-
-        idleFishAndroidApp1.getUserName(new PageActionHomeMy.UserInfoCallBack() {
-            @Override
-            public void result(String name, String postedNum) {
-                System.out.println(name + " __ " + postedNum);
-            }
-        });
-        idleFishAndroidApp1.refreshPostedProduct();
-        idleFishAndroidApp1.getPostedProductsName(new PostedProductNames.CallBack() {
-            @Override
-            public void names(Set<String> names) {
-                System.out.println(names);
-            }
-        });
-
-
-        idleFishAndroidApp1.isLogin(new PageActionHomeMy.IsLoginCallBack() {
-            @Override
-            public void isLogin(boolean isLogin) {
-                System.out.println(isLogin);
-            }
-        });
-        idleFishAndroidApp1.getUserName(new PageActionHomeMy.UserInfoCallBack() {
-            @Override
-            public void result(String name, String postedNum) {
-                System.out.println(name + " __ " + postedNum);
-            }
-        });
+        for (int i = 0; i < 2; i++) {
+            ArrayList<File> objects = new ArrayList<>();
+            objects.add(new File(""));objects.add(new File(""));objects.add(new File(""));
+            objects.add(new File(""));objects.add(new File(""));objects.add(new File(""));
+            objects.add(new File(""));objects.add(new File(""));objects.add(new File(""));
+            ArrayList<String> tags = new ArrayList<>();
+            tags.add("tag1");tags.add("tag2");tags.add("tag3");
+//        键盘切换测试
+            long l1 = System.currentTimeMillis();
+            idleFishAndroidApp1.postProduct(new IdleFishProductBean(
+                    "title","info", objects, tags, "12.3", "15.1"
+            ));
+            System.out.println("-----------------------------"+(System.currentTimeMillis() - l1) / 1000+"-------------------------------");
+        }
+//        idleFishAndroidApp1.isLogin(new PageActionHomeMy.IsLoginCallBack() {
+//            @Override
+//            public void isLogin(boolean isLogin) {
+//                System.out.println(isLogin);
+//            }
+//        });
+//        idleFishAndroidApp1.getUserName(new PageActionHomeMy.UserInfoCallBack() {
+//            @Override
+//            public void result(String name, String postedNum) {
+//                System.out.println(name + " __ " + postedNum);
+//            }
+//        });
+//        idleFishAndroidApp1.getPostedProductsName(new PostedProductNames.CallBack() {
+//            @Override
+//            public void names(Set<String> names) {
+//                System.out.println(names);
+//            }
+//        });
+//
+//
+////        idleFishAndroidApp1.startApp();
+//        idleFishAndroidApp1.isLogin(new PageActionHomeMy.IsLoginCallBack() {
+//            @Override
+//            public void isLogin(boolean isLogin) {
+//                System.out.println(isLogin);
+//            }
+//        });
+//        idleFishAndroidApp1.getUserName(new PageActionHomeMy.UserInfoCallBack() {
+//            @Override
+//            public void result(String name, String postedNum) {
+//                System.out.println(name + " __ " + postedNum);
+//            }
+//        });
+//        idleFishAndroidApp1.getPostedProductsName(new PostedProductNames.CallBack() {
+//            @Override
+//            public void names(Set<String> names) {
+//                System.out.println(names);
+//            }
+//        });
+//        idleFishAndroidApp1.refreshPostedProduct();
+//
+//
+//        idleFishAndroidApp1.getUserName(new PageActionHomeMy.UserInfoCallBack() {
+//            @Override
+//            public void result(String name, String postedNum) {
+//                System.out.println(name + " __ " + postedNum);
+//            }
+//        });
+//        idleFishAndroidApp1.refreshPostedProduct();
+//        idleFishAndroidApp1.getPostedProductsName(new PostedProductNames.CallBack() {
+//            @Override
+//            public void names(Set<String> names) {
+//                System.out.println(names);
+//            }
+//        });
+//
+//
+//        idleFishAndroidApp1.isLogin(new PageActionHomeMy.IsLoginCallBack() {
+//            @Override
+//            public void isLogin(boolean isLogin) {
+//                System.out.println(isLogin);
+//            }
+//        });
+//        idleFishAndroidApp1.getUserName(new PageActionHomeMy.UserInfoCallBack() {
+//            @Override
+//            public void result(String name, String postedNum) {
+//                System.out.println(name + " __ " + postedNum);
+//            }
+//        });
 
         System.out.println((System.currentTimeMillis() - l) / 1000);
     }

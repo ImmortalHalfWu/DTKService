@@ -66,7 +66,7 @@ public class AndroidIdleFishPagerFactory {
     public IAndroidPager getHomeActivity(IDevice deviceId) {
 
         String mainActivity = AndroidIdleFishPagerName.PAGER_NAME_MAIN.NAME_ACTIVITY;
-        IAndroidPager iAndroidPager = androidPagerMap.get(createPagerMapKey(deviceId, AndroidIdleFishPagerName.PAGER_NAME_MAIN));
+//        IAndroidPager iAndroidPager = androidPagerMap.get(createPagerMapKey(deviceId, AndroidIdleFishPagerName.PAGER_NAME_MAIN));
 
         return createHaveCache(deviceId, AndroidIdleFishPagerName.PAGER_NAME_MAIN,
                 mainActivity,
@@ -151,9 +151,10 @@ public class AndroidIdleFishPagerFactory {
 
         String multiMediaStudioActivity = AndroidIdleFishPagerName.PAGER_NAME_IMAGE_CHOICE.NAME_ACTIVITY;
         IAndroidPager iAndroidPager = androidPagerMap.get(createPagerMapKey(deviceId, AndroidIdleFishPagerName.PAGER_NAME_IMAGE_CHOICE));
+        Point imageChoiceSucButtonPoint = null;
 
         if (iAndroidPager != null) {
-            return iAndroidPager;
+            imageChoiceSucButtonPoint = iAndroidPager.getUIPoint(PAGE_POINT_KEY_IMG_CHOICE_OK);
         }
 
         String xmlString = UIProcessor.androidUIXMLNoCache(deviceId.getDeviceId(), deviceId.getDeviceId());
@@ -172,23 +173,32 @@ public class AndroidIdleFishPagerFactory {
 
                 if (allImgPoint.size() > 0) {
 
-                    new ADBBuilder()
-                            .addClick(allImgPoint.get(allImgPoint.size() - 1))
-                            .send(deviceId.getDeviceId());
+                    if (imageChoiceSucButtonPoint == null) {
 
-                    IAndroidPager imageChoiceSucButton = createNoCache(
-                            deviceId,
-                            AndroidIdleFishPagerName.PAGER_NAME_IMAGE_CHOICE,
-                            multiMediaStudioActivity,
-                            new PointFilterBuilder()
-                                    .addText(PAGE_POINT_KEY_IMG_CHOICE_OK)
-                                    .next(PAGE_POINT_KEY_IMG_CHOICE_OK)
-                                    .create()
-                    );
+                        new ADBBuilder()
+                                .addClick(allImgPoint.get(allImgPoint.size() - 1))
+                                .send(deviceId.getDeviceId());
+
+                        IAndroidPager imageChoiceSucButton = createNoCache(
+                                deviceId,
+                                AndroidIdleFishPagerName.PAGER_NAME_IMAGE_CHOICE,
+                                multiMediaStudioActivity,
+                                new PointFilterBuilder()
+                                        .addText(PAGE_POINT_KEY_IMG_CHOICE_OK)
+                                        .next(PAGE_POINT_KEY_IMG_CHOICE_OK)
+                                        .create()
+                        );
+
+                        imageChoiceSucButtonPoint = imageChoiceSucButton.getUIPoint(PAGE_POINT_KEY_IMG_CHOICE_OK);
+
+//                        new ADBBuilder()
+//                                .addClick(allImgPoint.get(allImgPoint.size() - 1))
+//                                .send(deviceId.getDeviceId());
+                    }
 
                     pointMap.put(
                             PAGE_POINT_KEY_IMG_CHOICE_OK,
-                            imageChoiceSucButton.getUIPoint(PAGE_POINT_KEY_IMG_CHOICE_OK));
+                            imageChoiceSucButtonPoint);
 
                     for (int i = 0, size = allImgPoint.size(); i < size; i++) {
                         String s = String.valueOf(i);
@@ -235,7 +245,7 @@ public class AndroidIdleFishPagerFactory {
         return iAndroidPager != null ? iAndroidPager : createHaveCache(deviceId, AndroidIdleFishPagerName.PAGER_NAME_IMAGE_PROCESS,
                 multiMediaEditorActivity,
                 new PointFilterBuilder()
-                        .addText(PAGE_POINT_KEY_IMG_PROCESS_TAG)
+                        .addResourceId("com.taobao.idlefish:id/ftv_lable")
                         .next(PAGE_POINT_KEY_IMG_PROCESS_TAG)
                         .addResourceId("com.taobao.idlefish:id/effect_next")
                         .next(PAGE_POINT_KEY_IMG_PROCESS_OK)
@@ -252,9 +262,9 @@ public class AndroidIdleFishPagerFactory {
     public IAndroidPager getPostProductInfoActivity(IDevice deviceId) {
 
         String fishFlutterActivity = AndroidIdleFishPagerName.PAGER_NAME_POST_PRODUCT_INFO.NAME_ACTIVITY;
-        IAndroidPager iAndroidPager = androidPagerMap.get(createPagerMapKey(deviceId, AndroidIdleFishPagerName.PAGER_NAME_POST_PRODUCT_INFO));
+//        IAndroidPager iAndroidPager = androidPagerMap.get(createPagerMapKey(deviceId, AndroidIdleFishPagerName.PAGER_NAME_POST_PRODUCT_INFO));
 
-        return iAndroidPager != null ? iAndroidPager : createHaveCache(deviceId, AndroidIdleFishPagerName.PAGER_NAME_POST_PRODUCT_INFO,
+        return createNoCache(deviceId, AndroidIdleFishPagerName.PAGER_NAME_POST_PRODUCT_INFO,
                 fishFlutterActivity,
                 new PointFilterBuilder()
                         .addText(PAGE_POINT_KEY_POST_PRODUCT_INFO_OK)
@@ -270,10 +280,11 @@ public class AndroidIdleFishPagerFactory {
     }
 
 
-    public final static String PAGE_POINT_KEY_POST_PRODUCT_MONEY_BUY = "一口价¥";
-    public final static String PAGE_POINT_KEY_POST_PRODUCT_MONEY_SELL = "入手价¥";
+    public final static String PAGE_POINT_KEY_POST_PRODUCT_MONEY_BUY = "入手价¥";
+    public final static String PAGE_POINT_KEY_POST_PRODUCT_MONEY_SELL = "一口价¥";
     public final static String PAGE_POINT_KEY_POST_PRODUCT_MONEY_MILL = "包邮";
     public final static String PAGE_POINT_KEY_POST_PRODUCT_MONEY_OK = "确认";
+    public final static String PAGE_POINT_KEY_POST_PRODUCT_MONEY_KEY_OK = "确定";
 
     public IAndroidPager getPostProductMoneyActivity(IDevice deviceId) {
 
@@ -304,7 +315,10 @@ public class AndroidIdleFishPagerFactory {
                 .addText(PAGE_POINT_KEY_POST_PRODUCT_MONEY_BUY)
                 .next(PAGE_POINT_KEY_POST_PRODUCT_MONEY_BUY)
                 .addText(PAGE_POINT_KEY_POST_PRODUCT_MONEY_MILL)
-                .next(PAGE_POINT_KEY_POST_PRODUCT_MONEY_MILL);
+                .next(PAGE_POINT_KEY_POST_PRODUCT_MONEY_MILL)
+                .addText(PAGE_POINT_KEY_POST_PRODUCT_MONEY_KEY_OK)
+                .next(PAGE_POINT_KEY_POST_PRODUCT_MONEY_KEY_OK)
+                ;
 
 
         for (int i = 0; i < 10; i++) {
@@ -312,11 +326,12 @@ public class AndroidIdleFishPagerFactory {
             pointFilterBuilder.addText(keyText).next(keyText);
         }
 
-        iAndroidPager = createHaveCache(deviceId, AndroidIdleFishPagerName.PAGER_NAME_POST_PRODUCT_MONEY,
+        iAndroidPager = createNoCache(deviceId, AndroidIdleFishPagerName.PAGER_NAME_POST_PRODUCT_MONEY,
                 fishFlutterActivity,
                 pointFilterBuilder.addText(".").next(".")
                         .create()
         );
+        androidPagerMap.put(createPagerMapKey(deviceId, AndroidIdleFishPagerName.PAGER_NAME_POST_PRODUCT_MONEY), iAndroidPager);
 
         return iAndroidPager;
     }
