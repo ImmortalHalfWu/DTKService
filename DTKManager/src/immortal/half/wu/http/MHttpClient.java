@@ -6,6 +6,7 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
+import org.jetbrains.annotations.NotNull;
 
 import java.net.URLEncoder;
 import java.util.Map;
@@ -28,6 +29,7 @@ public class MHttpClient {
 
 
     private final String BASE_URL;
+    @NotNull
     private final OkHttpClient okHttpClient;
 
     private MHttpClient(String baseUrl) {
@@ -51,7 +53,7 @@ public class MHttpClient {
      * @param actionUrl  接口地址
      * @param paramsMap   请求参数
      */
-    public void sendGetWithBaseUrl(String actionUrl, Map<String, String> paramsMap, Callback callback) {
+    public void sendGetWithBaseUrl(String actionUrl, @NotNull Map<String, String> paramsMap, Callback callback) {
         try {
             sendGet(BASE_URL + actionUrl, paramsMap, callback);
         } catch (Exception e) {
@@ -64,7 +66,7 @@ public class MHttpClient {
      * @param actionUrl  接口地址
      * @param paramsMap   请求参数
      */
-    private void sendGet(String actionUrl, Map<String, String> paramsMap, Callback callback) {
+    private void sendGet(String actionUrl, @NotNull Map<String, String> paramsMap, Callback callback) {
         StringBuilder tempParams = new StringBuilder();
         try {
             // 添加通用请求参数
@@ -90,7 +92,7 @@ public class MHttpClient {
      * okHttp get请求异步
      * @param requestUrl  接口地址
      */
-    public void sendGet(String requestUrl, Callback callback) {
+    public void sendGet(@NotNull String requestUrl, Callback callback) {
         try {
             //创建一个请求
             Request request = new Request.Builder().url(requestUrl).build();

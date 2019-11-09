@@ -4,6 +4,8 @@ import immortal.half.wu.adbs.IADBBuilder;
 import immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerName;
 import immortal.half.wu.apps.IdleFish.sender.IAction;
 import immortal.half.wu.apps.interfaces.IDevice;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
@@ -12,7 +14,8 @@ import static immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerFactory.
 public class PageActionHomeMy {
 
 
-    public static IAction newFindUserInfoAction(UserInfoCallBack callBack) {
+    @NotNull
+    public static IAction newFindUserInfoAction(@Nullable UserInfoCallBack callBack) {
         return SimpleAction.newInstanceXML(AndroidIdleFishPagerName.PAGER_NAME_MAIN, "text=\"去炫耀\"")
                 .setCheckSucAction(
                         (iDevice, adbBuilder, pagerName) -> {
@@ -29,19 +32,21 @@ public class PageActionHomeMy {
     }
 
 
+    @NotNull
     public static IAction newGoPostedAction() {
         return SimpleAction.newInstanceXML(AndroidIdleFishPagerName.PAGER_NAME_MAIN, "text=\"我发布的\"")
                 .setCheckSucAction(
                         (iDevice, adbBuilder, pagerName) -> {
                             adbBuilder.addClick(
                                     instance().getMyActivity(iDevice)
-                                    .getUIPoint(PAGE_POINT_KEY_HOME_MY_POSTED)
+                                            .getUIPoint(PAGE_POINT_KEY_HOME_MY_POSTED)
                             ).send(iDevice.getDeviceId());
                         }
                 );
     }
 
 
+    @NotNull
     public static IAction newIsLogin(IsLoginCallBack callBack) {
         LoginCheckSimpleCallBack loginCheckSimpleCallBack = new LoginCheckSimpleCallBack(callBack);
         return SimpleAction.newInstanceXML(AndroidIdleFishPagerName.PAGER_NAME_MAIN, "text=\"去炫耀\"")
@@ -59,9 +64,10 @@ public class PageActionHomeMy {
 
     private static final class LoginCheckSimpleCallBack implements ICheckSucAction, ICheckFailAction {
 
+        @Nullable
         private IsLoginCallBack callBack;
 
-        private LoginCheckSimpleCallBack(IsLoginCallBack callBack) {
+        private LoginCheckSimpleCallBack(@Nullable IsLoginCallBack callBack) {
             this.callBack = callBack;
         }
 

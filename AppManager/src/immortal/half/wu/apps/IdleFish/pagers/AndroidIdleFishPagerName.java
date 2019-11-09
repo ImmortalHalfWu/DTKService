@@ -1,5 +1,7 @@
 package immortal.half.wu.apps.IdleFish.pagers;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Objects;
 
 public class AndroidIdleFishPagerName {
@@ -47,6 +49,7 @@ public class AndroidIdleFishPagerName {
         return Objects.hash(tag, NAME);
     }
 
+    @NotNull
     @Override
     public String toString() {
         return NAME_ACTIVITY + NAME;

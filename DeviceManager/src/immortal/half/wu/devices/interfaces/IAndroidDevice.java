@@ -1,5 +1,7 @@
 package immortal.half.wu.devices.interfaces;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.awt.*;
 
 public interface IAndroidDevice {
@@ -8,7 +10,7 @@ public interface IAndroidDevice {
 
 //    String[] getAllAppsPackage(@NotNull IAndroidAppFactory androidAppFactory);
 
-    String[] getAllAppsPackage();
+    @NotNull String[] getAllAppsPackage();
 
     boolean isInstallApp(String appPackageName);
 
@@ -18,6 +20,6 @@ public interface IAndroidDevice {
 
     void choiceTextInputKeyBoard();
 
-    Point getDxSize();
+    @NotNull Point getDxSize();
 
 }

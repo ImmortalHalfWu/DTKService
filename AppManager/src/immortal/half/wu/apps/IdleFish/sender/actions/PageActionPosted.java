@@ -7,10 +7,13 @@ import immortal.half.wu.apps.impls.PostedProductNames;
 import immortal.half.wu.apps.impls.PostedProductRefresh;
 import immortal.half.wu.apps.impls.PostedProductRemove;
 import immortal.half.wu.apps.interfaces.IDevice;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class PageActionPosted {
 
-    public static IAction newFindPostedProductNamesAction(PostedProductNames.CallBack callBack) {
+    @NotNull
+    public static IAction newFindPostedProductNamesAction(@Nullable PostedProductNames.CallBack callBack) {
         return SimpleAction.newInstanceXML(AndroidIdleFishPagerName.PAGER_NAME_POSTED, "content-desc=\"标题栏\"")
                 .setCheckSucAction(new ICheckSucAction() {
                     @Override
@@ -23,6 +26,7 @@ public class PageActionPosted {
                 });
     }
 
+    @NotNull
     public static IAction newRefreshPostedProductAction() {
         return SimpleAction.newInstanceXML(AndroidIdleFishPagerName.PAGER_NAME_POSTED, "content-desc=\"标题栏\"")
                 .setCheckSucAction(new ICheckSucAction() {
@@ -33,6 +37,7 @@ public class PageActionPosted {
                 });
     }
 
+    @NotNull
     public static IAction newRemovePostedProductAction(String productName) {
         return SimpleAction.newInstanceXML(AndroidIdleFishPagerName.PAGER_NAME_POSTED, "content-desc=\"标题栏\"")
                 .setCheckSucAction(new ICheckSucAction() {

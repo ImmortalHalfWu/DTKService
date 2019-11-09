@@ -2,26 +2,29 @@ package cn;
 
 import immortal.half.wu.AppManager;
 import immortal.half.wu.FileUtils;
+import immortal.half.wu.LogUtil;
 import immortal.half.wu.adbs.ADBManager;
 import immortal.half.wu.adbs.ADBRunnable;
 import immortal.half.wu.apps.IdleFish.beans.IdleFishProductBean;
 import immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerFactory;
 import immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerName;
+import immortal.half.wu.apps.IdleFish.sender.actions.PageActionHomeMy;
 import immortal.half.wu.apps.impls.PostedProductNames;
 import immortal.half.wu.apps.impls.PostedProductRefresh;
 import immortal.half.wu.apps.impls.PostedProductRemove;
 import immortal.half.wu.apps.interfaces.IAndroidApp;
 import immortal.half.wu.apps.interfaces.IAndroidPager;
 import immortal.half.wu.apps.interfaces.IDevice;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Map;
 
 import static immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerFactory.*;
 
 public class APP {
+
+    private static final String TAG = "APP";
 
     private static Point dxSize;
 
@@ -32,23 +35,31 @@ public class APP {
         );
 
         long l = System.currentTimeMillis();
-
         idleFishAndroidApp1.startApp();
+        idleFishAndroidApp1.isLogin(new PageActionHomeMy.IsLoginCallBack() {
+            @Override
+            public void isLogin(boolean isLogin) {
+                LogUtil.i(TAG, isLogin);
+                idleFishAndroidApp1.refreshConnect();
+            }
+        });
+//        idleFishAndroidApp1.startApp();
+//
+//        for (int i = 0; i < 2; i++) {
+//            ArrayList<File> objects = new ArrayList<>();
+//            objects.add(new File(""));objects.add(new File(""));objects.add(new File(""));
+//            objects.add(new File(""));objects.add(new File(""));objects.add(new File(""));
+//            objects.add(new File(""));objects.add(new File(""));objects.add(new File(""));
+//            ArrayList<String> tags = new ArrayList<>();
+//            tags.add("tag1");tags.add("tag2");tags.add("tag3");
+////        键盘切换测试
+//            long l1 = System.currentTimeMillis();
+//            idleFishAndroidApp1.postProduct(new IdleFishProductBean(
+//                    "title","info", objects, tags, "12.3", "15.1"
+//            ));
+//            System.out.println("-----------------------------"+(System.currentTimeMillis() - l1) / 1000+"-------------------------------");
+//        }
 
-        for (int i = 0; i < 2; i++) {
-            ArrayList<File> objects = new ArrayList<>();
-            objects.add(new File(""));objects.add(new File(""));objects.add(new File(""));
-            objects.add(new File(""));objects.add(new File(""));objects.add(new File(""));
-            objects.add(new File(""));objects.add(new File(""));objects.add(new File(""));
-            ArrayList<String> tags = new ArrayList<>();
-            tags.add("tag1");tags.add("tag2");tags.add("tag3");
-//        键盘切换测试
-            long l1 = System.currentTimeMillis();
-            idleFishAndroidApp1.postProduct(new IdleFishProductBean(
-                    "title","info", objects, tags, "12.3", "15.1"
-            ));
-            System.out.println("-----------------------------"+(System.currentTimeMillis() - l1) / 1000+"-------------------------------");
-        }
 //        idleFishAndroidApp1.isLogin(new PageActionHomeMy.IsLoginCallBack() {
 //            @Override
 //            public void isLogin(boolean isLogin) {
@@ -232,7 +243,7 @@ public class APP {
             ADBManager.getInstance().createBuild()
                     .addCallBack(new ADBRunnable() {
                         @Override
-                        public void run(ADBManager adbProcess) {
+                        public void run(@NotNull ADBManager adbProcess) {
 
                             IAndroidPager homeActivity = instance().getHomeActivity(deviceId);
                             adbProcess.createBuild()
@@ -244,7 +255,7 @@ public class APP {
                     })
                     .addCallBack(new ADBRunnable() {
                         @Override
-                        public void run(ADBManager adbProcess) {
+                        public void run(@NotNull ADBManager adbProcess) {
                             adbProcess.createBuild()
                                     .addClick(
                                             AndroidIdleFishPagerFactory.instance()
@@ -255,7 +266,7 @@ public class APP {
                     })
                     .addCallBack(new ADBRunnable() {
                         @Override
-                        public void run(ADBManager adbProcess) {
+                        public void run(@NotNull ADBManager adbProcess) {
                             adbProcess.createBuild()
                                     .addClick(instance().getImgChoiceActivity(deviceId).getUIPoint(PAGE_POINT_KEY_IMG_CHOICE_OK))
                                     .send(deviceId.getDeviceId());
@@ -263,7 +274,7 @@ public class APP {
                     })
                     .addCallBack(new ADBRunnable() {
                         @Override
-                        public void run(ADBManager adbProcess) {
+                        public void run(@NotNull ADBManager adbProcess) {
                             IAndroidPager imagProcessActivity = instance().getImagProcessActivity(deviceId);
                             adbProcess.createBuild()
                                     .addClick(imagProcessActivity.getUIPoint(PAGE_POINT_KEY_IMG_PROCESS_TAG))
@@ -273,7 +284,7 @@ public class APP {
                     })
                     .addCallBack(new ADBRunnable() {
                         @Override
-                        public void run(ADBManager adbProcess) {
+                        public void run(@NotNull ADBManager adbProcess) {
                             IAndroidPager postProductTagActivity = instance().getPostProductTagActivity(deviceId);
                             adbProcess.createBuild()
                                     .addClick(postProductTagActivity.getUIPoint(PAGE_POINT_KEY_POST_PRODUCT_TAG_CANCLE))
@@ -282,7 +293,7 @@ public class APP {
                     })
                     .addCallBack(new ADBRunnable() {
                         @Override
-                        public void run(ADBManager adbProcess) {
+                        public void run(@NotNull ADBManager adbProcess) {
                             adbProcess.createBuild()
                                     .delayTime(500)
                                     .addClick(
@@ -294,7 +305,7 @@ public class APP {
                     })
                     .addCallBack(new ADBRunnable() {
                         @Override
-                        public void run(ADBManager adbProcess) {
+                        public void run(@NotNull ADBManager adbProcess) {
                             IAndroidPager postProductInfoActivity = instance().getPostProductInfoActivity(deviceId);
                             adbProcess.createBuild()
                                     .addClick(postProductInfoActivity.getUIPoint(PAGE_POINT_KEY_POST_PRODUCT_INFO_MONEY))
@@ -323,7 +334,7 @@ public class APP {
             ADBManager.getInstance().createBuild()
                     .addCallBack(new ADBRunnable() {
                         @Override
-                        public void run(ADBManager adbProcess) {
+                        public void run(@NotNull ADBManager adbProcess) {
                             instance().getHomeActivity(deviceId);
                             adbProcess.createBuild()
                                     .addClick(instance().getAndroidPager(deviceId, AndroidIdleFishPagerName.PAGER_NAME_MAIN).getUIPoint(PAGE_POINT_KEY_HOME_MY))
@@ -339,7 +350,7 @@ public class APP {
                     })
                     .addCallBack(new ADBRunnable() {
                         @Override
-                        public void run(ADBManager adbProcess) {
+                        public void run(@NotNull ADBManager adbProcess) {
                             instance().getMyActivity(deviceId);
                             adbProcess.createBuild()
                                     .addClick(instance().getMyActivity(deviceId).getUIPoint(PAGE_POINT_KEY_HOME_MY_POSTED))
@@ -529,6 +540,7 @@ public class APP {
 
     private static void postedProductRemove() {
         new PostedProductRemove(new IDevice() {
+            @NotNull
             @Override
             public String getDeviceId() {
                 return "5ENDU19214004179";
@@ -543,6 +555,7 @@ public class APP {
 
     private static void postedProductRefresh() {
         new PostedProductRefresh(new IDevice() {
+            @NotNull
             @Override
             public String getDeviceId() {
                 return "5ENDU19214004179";
@@ -557,6 +570,7 @@ public class APP {
 
     private static void postedProductName() {
         new PostedProductNames(new IDevice() {
+            @NotNull
             @Override
             public String getDeviceId() {
                 return "5ENDU19214004179";

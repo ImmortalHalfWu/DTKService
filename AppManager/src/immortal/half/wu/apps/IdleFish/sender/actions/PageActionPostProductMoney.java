@@ -5,11 +5,13 @@ import immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerName;
 import immortal.half.wu.apps.IdleFish.sender.IAction;
 import immortal.half.wu.apps.interfaces.IAndroidPager;
 import immortal.half.wu.apps.interfaces.IDevice;
+import org.jetbrains.annotations.NotNull;
 
 import static immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerFactory.*;
 
 public class PageActionPostProductMoney {
 
+    @NotNull
     public static IAction newPostProductMoneyAction() {
         return SimpleAction.newInstanceXML(AndroidIdleFishPagerName.PAGER_NAME_POST_PRODUCT_MONEY, "index=\"1\" text=\"包邮\"")
                 .setCheckSucAction(
@@ -22,11 +24,12 @@ public class PageActionPostProductMoney {
     }
 
 
-    public static IAction newPostProductMoneyAction(String outMoney, String inMoney) {
+    @NotNull
+    public static IAction newPostProductMoneyAction(@NotNull String outMoney, @NotNull String inMoney) {
         return SimpleAction.newInstanceXML(AndroidIdleFishPagerName.PAGER_NAME_POST_PRODUCT_MONEY, "index=\"1\" text=\"包邮\"")
                 .setCheckSucAction(new ICheckSucAction() {
                                        @Override
-                                       public void checkSucAction(IDevice iDevice, IADBBuilder adbBuilder, AndroidIdleFishPagerName pagerName) {
+                                       public void checkSucAction(@NotNull IDevice iDevice, @NotNull IADBBuilder adbBuilder, AndroidIdleFishPagerName pagerName) {
                                            /*
 
     public final static String PAGE_POINT_KEY_POST_PRODUCT_MONEY_BUY = "一口价¥";

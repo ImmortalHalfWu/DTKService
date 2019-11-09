@@ -1,6 +1,7 @@
 package immortal.half.wu.apps.IdleFish.sender;
 
 import immortal.half.wu.apps.interfaces.IDevice;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,12 +14,13 @@ class ActionBuilder {
         objects = new ArrayList<>();
     }
 
+    @NotNull
     public ActionBuilder addAction(IAction action) {
         objects.add(action);
         return this;
     }
 
-    Runnable build(IDevice iDevice, IActionException actionException) {
+    @NotNull Runnable build(@NotNull IDevice iDevice, IActionException actionException) {
         return new ActionRunner(iDevice, objects, actionException);
     }
 

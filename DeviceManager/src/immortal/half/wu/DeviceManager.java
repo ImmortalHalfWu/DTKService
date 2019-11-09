@@ -2,6 +2,7 @@ package immortal.half.wu;
 
 import immortal.half.wu.adbs.ADBManager;
 import immortal.half.wu.devices.interfaces.IAndroidDevice;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,8 +11,11 @@ import java.util.Map;
 
 public class DeviceManager {
 
+    private static final String TAG = "DeviceManager";
+    
     private static DeviceManager instance;
 
+    @NotNull
     private final Map<String, IAndroidDevice> androidDevices;
 
     private DeviceManager() {
@@ -30,6 +34,7 @@ public class DeviceManager {
         return instance;
     }
 
+    @NotNull
     public List<IAndroidDevice> getAllAndroidDevice() {
 
         String[] deviceIds = ADBManager.getInstance().adbFindAllDevice();
@@ -41,7 +46,9 @@ public class DeviceManager {
             }
         }
 
-        return new ArrayList<>(androidDevices.values());
+        ArrayList<IAndroidDevice> iAndroidDevices = new ArrayList<>(androidDevices.values());
+        LogUtil.i(TAG,"获取所有Android设备：" + iAndroidDevices);
+        return iAndroidDevices;
     }
 
 }

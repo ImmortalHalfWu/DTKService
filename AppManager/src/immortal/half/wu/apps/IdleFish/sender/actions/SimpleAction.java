@@ -5,6 +5,7 @@ import immortal.half.wu.adbs.IADBBuilder;
 import immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerName;
 import immortal.half.wu.apps.IdleFish.sender.IAction;
 import immortal.half.wu.apps.interfaces.IDevice;
+import org.jetbrains.annotations.NotNull;
 
 public class SimpleAction implements IAction {
 
@@ -22,7 +23,7 @@ public class SimpleAction implements IAction {
 
 
     static SimpleAction newInstanceName(
-            AndroidIdleFishPagerName androidIdleFishPagerName
+            @NotNull AndroidIdleFishPagerName androidIdleFishPagerName
     ) {
         return new SimpleAction(false, androidIdleFishPagerName, CHECK_TYPE_ACTIVITY_NAME, androidIdleFishPagerName.NAME_ACTIVITY);
     }
@@ -57,17 +58,18 @@ public class SimpleAction implements IAction {
         return needXMLCache;
     }
 
+    @NotNull
     @Override
-    public String xmlFileName(IDevice iDevice) {
+    public String xmlFileName(@NotNull IDevice iDevice) {
         return createFileName(iDevice, androidIdleFishPagerName);
     }
 
     @Override
-    public boolean check(IDevice iDevice, IADBBuilder adbBuilder, String xml) {
+    public boolean check(@NotNull IDevice iDevice, IADBBuilder adbBuilder, @NotNull String xml) {
 
         boolean checkResult;
         if (checkType == 0) {
-            checkResult =  ADBManager.getInstance().findTopActivity(iDevice.getDeviceId()).equals(checkString);
+            checkResult = ADBManager.getInstance().findTopActivity(iDevice.getDeviceId()).equals(checkString);
         } else {
             checkResult = xml.contains(checkString);
         }
@@ -83,11 +85,13 @@ public class SimpleAction implements IAction {
         return deviceId.getDeviceId() + pagerName + deviceId.getDxSize().x + deviceId.getDxSize().y;
     }
 
+    @NotNull
     public SimpleAction setCheckSucAction(ICheckSucAction checkSucAction) {
         this.checkSucAction = checkSucAction;
         return this;
     }
 
+    @NotNull
     public SimpleAction setCheckFailAction(ICheckFailAction checkFailAction) {
         this.checkFailAction = checkFailAction;
         return this;

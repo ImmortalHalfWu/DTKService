@@ -1,5 +1,7 @@
 package immortal.half.wu.apps.IdleFish.beans;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.List;
 
@@ -42,6 +44,7 @@ public class IdleFishProductBean {
         return price;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return "IdleFishProductBean{" +

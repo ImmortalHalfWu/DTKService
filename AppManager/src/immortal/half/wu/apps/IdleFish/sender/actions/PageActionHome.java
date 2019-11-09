@@ -1,9 +1,11 @@
 package immortal.half.wu.apps.IdleFish.sender.actions;
 
+import immortal.half.wu.LogUtil;
 import immortal.half.wu.adbs.ADBManager;
 import immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerName;
 import immortal.half.wu.apps.IdleFish.sender.IAction;
 import immortal.half.wu.apps.interfaces.IAndroidPager;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
@@ -11,49 +13,49 @@ import static immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerFactory.
 
 
 public class PageActionHome {
+    private static final String TAG = "PageActionHome";
 
-    private static boolean activityHidding(String deviceId, String mainActivityPath) {
+
+    private static boolean activityHidding(String deviceId, @NotNull String mainActivityPath) {
         String topActivity = ADBManager.getInstance().findTopActivity(deviceId);
         return topActivity == null || topActivity.length() == 0 || !mainActivityPath.endsWith(topActivity);
     }
 
 
-
-    public static IAction newGoHomeAction(String packageName, String mainActivityPath) {
+    @NotNull
+    public static IAction newGoHomeAction(String packageName, @NotNull String mainActivityPath) {
         return SimpleAction.newInstanceXML(AndroidIdleFishPagerName.PAGER_NAME_MAIN, "")
                 .setCheckSucAction(
                         (iDevice, adbBuilder, pagerName) -> {
-                            System.out.println("============================启动App");
                             while (true) {
 
                                 if (activityHidding(iDevice.getDeviceId(), mainActivityPath)) {
-                                    System.out.println("============================main未显示，启动main");
+                                    LogUtil.i(TAG, "主页面未显示，启动主页面" + packageName);
                                     ADBManager.getInstance().startActivity(iDevice.getDeviceId(), packageName, mainActivityPath);
-                                    try {
-                                        Thread.sleep(500);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
+//                                    try {
+//                                        Thread.sleep(100);
+//                                    } catch (InterruptedException e) {
+//                                        e.printStackTrace();
+//                                    }
 //                                    ADBManager.getInstance().startActivity(iDevice.getDeviceId(), packageName, mainActivityPath);
                                     continue;
                                 }
 
-                                System.out.println("============================main已显示，移除updata");
-
                                 IAndroidPager androidPager = instance().getAndroidPager(iDevice, AndroidIdleFishPagerName.PAGER_NAME_MAIN);
                                 Point uiPoint = androidPager.getUIPoint(PAGE_POINT_KEY_HOME_UPDATE);
-                                adbBuilder.addClick(uiPoint).send(iDevice.getDeviceId());
+                                if (uiPoint.x != 0 && uiPoint.y != 0) {
+                                    LogUtil.i(TAG, "main已显示，移除updata");
+                                    adbBuilder.addClick(uiPoint).send(iDevice.getDeviceId());
+                                }
 
-                                System.out.println("============================再次开启main");
                                 ADBManager.getInstance().startActivity(iDevice.getDeviceId(), packageName, mainActivityPath);
 
                                 if (activityHidding(iDevice.getDeviceId(), mainActivityPath)) {
 //                                    ADBManager.getInstance().startActivity(iDevice.getDeviceId(), packageName, mainActivityPath);
-                                    System.out.println("============================再次开启main失败，从新启动app");
                                     continue;
                                 }
 
-                                System.out.println("============================开启main成功");
+                                LogUtil.i(TAG, "已成功启动主页面" + packageName);
                                 return;
                             }
 
@@ -61,6 +63,7 @@ public class PageActionHome {
                 );
     }
 
+    @NotNull
     public static IAction newGoHomeMyAction() {
         return SimpleAction.newInstanceName(AndroidIdleFishPagerName.PAGER_NAME_MAIN)
                 .setCheckSucAction(
@@ -72,6 +75,7 @@ public class PageActionHome {
     }
 
 
+    @NotNull
     public static IAction newGoPostChoiceAction() {
         return SimpleAction.newInstanceName(AndroidIdleFishPagerName.PAGER_NAME_MAIN)
                 .setCheckSucAction(

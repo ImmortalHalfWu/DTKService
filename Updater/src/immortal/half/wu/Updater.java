@@ -1,5 +1,7 @@
 package immortal.half.wu;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -18,8 +20,11 @@ public class Updater {
     private static float newversion = currentversion; //最新版本号
     private static boolean downloaded = false;//下载完成与否
     private static boolean errored = false;//下载出错与否
+    @NotNull
     private static String jarurl = "https://immortalhalfwu.coding.net/p/MallHelper/d/MallHelper/git/archive/master/immortalHalfWu-MallHelper-master.zip"; // jar存放地址
+    @NotNull
     private static String string2dowload = "http://your.server/完整版本下载链接用于下载失败时调用浏览器完成下载.exe"; //备用更新方案
+    @NotNull
     private static String description = "";//新版本更新信息
 
     /**
@@ -80,7 +85,7 @@ public class Updater {
      * @param getUrl
      * @return 网页context
      */
-    private static String sendGetRequest(String getUrl) {
+    private static String sendGetRequest(@NotNull String getUrl) {
         StringBuffer sb = new StringBuffer();
         InputStreamReader isr = null;
         BufferedReader br = null;
@@ -109,7 +114,8 @@ public class Updater {
      * @param savePath
      * @throws IOException
      */
-    private static File downLoadFromUrl(String urlStr, String fileName, String savePath) throws IOException {
+    @NotNull
+    private static File downLoadFromUrl(@NotNull String urlStr, String fileName, @NotNull String savePath) throws IOException {
         URL url = new URL(urlStr);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         // 设置超时间为3秒
@@ -162,7 +168,7 @@ public class Updater {
      * @param ins
      * @param out
      */
-    public static void writeIntoOut(InputStream ins, OutputStream out) {
+    public static void writeIntoOut(InputStream ins, @NotNull OutputStream out) {
         byte[] bb = new byte[10 * 1024];
         try {
             int cnt = ins.read(bb);

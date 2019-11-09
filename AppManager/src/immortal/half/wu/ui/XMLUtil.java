@@ -2,6 +2,7 @@ package immortal.half.wu.ui;
 
 import immortal.half.wu.FileUtils;
 import org.dom4j.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.List;
@@ -14,18 +15,20 @@ public class XMLUtil {
     };
 
 
-    public static Element findRootElement(String xml) throws DocumentException {
+    public static Element findRootElement(@NotNull String xml) throws DocumentException {
         return DocumentHelper.parseText(xml).getRootElement();
     }
 
     /**
      * 获取文档中的所有指定元素
+     *
      * @param rootElement 根元素
-     * @param tagName 指定元素名称
-     * @param elements 存放集合
+     * @param tagName     指定元素名称
+     * @param elements    存放集合
      * @return 文档中的所有指定元素
      */
-    public static List<Element> findAllElementByTagName(Element rootElement, String tagName, List<Element> elements) {
+    @NotNull
+    public static List<Element> findAllElementByTagName(Element rootElement, String tagName, @NotNull List<Element> elements) {
 
         List<Element> mElements = rootElement.elements(QName.get(tagName));
         for (Element element :
@@ -40,12 +43,14 @@ public class XMLUtil {
 
     /**
      * 获取文档中的所有指定元素Point
-     * @param rootElement 根元素
-     * @param filterString text 文本过滤
+     *
+     * @param rootElement    根元素
+     * @param filterString   text 文本过滤
      * @param resultElements 存放集合
      * @return 文档中的所有指定元素的Point
      */
-    public static List<Point> findElementPointByKeyValue(Element rootElement, List<String> filterString, List<Point> resultElements) {
+    @NotNull
+    public static List<Point> findElementPointByKeyValue(@NotNull Element rootElement, @NotNull List<String> filterString, @NotNull List<Point> resultElements) {
 
 
         List<Element> elementByStartWith = findElementByStartWith(rootElement, filterString, new ArrayList<>());
@@ -60,12 +65,14 @@ public class XMLUtil {
 
     /**
      * 获取文档中的所有指定元素
-     * @param rootElement 根元素
-     * @param filterString text 文本过滤
+     *
+     * @param rootElement    根元素
+     * @param filterString   text 文本过滤
      * @param resultElements 存放集合
      * @return 文档中的所有指定元素的
      */
-    public static List<Element> findElementByStartWith(Element rootElement, List<String> filterString, List<Element> resultElements) {
+    @NotNull
+    public static List<Element> findElementByStartWith(Element rootElement, @NotNull List<String> filterString, @NotNull List<Element> resultElements) {
 
         List<Element> mElements = rootElement.elements(QName.get("node"));
         for (Element element :
@@ -84,7 +91,7 @@ public class XMLUtil {
 
             }
 
-            findElementByStartWith(element , filterString, resultElements);
+            findElementByStartWith(element, filterString, resultElements);
         }
 
         return resultElements;
@@ -92,10 +99,12 @@ public class XMLUtil {
 
     /**
      * 获取文档中的所有text
+     *
      * @param rootElement 根元素
      * @return 文档中的所有指定元素的
      */
-    public static List<String> findElementByTextNotNull(Element rootElement, List<String> resultStrings) {
+    @NotNull
+    public static List<String> findElementByTextNotNull(Element rootElement, @NotNull List<String> resultStrings) {
 
         List<Element> mElements = rootElement.elements(QName.get("node"));
         String string;
@@ -106,7 +115,7 @@ public class XMLUtil {
                 resultStrings.add(string);
             }
 
-            findElementByTextNotNull(element , resultStrings);
+            findElementByTextNotNull(element, resultStrings);
         }
 
         return resultStrings;
@@ -115,8 +124,8 @@ public class XMLUtil {
 
     /**
      * @param rootElement 根元素
-     * @param key 查找第一个，attr中包含指定键值对的元素
-     * @param value 键值对
+     * @param key         查找第一个，attr中包含指定键值对的元素
+     * @param value       键值对
      * @return 查找第一个，attr中包含指定键值对的元素
      */
     public static Element findElementByNodeKeyValue(Element rootElement, String key, String value) {
@@ -138,11 +147,11 @@ public class XMLUtil {
 
     /**
      * @param rootElement 根元素
-     * @param key 查找第一个，attr中包含指定键值对的元素
-     * @param value 键值对
+     * @param key         查找第一个，attr中包含指定键值对的元素
+     * @param value       键值对
      * @return 查找第一个，attr中包含指定键值对的元素
      */
-    public static Element findElementByNodeStartWithKeyValue(Element rootElement, String key, String value) {
+    public static Element findElementByNodeStartWithKeyValue(Element rootElement, String key, @NotNull String value) {
 
         List<Element> elements = rootElement.elements();
         for (Element element :
@@ -163,12 +172,13 @@ public class XMLUtil {
      * @param elements 指定元素集合
      * @return 所有text字段的值
      */
+    @NotNull
     public static List<String> findTextByElements(List<Element> elements) {
 
         ArrayList<String> strings = new ArrayList<>(elements.size());
         String string;
-        for (Element element: elements
-             ) {
+        for (Element element : elements
+        ) {
 
             if (!FileUtils.isEmpty(string = element.attribute("text").getValue()) || !FileUtils.isEmpty(string = element.attribute("content-desc").getValue())) {
                 strings.add(string);
@@ -198,18 +208,19 @@ public class XMLUtil {
             if (contentText.length() == 0) {
                 continue;
             }
-            System.out.println("\"" + contentText + "\"" + ",");
+//            System.out.println("\"" + contentText + "\"" + ",");
 
         }
         return nodes.get(0);
     }
 
     /**
-     * @param nodes 指定元素列表
+     * @param nodes     指定元素列表
      * @param filterMap 指定文本内容
      * @return 删除元素列表中，content-desc 或 text 包含 指定string的元素 或者 为空
      */
-    public static List<Element> removeElementByAttrTextWithNull(List<Element> nodes, List<String> filterMap) {
+    @NotNull
+    public static List<Element> removeElementByAttrTextWithNull(List<Element> nodes, @NotNull List<String> filterMap) {
 
         List<Element> removeElement = new ArrayList<>();
 
@@ -233,19 +244,20 @@ public class XMLUtil {
 
     /**
      * 获取文档中的所有指定元素
+     *
      * @param rootElement 根元素
      * @return 文档中的所有指定元素
      */
     private static void loopXMLNodes(
-            Element rootElement,
+            @NotNull Element rootElement,
             LoopXMLNodeCallBack callBack
     ) {
 
         callBack.node(rootElement);
 
         //递归遍历当前节点所有的子节点
-        List<Element> listElement=rootElement.elements();//所有一级子节点的list
-        for(Element e:listElement) {//遍历所有一级子节点
+        List<Element> listElement = rootElement.elements();//所有一级子节点的list
+        for (Element e : listElement) {//遍历所有一级子节点
             loopXMLNodes(e, callBack);//递归
         }
 
@@ -254,19 +266,21 @@ public class XMLUtil {
 
     /**
      * 获取文档中的所有指定元素
+     *
      * @param rootElement 根元素
-     * @param resultMap 存放集合
+     * @param resultMap   存放集合
      * @return 文档中的所有指定元素
      */
+    @NotNull
     static Map<String, Point> findAllPointByAttrKeyValue(
-            Element rootElement,
-            Map<String, Point> resultMap,
-            Map<String, Map<String, String>> filterMap) {
+            @NotNull Element rootElement,
+            @NotNull Map<String, Point> resultMap,
+            @NotNull Map<String, Map<String, String>> filterMap) {
 
 
         loopXMLNodes(rootElement, new LoopXMLNodeCallBack() {
             @Override
-            public boolean node(Element element) {
+            public boolean node(@NotNull Element element) {
                 //当前节点的名称、文本内容和属性
                 Set<String> resultKeys = filterMap.keySet();
 
@@ -320,15 +334,16 @@ public class XMLUtil {
     /**
      * 获取文档中的所有指定元素
      */
+    @NotNull
     public static List<Point> findAllPointByAttrKeyValue(
-            Element rootElement,
-            List<Point> resultPoints,
+            @NotNull Element rootElement,
+            @NotNull List<Point> resultPoints,
             String key,
             String value) {
 
         loopXMLNodes(rootElement, new LoopXMLNodeCallBack() {
             @Override
-            public boolean node(Element element) {
+            public boolean node(@NotNull Element element) {
 
                 Attribute attribute = element.attribute(QName.get(key));
 
@@ -351,14 +366,15 @@ public class XMLUtil {
     /**
      * 获取文档中的所有指定元素
      */
+    @NotNull
     public static Map<String, String> findTextByAttrKeyValues(
-            Element rootElement,
-            Map<String, String> resultMap,
-            Map<String, Map<String, String>> filterMap) {
+            @NotNull Element rootElement,
+            @NotNull Map<String, String> resultMap,
+            @NotNull Map<String, Map<String, String>> filterMap) {
 
         loopXMLNodes(rootElement, new LoopXMLNodeCallBack() {
             @Override
-            public boolean node(Element element) {
+            public boolean node(@NotNull Element element) {
 
                 //当前节点的名称、文本内容和属性
                 Set<String> resultKeys = filterMap.keySet();
@@ -413,21 +429,21 @@ public class XMLUtil {
     public static Point findPointByAttrKeyValueEndWith(
             Element rootElement,
             String key,
-            String value) {
+            @NotNull String value) {
 
         //当前节点的名称、文本内容和属性
 
         Attribute attribute = rootElement.attribute(QName.get(key));
         if (attribute != null) {
-            System.out.println(attribute.getValue());
+//            System.out.println(attribute.getValue());
         }
         if (attribute != null && attribute.getValue().endsWith(value)) {
             return getElementBoundsCenter(rootElement);
         }
 
         //递归遍历当前节点所有的子节点
-        List<Element> listElement=rootElement.elements();//所有一级子节点的list
-        for(Element e : listElement) {//遍历所有一级子节点
+        List<Element> listElement = rootElement.elements();//所有一级子节点的list
+        for (Element e : listElement) {//遍历所有一级子节点
             Point point = findPointByAttrKeyValueEndWith(e, key, value);//递归
             if (point.x != 0 && point.y != 0) {
                 return point;
@@ -439,10 +455,11 @@ public class XMLUtil {
 
 
     /**
-     * @param nodes 指定元素列表
+     * @param nodes     指定元素列表
      * @param filterMap 指定文本内容
      * @return 查找元素列表中，content-desc 或 text 包含 指定string的元素及坐标中心
      */
+    @NotNull
     public static Map<String, Point> findElementByAttrTextStartWith(List<Element> nodes, List<String> filterMap) {
         List<String> filterStringKey = new ArrayList<>();
         filterStringKey.add("content-desc");
@@ -488,7 +505,7 @@ public class XMLUtil {
      * @param element 指定元素
      * @return 获取指定元素bounds属性记录的中心位置
      */
-    public static Point getElementBoundsCenter(Element element) {
+    public static Point getElementBoundsCenter(@NotNull Element element) {
         if (attrBoundsIsNull(element)) {
             return new Point(0, 0);
         }
@@ -502,7 +519,7 @@ public class XMLUtil {
                 elementRightBottomPoint.y);
     }
 
-    public static Point getElementLeftTopPoint(Element element) {
+    public static Point getElementLeftTopPoint(@NotNull Element element) {
         if (attrBoundsIsNull(element)) {
             return new Point(0, 0);
         }
@@ -514,7 +531,7 @@ public class XMLUtil {
         return new Point(left, top);
     }
 
-    public static Point getElementRightBottomPoint(Element element) {
+    public static Point getElementRightBottomPoint(@NotNull Element element) {
         if (attrBoundsIsNull(element)) {
             return new Point(0, 0);
         }
@@ -527,6 +544,7 @@ public class XMLUtil {
 
     }
 
+    @NotNull
     private static String[] getElementBoundsSplit(Element element) {
 
         Attribute bounds = element.attribute("bounds");
@@ -550,12 +568,13 @@ public class XMLUtil {
 
 
     /**
-     * @param price 数字
-     * @param numList 数字对应Map的Key
+     * @param price       数字
+     * @param numList     数字对应Map的Key
      * @param numPointMap 通过key活的point
      * @return 指定数字对应point组合
      */
-    public static Point[] numKeyBroadPoint(String price, String[] numList, Map<String, Point> numPointMap) {
+    @NotNull
+    public static Point[] numKeyBroadPoint(String price, @NotNull String[] numList, @NotNull Map<String, Point> numPointMap) {
         Point[] pricePoints = new Point[price.length()];
         int length = price.length();
         for (int i = 0; i < length; i++) {

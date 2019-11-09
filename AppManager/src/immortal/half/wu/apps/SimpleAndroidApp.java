@@ -3,6 +3,7 @@ package immortal.half.wu.apps;
 import immortal.half.wu.apps.IdleFish.sender.actions.PageActionHomeMy;
 import immortal.half.wu.apps.impls.PostedProductNames;
 import immortal.half.wu.apps.interfaces.IDevice;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -29,11 +30,17 @@ public class SimpleAndroidApp<T> extends BaseAndroidApp<T> {
                 return SimpleAndroidApp.class.getName();
             }
 
+            @NotNull
             @Override
             public Point getDxSize() {
                 return new Point(0, 0);
             }
         }, SimpleAndroidApp.class.getName(), SimpleAndroidApp.class.getName());
+    }
+
+    @Override
+    public void refreshConnect() {
+
     }
 
     @Override
@@ -47,7 +54,7 @@ public class SimpleAndroidApp<T> extends BaseAndroidApp<T> {
     }
 
     @Override
-    public void isLogin(PageActionHomeMy.IsLoginCallBack callBack) {
+    public void isLogin(@NotNull PageActionHomeMy.IsLoginCallBack callBack) {
         callBack.isLogin(false);
     }
 
@@ -62,12 +69,12 @@ public class SimpleAndroidApp<T> extends BaseAndroidApp<T> {
     }
 
     @Override
-    public void getPostedProductsName(PostedProductNames.CallBack callBack) {
+    public void getPostedProductsName(@NotNull PostedProductNames.CallBack callBack) {
         callBack.names(new HashSet<>(0));
     }
 
     @Override
-    public void getUserName(PageActionHomeMy.UserInfoCallBack callBack) {
+    public void getUserName(@NotNull PageActionHomeMy.UserInfoCallBack callBack) {
         callBack.result("", "");
     }
 

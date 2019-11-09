@@ -1,6 +1,8 @@
 package immortal.half.wu.utils;
 
 import com.google.gson.Gson;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -15,7 +17,7 @@ import java.util.TreeMap;
 
 public class JsonUtil {
 
-    public static <T> T fromJson(Class<T> tClass, String jsonString) {
+    public static <T> T fromJson(@NotNull Class<T> tClass, String jsonString) {
 
         try {
             return getGson().fromJson(jsonString, tClass);
@@ -25,7 +27,7 @@ public class JsonUtil {
 
         try {
             return tClass.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (@NotNull InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
 
@@ -37,7 +39,8 @@ public class JsonUtil {
     }
 
 
-    public static Object mapToObject(Map<String, Object> map, Class<?> beanClass) throws Exception {
+    @Nullable
+    public static Object mapToObject(@Nullable Map<String, Object> map, @NotNull Class<?> beanClass) throws Exception {
         if (map == null)
             return null;
 
@@ -76,6 +79,7 @@ public class JsonUtil {
 //        return map;
 //    }
     
+    @NotNull
     public static TreeMap<String, String> objectToMap(Object bean)
             throws IntrospectionException, IllegalAccessException, InvocationTargetException {
 

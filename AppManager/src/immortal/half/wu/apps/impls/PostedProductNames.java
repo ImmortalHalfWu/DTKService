@@ -2,6 +2,7 @@ package immortal.half.wu.apps.impls;
 
 import immortal.half.wu.apps.SimpleProcessPostedProductCallBack;
 import immortal.half.wu.apps.interfaces.IDevice;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
@@ -15,7 +16,7 @@ public class PostedProductNames extends SimpleProcessPostedProductCallBack {
     }
 
     @Override
-    protected void over(boolean isOver, Set<String> names) {
+    protected void over(boolean isOver, @NotNull Set<String> names) {
         if (isOver) {
             names.remove("擦亮");
             names.remove("更多");

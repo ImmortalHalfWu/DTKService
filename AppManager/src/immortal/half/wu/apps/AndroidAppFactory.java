@@ -7,13 +7,15 @@ import immortal.half.wu.apps.IdleFish.IdleFishAndroidApp;
 import immortal.half.wu.apps.IdleFish.beans.IdleFishProductBean;
 import immortal.half.wu.apps.interfaces.IAndroidApp;
 import immortal.half.wu.apps.interfaces.IDevice;
-
+import org.jetbrains.annotations.NotNull;
 
 
 public class AndroidAppFactory {
 
 
-    public static @Nullable IAndroidApp<IdleFishProductBean> createIdleFishAndroidApp(IDevice deviceID) {
+    @NotNull
+    public static @Nullable
+    IAndroidApp<IdleFishProductBean> createIdleFishAndroidApp(IDevice deviceID) {
         return ADBManager.getInstance().isInstallApp(deviceID.getDeviceId(), IdleFishAndroidApp.IDLE_FISH_PACKAGE_NAME) ?
                 new IdleFishAndroidApp(deviceID) :
                 SimpleAndroidApp.getInstance();

@@ -1,11 +1,15 @@
 package immortal.half.wu.apps.tasks;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 
 public class AndroidPagerSender implements Runnable, AndroidPagerTask.AndroidPagerTaskCallBack {
 
+    @NotNull
     private final Set<AndroidPagerListener> pagerListeners;
     private final ExecutorService executor;
 
@@ -45,7 +49,8 @@ public class AndroidPagerSender implements Runnable, AndroidPagerTask.AndroidPag
                 )) {
                     continue;
                 }
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
 
             if (!stringIsNull(lastActivityName) && !lastActivityName.equals(activityName)) {
                 try {
@@ -54,7 +59,8 @@ public class AndroidPagerSender implements Runnable, AndroidPagerTask.AndroidPag
                             lastPackageName,
                             lastActivityPath,
                             lastActivityName);
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
             }
 
             try {
@@ -64,13 +70,14 @@ public class AndroidPagerSender implements Runnable, AndroidPagerTask.AndroidPag
                         activityPath,
                         activityName
                 );
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
 
         }
     }
 
     @Override
-    public void onPagerResume(String deviceId, String packageName, String activityPath, String activityName) {
+    public void onPagerResume(String deviceId, String packageName, String activityPath, @NotNull String activityName) {
 
         if (activityName.equals(this.activityName)) {
             return;
@@ -94,17 +101,17 @@ public class AndroidPagerSender implements Runnable, AndroidPagerTask.AndroidPag
         executor.execute(this);
     }
 
-    private boolean stringIsNull(String text) {
+    private boolean stringIsNull(@Nullable String text) {
         return text == null || text.length() == 0;
     }
 
-    public void addListener(AndroidPagerListener listener) {
+    public void addListener(@Nullable AndroidPagerListener listener) {
         if (listener != null) {
             pagerListeners.add(listener);
         }
     }
 
-    public void removeListener(AndroidPagerListener listener) {
+    public void removeListener(@Nullable AndroidPagerListener listener) {
         if (listener != null) {
             pagerListeners.remove(listener);
         }

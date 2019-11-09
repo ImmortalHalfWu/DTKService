@@ -1,6 +1,7 @@
 package immortal.half.wu.ui;
 
 import immortal.half.wu.FileUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,31 +16,37 @@ public class PointFilterBuilder {
         filterMap = new HashMap<>();
     }
 
+    @NotNull
     public PointFilterBuilder addContentDesc(String contentDesc) {
         filterMap.put("content-desc", contentDesc);
         return this;
     }
 
+    @NotNull
     public PointFilterBuilder addText(String text) {
         filterMap.put("text", text);
         return this;
     }
 
+    @NotNull
     public PointFilterBuilder addResourceId(String resourceId) {
         filterMap.put("resource-id", resourceId);
         return this;
     }
 
+    @NotNull
     public PointFilterBuilder addClass(String className) {
         filterMap.put("class", className);
         return this;
     }
 
+    @NotNull
     public PointFilterBuilder addIndex(String index) {
         filterMap.put("index", index);
         return this;
     }
 
+    @NotNull
     public PointFilterBuilder next(String key) {
         if (filterMap.size() > 0 && !FileUtils.isEmpty(key)) {
             pointFilter.put(key, new HashMap<>(filterMap));
@@ -48,6 +55,7 @@ public class PointFilterBuilder {
         return this;
     }
 
+    @NotNull
     public PointFilterBean create() {
         return new PointFilterBean(pointFilter);
     }

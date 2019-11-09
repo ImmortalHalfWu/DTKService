@@ -1,17 +1,27 @@
 package immortal.half.wu.adbs;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.awt.*;
 
 public interface IADBBuilder {
 
-    IADBBuilder addClick(Point point);
-    IADBBuilder addClick(Point point, int offsetX, int offsetY);
-    IADBBuilder addClick(Point[] point);
-    IADBBuilder addSwipe(Point start, Point end, int time);
-    IADBBuilder addText(String text);
-    IADBBuilder addBackClick();
-    IADBBuilder addCallBack(ADBRunnable runnable);
-    IADBBuilder delayTime(long ms);
+    @NotNull IADBBuilder addClick(Point point);
+
+    @NotNull IADBBuilder addClick(Point point, int offsetX, int offsetY);
+
+    @NotNull IADBBuilder addClick(Point[] point);
+
+    @NotNull IADBBuilder addSwipe(Point start, Point end, int time);
+
+    @NotNull IADBBuilder addText(String text);
+
+    @NotNull IADBBuilder addBackClick();
+
+    @NotNull IADBBuilder addCallBack(ADBRunnable runnable);
+
+    @NotNull IADBBuilder delayTime(long ms);
+
     void send(String deviceId);
 
 }

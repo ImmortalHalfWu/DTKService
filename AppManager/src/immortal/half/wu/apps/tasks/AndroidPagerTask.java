@@ -2,6 +2,8 @@ package immortal.half.wu.apps.tasks;
 
 
 import immortal.half.wu.adbs.ADBManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -11,7 +13,9 @@ import java.util.concurrent.ExecutorService;
 public class AndroidPagerTask implements Runnable {
 
     private static AndroidPagerTask instance;
+    @NotNull
     private final Set<String> listenerDeviceIds;
+    @NotNull
     private final ExecutorService executor;
 
     private final AndroidPagerTaskCallBack callBack;
@@ -23,7 +27,7 @@ public class AndroidPagerTask implements Runnable {
         executor.execute(this);
     }
 
-    public static void init(ExecutorService executor, AndroidPagerTaskCallBack callBack) {
+    public static void init(@NotNull ExecutorService executor, AndroidPagerTaskCallBack callBack) {
         if (instance == null) {
             synchronized (AndroidPagerTask.class) {
                 if (instance == null) {
@@ -70,18 +74,18 @@ public class AndroidPagerTask implements Runnable {
                         mResumedActivity: ActivityRecord{69d26d4 u0 com.taobao.idlefish/.post.activity.publishEntry.PublishEntryActivity t844}
                           ResumedActivity: ActivityRecord{69d26d4 u0 com.taobao.idlefish/.post.activity.publishEntry.PublishEntryActivity t844}
                              */
-                            String[] split = topActivity.split("/");
+                        String[] split = topActivity.split("/");
 
-                            String[] s1 = split[0].split(" ");
-                            packageName = s1[s1.length - 1];
+                        String[] s1 = split[0].split(" ");
+                        packageName = s1[s1.length - 1];
 
-                            s1 = split[1].split(" ");
-                            activityPath = s1[0];
+                        s1 = split[1].split(" ");
+                        activityPath = s1[0];
 
-                            s1 = activityPath.split("\\.");
-                            activityName = s1[s1.length - 1];
+                        s1 = activityPath.split("\\.");
+                        activityName = s1[s1.length - 1];
 
-                            callBack.onPagerResume(key, packageName, activityPath, activityName);
+                        callBack.onPagerResume(key, packageName, activityPath, activityName);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -97,13 +101,13 @@ public class AndroidPagerTask implements Runnable {
 
     }
 
-    void addListenDevice(String deviceId) {
+    void addListenDevice(@Nullable String deviceId) {
         if (deviceId != null && deviceId.length() > 0) {
             listenerDeviceIds.add(deviceId);
         }
     }
 
-    void removeListenDevice(String deviceId) {
+    void removeListenDevice(@Nullable String deviceId) {
         if (deviceId != null && deviceId.length() > 0) {
             listenerDeviceIds.add(deviceId);
         }

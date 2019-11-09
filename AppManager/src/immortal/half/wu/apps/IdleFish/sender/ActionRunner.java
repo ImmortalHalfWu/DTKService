@@ -5,11 +5,13 @@ import immortal.half.wu.adbs.ADBManager;
 import immortal.half.wu.adbs.IADBBuilder;
 import immortal.half.wu.apps.interfaces.IDevice;
 import immortal.half.wu.ui.UIProcessor;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 class ActionRunner implements Runnable {
 
+    @NotNull
     private final IDevice iDevice;
     private final String deviceId;
     private final List<IAction> actions;

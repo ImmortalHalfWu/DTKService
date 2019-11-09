@@ -6,15 +6,17 @@ import immortal.half.wu.apps.IdleFish.sender.IdleFishActionController;
 import immortal.half.wu.apps.IdleFish.sender.actions.PageActionHomeMy;
 import immortal.half.wu.apps.impls.PostedProductNames;
 import immortal.half.wu.apps.interfaces.IDevice;
+import org.jetbrains.annotations.NotNull;
 
 public class IdleFishAndroidApp extends BaseAndroidApp<IdleFishProductBean> {
 
     public final static String IDLE_FISH_PACKAGE_NAME = "com.taobao.idlefish";
     private final static String IDLE_FISH_MAIN_PATH = "com.taobao.fleamarket.home.activity.MainActivity";
 
+    @NotNull
     private final IdleFishActionController controller;
 
-    public IdleFishAndroidApp(IDevice deviceId) {
+    public IdleFishAndroidApp(@NotNull IDevice deviceId) {
         super(deviceId, IDLE_FISH_PACKAGE_NAME, IDLE_FISH_MAIN_PATH);
 
         controller = new IdleFishActionController(deviceId, packageName, mainActivityPath);
@@ -24,6 +26,11 @@ public class IdleFishAndroidApp extends BaseAndroidApp<IdleFishProductBean> {
     @Override
     public void isLogin(PageActionHomeMy.IsLoginCallBack callBack) {
         controller.isLogin(callBack);
+    }
+
+    @Override
+    public void refreshConnect() {
+        controller.init();
     }
 
     @Override
@@ -57,22 +64,22 @@ public class IdleFishAndroidApp extends BaseAndroidApp<IdleFishProductBean> {
 
 
     @Override
-    public void postProduct(IdleFishProductBean product) {
+    public void postProduct(@NotNull IdleFishProductBean product) {
         controller.postProduct(product);
     }
 
     @Override
-    public void deleteProduct(String name) {
+    public void deleteProduct(@NotNull String name) {
         controller.deleteProduct(name);
     }
 
     @Override
-    public void getPostedProductsName(PostedProductNames.CallBack callBack) {
+    public void getPostedProductsName(@NotNull PostedProductNames.CallBack callBack) {
         controller.getPostedProductsName(callBack);
     }
 
     @Override
-    public void getUserName(PageActionHomeMy.UserInfoCallBack callBack) {
+    public void getUserName(@NotNull PageActionHomeMy.UserInfoCallBack callBack) {
         controller.getUserName(callBack);
     }
 

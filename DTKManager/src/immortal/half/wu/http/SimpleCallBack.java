@@ -4,6 +4,8 @@ import immortal.half.wu.utils.JsonUtil;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
@@ -13,13 +15,13 @@ import java.util.Objects;
 public abstract class SimpleCallBack<T> implements Callback {
 
     @Override
-    public void onFailure(Call call, IOException e) {
+    public void onFailure(Call call, @NotNull IOException e) {
         e.printStackTrace();
         onFail(call, e);
     }
 
     @Override
-    public void onResponse(Call call, Response response) throws IOException {
+    public void onResponse(Call call, @Nullable Response response) throws IOException {
         if (response == null || response.body() == null) {
             onFailure(call, new IOException("response.body() == null"));
             return;
@@ -33,6 +35,7 @@ public abstract class SimpleCallBack<T> implements Callback {
     public abstract void onResponse(Call call, T resultBean, String resultString) throws IOException;
     public abstract void onFail(Call call, IOException e);
 
+    @NotNull
     private Class<T> getT() {
         Type sType = getClass().getGenericSuperclass();
         Type[] generics = ((ParameterizedType) sType).getActualTypeArguments();

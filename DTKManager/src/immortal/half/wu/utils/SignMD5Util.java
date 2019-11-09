@@ -1,5 +1,8 @@
 package immortal.half.wu.utils;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
 import java.security.MessageDigest;
@@ -15,7 +18,8 @@ public class SignMD5Util {
      * @param params 请求参数
      * @param secretKey 密钥
      */
-    public static Map<String, String> getSignMap(Object params, String secretKey, String appKey) {
+    @NotNull
+    public static Map<String, String> getSignMap(@Nullable Object params, String secretKey, String appKey) {
 
         TreeMap<String, String> paramsSignMap = new TreeMap<>();
         if (params == null){
@@ -35,7 +39,7 @@ public class SignMD5Util {
 
             return paramsSignMap;
 
-        } catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
+        } catch (@NotNull IntrospectionException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
 
@@ -78,7 +82,7 @@ public class SignMD5Util {
      *
      * @see [类、类#方法、类#成员]
      */
-    private static String MD5(String s) {
+    private static String MD5(@NotNull String s) {
         char[] hexDigits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
         try {
             byte[] btInput = s.getBytes();

@@ -1,7 +1,9 @@
 package immortal.half.wu.adbs;
 
 import immortal.half.wu.FileUtils;
-import immortal.half.wu.utils.MLog;
+import immortal.half.wu.LogUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -9,12 +11,12 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 class ADBUtils {
-
+    private static final String TAG = "ADB";
     private final static String ADB_PHONE_ROOT_DIR = "/sdcard/";
     private final static String ADB = "adb -s ";
     private final static String ADB_UI_AUTO_MATOR = " shell uiautomator dump " + ADB_PHONE_ROOT_DIR;
     private final static String ADB_PULL_FILE = " pull " + ADB_PHONE_ROOT_DIR;
-    private final static String ADB_PUSH_FILE = " push " ;
+    private final static String ADB_PUSH_FILE = " push ";
     private final static String ADB_START_IDLE_FISH_MAIN_ACTIVITY = " shell am start -n com.taobao.idlefish/com.taobao.fleamarket.home.activity.InitActivity";
     private final static String ADB_IDLE_FISH_IS_RUNNING = " shell dumpsys activity activities | grep ResumedActivity";
     private final static String ADB_IDLE_FISH_IS_INSTANCES = " shell pm list packages | grep com.taobao.idlefish";
@@ -55,6 +57,7 @@ class ADBUtils {
     synchronized static boolean adbIdleFishIsInstance(String deviceAddr) {
         return runInCmd(ADB + deviceAddr + ADB_IDLE_FISH_IS_INSTANCES, "com.taobao.idlefish");
     }
+
     synchronized static boolean adbKeyBoardIsInstance(String deviceAddr) {
         return runInCmd(ADB + deviceAddr + ADB_KEY_BOARD_IS_INSTANCES, "com.android.adbkeyboard");
     }
@@ -71,20 +74,20 @@ class ADBUtils {
         return runInCmd(ADB + deviceAddr + ADB_INSTANCES + apkPath, "com.android.adbkeyboard");
     }
 
-    synchronized static boolean adbInstallApk(String deviceAddr, String apkPath, String packageName) {
+    synchronized static boolean adbInstallApk(String deviceAddr, String apkPath, @NotNull String packageName) {
         return runInCmd(ADB + deviceAddr + ADB_INSTANCES + apkPath, packageName);
     }
 
-    synchronized static boolean adbUNInstallApk(String deviceAddr, String packageName) {
+    synchronized static boolean adbUNInstallApk(String deviceAddr, @NotNull String packageName) {
         return runInCmd(ADB + deviceAddr + ADB_UNINSTALL + packageName, packageName);
     }
 
-    synchronized static boolean adbGetAndroidUIXML(String deviceAddr, String phoneFileName, String saveFileName) {
+    synchronized static boolean adbGetAndroidUIXML(String deviceAddr, @NotNull String phoneFileName, String saveFileName) {
         return runInCmd(ADB + deviceAddr + ADB_UI_AUTO_MATOR + phoneFileName, "UI hierchary dumped to: ") &&
                 runInCmd(ADB + deviceAddr + ADB_PULL_FILE + phoneFileName + " " + saveFileName, phoneFileName);
     }
 
-    synchronized static boolean adbPushFile(String deviceAddr, String fromPath, String toFileName) {
+    synchronized static boolean adbPushFile(String deviceAddr, @NotNull String fromPath, String toFileName) {
         return runInCmd(ADB + deviceAddr + ADB_PUSH_FILE + fromPath + " " + ADB_PHONE_ROOT_DIR + toFileName, fromPath);
     }
 
@@ -97,12 +100,12 @@ class ADBUtils {
         return runInCmd(ADB + deviceAddr + ADB_INPUT_TAP + x + " " + y, "");
     }
 
-    synchronized static boolean adbConnectDevice(String deviceAddr) {
+    synchronized static boolean adbConnectDevice(@NotNull String deviceAddr) {
         runInCmd(ADB + ADB_CONNECT + deviceAddr, "");
         return adbFindDevice(deviceAddr);
     }
 
-    synchronized static boolean adbFindDevice(String deviceAddr) {
+    synchronized static boolean adbFindDevice(@NotNull String deviceAddr) {
         return runInCmd(ADB_FIND_DEVICES, deviceAddr);
     }
 
@@ -111,7 +114,7 @@ class ADBUtils {
     }
 
     synchronized static boolean adbInputText(String deviceAddr, String text) {
-        return runInCmd(ADB + deviceAddr + " shell am broadcast -a ADB_INPUT_B64 --es msg `echo '"+text+"' | base64`", "Broadcast completed");
+        return runInCmd(ADB + deviceAddr + " shell am broadcast -a ADB_INPUT_B64 --es msg `echo '" + text + "' | base64`", "Broadcast completed");
     }
 
     synchronized static boolean adbSwipe(String deviceAddr, int startX, int startY, int endX, int endY, int time) {
@@ -142,40 +145,45 @@ class ADBUtils {
         return runInCmd(ADB + deviceId + ADB_WM_SIZE);
     }
 
-    public static boolean closeApp(String deviceAddr, String packageName) {
+    synchronized static boolean closeApp(String deviceAddr, String packageName) {
         return runInCmd(ADB + deviceAddr + " shell am force-stop " + packageName, "");
     }
 
-    synchronized static boolean runInCmd(String cmd, String resultIsSuc) {
-        return runInCmd(cmd).contains(resultIsSuc);
+    synchronized static boolean runInCmd(String cmd, @NotNull String resultIsSuc) {
+        String cmdResult = runInCmd(cmd);
+        boolean contains = cmdResult.contains(resultIsSuc);
+        if (!contains) {
+            LogUtil.e(TAG, "CMD执行失败" + cmd + "，执行结果：" + cmdResult);
+        }
+        return contains;
     }
 
     synchronized static String runInCmd(String cmd) {
 
         try {
-            MLog.logi("执行ADB：" + cmd);
+//            MLog.logi("执行ADB：" + cmd);
             Process process = Runtime.getRuntime().exec(cmd);
 //            process.waitFor();
 
             String erroResult = readCMDResult(process.getErrorStream());
 
             if (!FileUtils.isEmpty(erroResult)) {
-                MLog.logi("执行结果：" + erroResult);
+//                MLog.logi("执行结果：" + erroResult);
                 return erroResult;
             }
 
             String result = readCMDResult(process.getInputStream());
-            MLog.logi("执行结果：" + result);
+//            MLog.logi("执行结果：" + result);
             return result;
 
         } catch (IOException e) {
             e.printStackTrace();
-            MLog.logi("执行结果：" + e.getMessage());
+//            MLog.logi("执行结果：" + e.getMessage());
             return e.getMessage();
         }
     }
 
-    private static String readCMDResult(InputStream inputStream) throws IOException {
+    private static String readCMDResult(@Nullable InputStream inputStream) throws IOException {
 
         if (inputStream == null) {
             return "inputStream == null";

@@ -1,5 +1,7 @@
 package immortal.half.wu.apps.tasks;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +11,9 @@ import java.util.concurrent.Executors;
 public class AndroidPagerManager implements AndroidPagerTask.AndroidPagerTaskCallBack {
 
     private static AndroidPagerManager instance;
+    @NotNull
     private final ExecutorService executor;
+    @NotNull
     private final Map<String, AndroidPagerSender> pagerListenerHashMap;
 
     private AndroidPagerManager() {

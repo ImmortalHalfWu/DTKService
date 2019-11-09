@@ -1,6 +1,8 @@
 package immortal.half.wu.adbs;
 
 
+import org.jetbrains.annotations.NotNull;
+
 public class ADBProcess implements IADBProcess {
 
     private static ADBProcess instance;
@@ -16,7 +18,8 @@ public class ADBProcess implements IADBProcess {
         return instance;
     }
 
-    private ADBProcess() {}
+    private ADBProcess() {
+    }
 
     @Override
     public boolean adbStartIdleFishMainActivity(String deviceAddr) {
@@ -54,12 +57,12 @@ public class ADBProcess implements IADBProcess {
     }
 
     @Override
-    public boolean adbGetAndroidUIXML(String deviceAddr, String phoneFileName, String savePath) {
+    public boolean adbGetAndroidUIXML(String deviceAddr, @NotNull String phoneFileName, String savePath) {
         return ADBUtils.adbGetAndroidUIXML(deviceAddr, phoneFileName, savePath);
     }
 
     @Override
-    public boolean adbPushFile(String deviceAddr, String fromPath, String toFileName) {
+    public boolean adbPushFile(String deviceAddr, @NotNull String fromPath, String toFileName) {
         return ADBUtils.adbPushFile(deviceAddr, fromPath, toFileName);
     }
 
@@ -74,12 +77,12 @@ public class ADBProcess implements IADBProcess {
     }
 
     @Override
-    public boolean adbConnectDevice(String deviceAddr) {
+    public boolean adbConnectDevice(@NotNull String deviceAddr) {
         return ADBUtils.adbConnectDevice(deviceAddr);
     }
 
     @Override
-    public boolean adbFindDevice(String deviceAddr) {
+    public boolean adbFindDevice(@NotNull String deviceAddr) {
         return ADBUtils.adbFindDevice(deviceAddr);
     }
 
@@ -119,7 +122,7 @@ public class ADBProcess implements IADBProcess {
     }
 
     @Override
-    public boolean runInCmd(String cmd, String resultIsSuc) {
+    public boolean runInCmd(String cmd, @NotNull String resultIsSuc) {
         return ADBUtils.runInCmd(cmd, resultIsSuc);
     }
 

@@ -4,6 +4,7 @@ import immortal.half.wu.apps.SimpleProcessPostedProductCallBack;
 import immortal.half.wu.apps.interfaces.IDevice;
 import immortal.half.wu.ui.XMLUtil;
 import org.dom4j.Element;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 
@@ -14,10 +15,11 @@ public class PostedProductRefresh extends SimpleProcessPostedProductCallBack {
     }
 
     @Override
-    protected void over(boolean isOver, Set<String> names) { }
+    protected void over(boolean isOver, Set<String> names) {
+    }
 
     @Override
-    public boolean process(String productName, int price, Element refresh) {
+    public boolean process(String productName, int price, @Nullable Element refresh) {
         if (refresh == null) {
             return super.process(productName, price, null);
         }

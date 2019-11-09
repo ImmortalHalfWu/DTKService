@@ -3,6 +3,7 @@ package immortal.half.wu.adbs;
 import immortal.half.wu.FileUtils;
 import immortal.half.wu.OSInfo;
 import immortal.half.wu.utils.ZIPUtil;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.io.File;
@@ -51,6 +52,7 @@ public class ADBManager {
     }
 
 
+    @NotNull
     public IADBBuilder createBuild() {
         return new ADBBuilder();
     }
@@ -65,9 +67,10 @@ public class ADBManager {
   ResumedActivity: ActivityRecord{69d26d4 u0 com.taobao.idlefish/.post.activity.publishEntry.PublishEntryActivity t844}
          */
         try {
-            String[] s =  ADBUtils.findTopActivity(deviceAddr).split("/")[1].split(" ")[0].split("\\.");
+            String[] s = ADBUtils.findTopActivity(deviceAddr).split("/")[1].split(" ")[0].split("\\.");
             return s[s.length - 1];
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         return "";
     }
@@ -80,6 +83,7 @@ public class ADBManager {
         return ADBUtils.findTopActivity(deviceAddr);
     }
 
+    @NotNull
     public String[] adbFindAllDevice() {
 
         String s = ADBProcess.getInstance().adbFindAllDevice();
@@ -100,19 +104,20 @@ public class ADBManager {
         return returnStrings.toArray(new String[0]);
     }
 
+    @NotNull
     public String[] adbAllAppPackage(String deviceAddr) {
         return ADBUtils.adbAllAppPackage(deviceAddr).split("\r\n");
     }
 
-    public boolean isInstallApp(String deviceAddr, String appPackageName) {
+    public boolean isInstallApp(String deviceAddr, @NotNull String appPackageName) {
         return ADBUtils.adbAllAppPackage(deviceAddr).contains(appPackageName);
     }
 
-    public void installApp(String deviceId, String apkPath, String packageName) {
-        ADBUtils.adbInstallApk(deviceId, apkPath, packageName);
+    public boolean installApp(String deviceId, String apkPath, @NotNull String packageName) {
+        return ADBUtils.adbInstallApk(deviceId, apkPath, packageName);
     }
 
-    public void uninstallApp(String deviceId, String appPackageName) {
+    public void uninstallApp(String deviceId, @NotNull String appPackageName) {
         ADBUtils.adbUNInstallApk(deviceId, appPackageName);
     }
 
@@ -120,6 +125,7 @@ public class ADBManager {
         ADBUtils.adbChangeKeyBoard(deviceId);
     }
 
+    @NotNull
     public Point getDxSize(String deviceId) {
         String size = ADBUtils.adbWmSize(deviceId)
                 .replace("Physical size: ", "")
@@ -128,7 +134,7 @@ public class ADBManager {
         return new Point(Integer.parseInt(xes[0]), Integer.parseInt(xes[1]));
     }
 
-    public boolean androidUIXML(String deviceAddr, String phoneFileName, String saveFileName) {
+    public boolean androidUIXML(String deviceAddr, @NotNull String phoneFileName, String saveFileName) {
         return ADBUtils.adbGetAndroidUIXML(deviceAddr, phoneFileName, saveFileName);
     }
 

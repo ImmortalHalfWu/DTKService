@@ -7,6 +7,7 @@ import immortal.half.wu.apps.interfaces.IAndroidPager;
 import immortal.half.wu.apps.interfaces.IDevice;
 import immortal.half.wu.ui.XMLUtil;
 import org.dom4j.Element;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.Set;
@@ -21,7 +22,7 @@ public class PostedProductRemove extends SimpleProcessPostedProductCallBack {
     }
 
     @Override
-    public boolean process(String productName, int price, Element refresh, Element more) {
+    public boolean process(@NotNull String productName, int price, Element refresh, @NotNull Element more) {
 
         if (removeProduct.startsWith(productName)) {
             Point point = XMLUtil.getElementBoundsCenter(more);

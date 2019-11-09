@@ -6,6 +6,7 @@ import immortal.half.wu.http.MHttpClient;
 import immortal.half.wu.http.SimpleCallBack;
 import immortal.half.wu.utils.FinalString;
 import immortal.half.wu.utils.SignMD5Util;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
@@ -133,6 +134,7 @@ public class DTKManager {
         }
     }
 
+    @NotNull
     private static Map<String, String> createParams(Object params) {
         return SignMD5Util.getSignMap(params, dtkManager.appSecret, dtkManager.appKey);
     }
@@ -141,7 +143,4 @@ public class DTKManager {
         return dtkManager != null &&  dtkManager.appSecret != null && dtkManager.appKey != null;
     }
 
-    public static void main(String[] args) {
-        System.out.println("asaaaaaaaaaa");
-    }
 }

@@ -1,16 +1,17 @@
 package immortal.half.wu;
 
-import com.sun.istack.internal.Nullable;
 import immortal.half.wu.apps.AndroidAppFactory;
 import immortal.half.wu.apps.IdleFish.beans.IdleFishProductBean;
 import immortal.half.wu.apps.interfaces.IAndroidApp;
 import immortal.half.wu.apps.interfaces.IDevice;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class AppManager {
 
+    private static final String TAG = "AppManager";
     private static AppManager appManager;
 
     private Map<String, IAndroidApp> androidAppMap;
@@ -30,15 +31,19 @@ public class AppManager {
         return appManager;
     }
 
-    public @Nullable IAndroidApp<IdleFishProductBean> createIdleFishAndroidApp(IDevice deviceID) {
+    @org.jetbrains.annotations.NotNull
+    public IAndroidApp<IdleFishProductBean> createIdleFishAndroidApp(@NotNull IDevice deviceID) {
 
+        LogUtil.i(TAG, "获取" + deviceID + "下闲鱼App实例");
         String key = deviceID + "idleFish";
         IAndroidApp<IdleFishProductBean> iAndroidApp = androidAppMap.get(key);
 
-        if (iAndroidApp == null && (iAndroidApp = AndroidAppFactory.createIdleFishAndroidApp(deviceID)) == null) {
-            return null;
+        if (iAndroidApp == null) {
+            LogUtil.e(TAG, "获取" + deviceID + "下闲鱼App实例失败");
+            iAndroidApp = AndroidAppFactory.createIdleFishAndroidApp(deviceID);
         }
 
+        LogUtil.i(TAG, "获取" + deviceID + "下闲鱼App实例成功");
         androidAppMap.put(key, iAndroidApp);
         return iAndroidApp;
 

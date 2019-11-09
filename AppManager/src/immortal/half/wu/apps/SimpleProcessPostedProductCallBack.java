@@ -5,6 +5,7 @@ import immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerFactory;
 import immortal.half.wu.apps.interfaces.IDevice;
 import immortal.half.wu.apps.interfaces.ProcessPostedProductCallBack;
 import org.dom4j.Element;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -12,6 +13,7 @@ import java.util.Set;
 
 public abstract class SimpleProcessPostedProductCallBack implements ProcessPostedProductCallBack {
 
+    @NotNull
     protected final Set<String> names;
     protected final IDevice deviceId;
 

@@ -11,15 +11,11 @@ import java.util.zip.ZipFile;
 public class ZIPUtil {
 
     /**
-
      * zip解压
-
-     * @param srcFile        zip源文件
-
-     * @param destDirPath     解压后的目标文件夹
-
+     *
+     * @param srcFile     zip源文件
+     * @param destDirPath 解压后的目标文件夹
      * @throws RuntimeException 解压失败会抛出运行时异常
-
      */
 
     public static void unZip(File srcFile, String destDirPath) throws RuntimeException {
@@ -66,7 +62,7 @@ public class ZIPUtil {
 
                     // 保证这个文件的父文件夹必须要存在
 
-                    if(!targetFile.getParentFile().exists()){
+                    if (!targetFile.getParentFile().exists()) {
 
                         targetFile.getParentFile().mkdirs();
 
@@ -102,7 +98,7 @@ public class ZIPUtil {
 
             long end = System.currentTimeMillis();
 
-            System.out.println("解压完成，耗时：" + (end - start) +" ms");
+            System.out.println("解压完成，耗时：" + (end - start) + " ms");
 
         } catch (Exception e) {
 
@@ -110,7 +106,7 @@ public class ZIPUtil {
 
         } finally {
 
-            if(zipFile != null){
+            if (zipFile != null) {
 
                 try {
 

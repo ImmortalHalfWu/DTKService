@@ -7,7 +7,7 @@ public class TestMain {
 //        Device.test();
 //        APP.test();
         APP.test2();
-
+//        FrameWork.test();
     }
 
 }

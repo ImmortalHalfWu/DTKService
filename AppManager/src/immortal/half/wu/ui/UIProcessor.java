@@ -3,6 +3,7 @@ package immortal.half.wu.ui;
 import immortal.half.wu.FileUtils;
 import immortal.half.wu.adbs.ADBManager;
 import org.dom4j.DocumentException;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.io.File;
@@ -11,30 +12,34 @@ import java.util.Map;
 
 public class UIProcessor {
 
+    @NotNull
     public static String getTopActivity(String devicesId) {
         String topActivity = ADBManager.getInstance().findTopActivity(devicesId);
         return topActivity == null ? "" : topActivity;
     }
 
+    @NotNull
     public static Map<String, Point> getPointByUIXML(
             String devicesId,
-            String fileName,
-            PointFilterBean pointFilterBean
+            @NotNull String fileName,
+            @NotNull PointFilterBean pointFilterBean
     ) {
         return getPointByUIXML(pointFilterBean, androidUIXMLHaveCache(devicesId, fileName));
     }
 
+    @NotNull
     public static Map<String, Point> getPointByUIXMLNoCache(
             String devicesId,
-            String fileName,
-            PointFilterBean pointFilterBean
+            @NotNull String fileName,
+            @NotNull PointFilterBean pointFilterBean
     ) {
         return getPointByUIXML(pointFilterBean, androidUIXMLNoCache(devicesId, fileName));
     }
 
+    @NotNull
     private static Map<String, Point> getPointByUIXML(
-            PointFilterBean pointFilterBean,
-            String xmlString) {
+            @NotNull PointFilterBean pointFilterBean,
+            @NotNull String xmlString) {
 
         if (!FileUtils.isEmpty(xmlString) && pointFilterBean.getPointFilter().size() > 0) {
 
@@ -55,9 +60,10 @@ public class UIProcessor {
         return new HashMap<>(0);
     }
 
+    @NotNull
     public static Map<String, String> getTextByUIXML(
-            PointFilterBean pointFilterBean,
-            String xmlString) {
+            @NotNull PointFilterBean pointFilterBean,
+            @NotNull String xmlString) {
 
         if (!FileUtils.isEmpty(xmlString) && pointFilterBean.getPointFilter().size() > 0) {
 
@@ -79,15 +85,15 @@ public class UIProcessor {
     }
 
 
-    public static String androidUIXMLHaveCache(String deviceId, String fileName) {
+    public static String androidUIXMLHaveCache(String deviceId, @NotNull String fileName) {
         return androidUIXMLHaveCache(deviceId, fileName, true);
     }
 
-    public static String androidUIXMLNoCache(String deviceId, String fileName) {
+    public static String androidUIXMLNoCache(String deviceId, @NotNull String fileName) {
         return androidUIXMLHaveCache(deviceId, fileName, false);
     }
 
-    private static String androidUIXMLHaveCache(String deviceId, String fileName, boolean findCache) {
+    private static String androidUIXMLHaveCache(String deviceId, @NotNull String fileName, boolean findCache) {
 
         String filePath = FileUtils.DIR_PATH_XML + fileName + ".xml";
 

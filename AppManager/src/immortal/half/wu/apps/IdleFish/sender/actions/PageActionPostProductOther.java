@@ -5,11 +5,13 @@ import immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerName;
 import immortal.half.wu.apps.IdleFish.sender.IAction;
 import immortal.half.wu.apps.interfaces.IAndroidPager;
 import immortal.half.wu.apps.interfaces.IDevice;
+import org.jetbrains.annotations.NotNull;
 
 import static immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerFactory.*;
 
 public class PageActionPostProductOther {
 
+    @NotNull
     public static IAction newPostProductOtherAction() {
         return SimpleAction.newInstanceXML(AndroidIdleFishPagerName.PAGER_NAME_POST_PRODUCT_OTHER, "index=\"3\" text=\"不讲价\"")
                 .setCheckSucAction(
@@ -21,11 +23,12 @@ public class PageActionPostProductOther {
                 );
     }
 
+    @NotNull
     public static IAction newChoiceOtherAction() {
         return SimpleAction.newInstanceXML(AndroidIdleFishPagerName.PAGER_NAME_POST_PRODUCT_OTHER, "index=\"3\" text=\"不讲价\"")
                 .setCheckSucAction(new ICheckSucAction() {
                                        @Override
-                                       public void checkSucAction(IDevice iDevice, IADBBuilder adbBuilder, AndroidIdleFishPagerName pagerName) {
+                                       public void checkSucAction(@NotNull IDevice iDevice, @NotNull IADBBuilder adbBuilder, AndroidIdleFishPagerName pagerName) {
                                            /*
 
     public final static String PAGE_POINT_KEY_POST_PRODUCT_OTHER_NEW = "全新";

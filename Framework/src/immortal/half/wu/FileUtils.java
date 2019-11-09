@@ -1,5 +1,8 @@
 package immortal.half.wu;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -8,7 +11,7 @@ import java.util.*;
 /**
  * <p>文件操作工具类<p>
  */
-@SuppressWarnings({"resource","unused"})
+@SuppressWarnings({"resource", "unused"})
 public class FileUtils {
 
 
@@ -20,7 +23,6 @@ public class FileUtils {
     public final static String DIR_PATH_WEB = DIR_PATH_ROOT + File.separator + "webs" + File.separator;
     public final static String DIR_PATH_OTHER = DIR_PATH_ROOT + File.separator + "others" + File.separator;
     public final static String DIR_PATH_ADB = DIR_PATH_ROOT + File.separator + "adbs" + File.separator;
-
 
 
     public final static String FILE_NAME_NEW_PRODUCT_JSON = "NewProductJson.json";
@@ -57,30 +59,33 @@ public class FileUtils {
 
     /**
      * 获取windows/linux的项目根目录
+     *
      * @return
      */
-    public static String getConTextPath(){
+    public static String getConTextPath() {
         String fileUrl = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-        if("usr".equals(fileUrl.substring(1,4))){
-            fileUrl = (fileUrl.substring(0,fileUrl.length()-16));//linux
-        }else{
-            fileUrl = (fileUrl.substring(1,fileUrl.length()-16));//windows
+        if ("usr".equals(fileUrl.substring(1, 4))) {
+            fileUrl = (fileUrl.substring(0, fileUrl.length() - 16));//linux
+        } else {
+            fileUrl = (fileUrl.substring(1, fileUrl.length() - 16));//windows
         }
         return fileUrl;
     }
 
     /**
      * 字符串转数组
-     * @param str 字符串
+     *
+     * @param str      字符串
      * @param splitStr 分隔符
      * @return
      */
-    public static String[] StringToArray(String str,String splitStr){
+    @Nullable
+    public static String[] StringToArray(@Nullable String str, @NotNull String splitStr) {
         String[] arrayStr = null;
-        if(!"".equals(str) && str != null){
-            if(str.contains(splitStr)){
+        if (!"".equals(str) && str != null) {
+            if (str.contains(splitStr)) {
                 arrayStr = str.split(splitStr);
-            }else{
+            } else {
                 arrayStr = new String[1];
                 arrayStr[0] = str;
             }
@@ -89,14 +94,11 @@ public class FileUtils {
     }
 
 
-
-
-
-
     /**
      * @param deviceId 设备id
      * @return 设备对应的设备数据文件路径
      */
+    @NotNull
     public static String createDeviceDir(String deviceId) {
         String s = DIR_PATH_DEVICE + deviceId + File.separator;
         mkDir(s);
@@ -142,6 +144,7 @@ public class FileUtils {
      * @param deviceId 文件名称
      * @return 设备对应的新商品数据文件路径
      */
+    @NotNull
     public static String createDeviceConfigFile(String deviceId) {
         String deviceInfoFile = createDeviceDir(deviceId);
         String s = deviceInfoFile + "config" + ".json";
@@ -178,7 +181,6 @@ public class FileUtils {
     }
 
 
-
 //    mkDir(DIR_PATH_IMG);
 //    mkDir(DIR_PATH_XML);
 //    mkDir(DIR_PATH_JSON);
@@ -186,22 +188,11 @@ public class FileUtils {
 //    mkDir(DIR_PATH_DEVICE);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * @param deviceId 设备id
      * @return 设备对应的web文件路径
      */
+    @NotNull
     public static String createWebCacheDir(String deviceId) {
         String s = DIR_PATH_WEB + deviceId + File.separator;
         mkDir(s);
@@ -212,6 +203,7 @@ public class FileUtils {
      * @param deviceId 设备id
      * @return 设备对应的已经发布商品数据文件路径
      */
+    @NotNull
     public static String createPostedProductInfoFile(String deviceId) {
         String s = DIR_PATH_JSON + deviceId + FILE_NAME_POSTED_PRODUCT_JSON;
         mkFile(s);
@@ -224,7 +216,8 @@ public class FileUtils {
      * @param Path
      * @return
      */
-    public static String readFile(String Path) {
+    @Nullable
+    public static String readFile(@NotNull String Path) {
         BufferedReader reader = null;
         String laststr = "";
         try {
@@ -255,29 +248,31 @@ public class FileUtils {
      * 1.当路径不存在时，map返回retType值为1
      * 2.当路径为文件路径时，map返回retType值为2，文件名fileName值为文件名
      * 3.当路径下有文件夹时，map返回retType值为3，文件名列表fileNameList，文件夹名列表folderNameList
+     *
      * @param folderPath 路径
-     * @param queryStr 模糊查询字符串
+     * @param queryStr   模糊查询字符串
      * @return
      */
-    public static HashMap<String, Object> getFilesName(String folderPath , String queryStr) {
+    @NotNull
+    public static HashMap<String, Object> getFilesName(@NotNull String folderPath, String queryStr) {
         HashMap<String, Object> map = new HashMap<>();
         List<String> fileNameList = new ArrayList<>();//文件名列表
         List<String> folderNameList = new ArrayList<>();//文件夹名列表
         File f = new File(folderPath);
         if (!f.exists()) { //路径不存在
             map.put("retType", "1");
-        }else{
+        } else {
             boolean flag = f.isDirectory();
-            if(flag==false){ //路径为文件
+            if (flag == false) { //路径为文件
                 map.put("retType", "2");
                 map.put("fileName", f.getName());
-            }else{ //路径为文件夹
+            } else { //路径为文件夹
                 map.put("retType", "3");
                 File[] fa = f.listFiles();
-                queryStr = queryStr==null ? "" : queryStr;//若queryStr传入为null,则替换为空（indexOf匹配值不能为null）
+                queryStr = queryStr == null ? "" : queryStr;//若queryStr传入为null,则替换为空（indexOf匹配值不能为null）
                 for (int i = 0; i < fa.length; i++) {
                     File fs = fa[i];
-                    if(fs.getName().indexOf(queryStr)!=-1){
+                    if (fs.getName().indexOf(queryStr) != -1) {
                         if (fs.isDirectory()) {
                             folderNameList.add(fs.getName());
                         } else {
@@ -294,10 +289,12 @@ public class FileUtils {
 
     /**
      * 以行为单位读取文件，读取到最后一行
+     *
      * @param filePath
      * @return
      */
-    public static List<String> readFileContent(String filePath) {
+    @NotNull
+    public static List<String> readFileContent(@NotNull String filePath) {
         BufferedReader reader = null;
         List<String> listContent = new ArrayList<>();
         try {
@@ -325,18 +322,19 @@ public class FileUtils {
 
     /**
      * 读取指定行数据 ，注意：0为开始行
+     *
      * @param filePath
      * @param lineNumber
      * @return
      */
-    public static String readLineContent(String filePath,int lineNumber){
+    public static String readLineContent(@NotNull String filePath, int lineNumber) {
         BufferedReader reader = null;
-        String lineContent="";
+        String lineContent = "";
         try {
             reader = new BufferedReader(new FileReader(filePath));
-            int line=0;
-            while(line<=lineNumber){
-                lineContent=reader.readLine();
+            int line = 0;
+            while (line <= lineNumber) {
+                lineContent = reader.readLine();
                 line++;
             }
             reader.close();
@@ -355,37 +353,41 @@ public class FileUtils {
 
     /**
      * 读取从beginLine到endLine数据（包含beginLine和endLine），注意：0为开始行
+     *
      * @param filePath
      * @param beginLineNumber 开始行
-     * @param endLineNumber 结束行
+     * @param endLineNumber   结束行
      * @return
      */
-    public static List<String> readLinesContent(String filePath,int beginLineNumber,int endLineNumber){
+    @NotNull
+    public static List<String> readLinesContent(@NotNull String filePath, int beginLineNumber, int endLineNumber) {
         List<String> listContent = new ArrayList<>();
-        try{
+        try {
             int count = 0;
             BufferedReader reader = new BufferedReader(new FileReader(filePath));
             String content = reader.readLine();
-            while(content !=null){
-                if(count >= beginLineNumber && count <=endLineNumber){
+            while (content != null) {
+                if (count >= beginLineNumber && count <= endLineNumber) {
                     listContent.add(content);
                 }
                 content = reader.readLine();
                 count++;
             }
-        } catch(Exception e){
+        } catch (Exception e) {
         }
         return listContent;
     }
 
     /**
      * 读取若干文件中所有数据
+     *
      * @param listFilePath
      * @return
      */
+    @NotNull
     public static List<String> readFileContent_list(List<String> listFilePath) {
         List<String> listContent = new ArrayList<>();
-        for(String filePath : listFilePath){
+        for (String filePath : listFilePath) {
             File file = new File(filePath);
             BufferedReader reader = null;
             try {
@@ -414,24 +416,26 @@ public class FileUtils {
 
     /**
      * 文件数据写入（如果文件夹和文件不存在，则先创建，再写入）
+     *
      * @param filePath
      * @param content
-     * @param flag true:如果文件存在且存在内容，则内容换行追加；false:如果文件存在且存在内容，则内容替换
+     * @param flag     true:如果文件存在且存在内容，则内容换行追加；false:如果文件存在且存在内容，则内容替换
      */
-    public static String fileLinesWrite(String filePath,String content,boolean flag){
+    @NotNull
+    public static String fileLinesWrite(@NotNull String filePath, String content, boolean flag) {
         String filedo = "write";
         FileWriter fw = null;
         try {
-            File file=new File(filePath);
+            File file = new File(filePath);
             //如果文件夹不存在，则创建文件夹
-            if (!file.getParentFile().exists()){
+            if (!file.getParentFile().exists()) {
                 file.getParentFile().mkdirs();
             }
-            if(!file.exists()){//如果文件不存在，则创建文件,写入第一行内容
+            if (!file.exists()) {//如果文件不存在，则创建文件,写入第一行内容
                 file.createNewFile();
                 fw = new FileWriter(file);
                 filedo = "create";
-            }else{//如果文件存在,则追加或替换内容
+            } else {//如果文件存在,则追加或替换内容
                 fw = new FileWriter(file, flag);
             }
         } catch (IOException e) {
@@ -452,29 +456,29 @@ public class FileUtils {
 
 
     /*写入Text文件操作*/
-    public static void writeText(String filePath, String content,boolean isAppend) {
+    public static void writeText(@NotNull String filePath, @NotNull String content, boolean isAppend) {
         FileOutputStream outputStream = null;
         OutputStreamWriter outputStreamWriter = null;
         BufferedWriter bufferedWriter = null;
         try {
-            outputStream = new FileOutputStream(filePath,isAppend);
+            outputStream = new FileOutputStream(filePath, isAppend);
             outputStreamWriter = new OutputStreamWriter(outputStream);
             bufferedWriter = new BufferedWriter(outputStreamWriter);
             bufferedWriter.write(content);
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
-            try{
-                if(bufferedWriter != null){
+        } finally {
+            try {
+                if (bufferedWriter != null) {
                     bufferedWriter.close();
                 }
-                if (outputStreamWriter != null){
+                if (outputStreamWriter != null) {
                     outputStreamWriter.close();
                 }
-                if (outputStream != null){
+                if (outputStream != null) {
                     outputStream.close();
                 }
-            }catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -482,10 +486,11 @@ public class FileUtils {
 
     /**
      * 写文件
+     *
      * @param ins
      * @param out
      */
-    public static void writeIntoOut(InputStream ins, OutputStream out) {
+    public static void writeIntoOut(InputStream ins, @NotNull OutputStream out) {
         byte[] bb = new byte[10 * 1024];
         try {
             int cnt = ins.read(bb);
@@ -508,68 +513,75 @@ public class FileUtils {
 
     /**
      * 判断list中元素是否完全相同（完全相同返回true,否则返回false）
+     *
      * @param list
      * @return
      */
-    private static boolean hasSame(List<? extends Object> list){
-        if(null == list)
+    private static boolean hasSame(@Nullable List<? extends Object> list) {
+        if (null == list)
             return false;
         return 1 == new HashSet<Object>(list).size();
     }
 
     /**
      * 判断list中是否有重复元素（无重复返回true,否则返回false）
+     *
      * @param list
      * @return
      */
-    private static boolean hasSame2(List<? extends Object> list){
-        if(null == list)
+    private static boolean hasSame2(@Nullable List<? extends Object> list) {
+        if (null == list)
             return false;
         return list.size() == new HashSet<Object>(list).size();
     }
 
     /**
      * 增加/减少天数
+     *
      * @param date
      * @param num
      * @return
      */
-    public static Date DateAddOrSub(Date date, int num) {
+    public static Date DateAddOrSub(@NotNull Date date, int num) {
         Calendar startDT = Calendar.getInstance();
         startDT.setTime(date);
         startDT.add(Calendar.DAY_OF_MONTH, num);
         return startDT.getTime();
     }
     //https://www.cnblogs.com/chenhuan001/p/6575053.html
+
     /**
      * 递归删除文件或者目录
+     *
      * @param file_path
      */
-    public static void deleteEveryThing(String file_path) {
-        try{
-            File file=new File(file_path);
-            if(!file.exists()){
-                return ;
+    public static void deleteEveryThing(@NotNull String file_path) {
+        try {
+            File file = new File(file_path);
+            if (!file.exists()) {
+                return;
             }
-            if(file.isFile()){
+            if (file.isFile()) {
                 file.delete();
-            }else{
+            } else {
                 File[] files = file.listFiles();
-                for(int i=0;i<files.length;i++){
-                    String root=files[i].getAbsolutePath();//得到子文件或文件夹的绝对路径
+                for (int i = 0; i < files.length; i++) {
+                    String root = files[i].getAbsolutePath();//得到子文件或文件夹的绝对路径
                     deleteEveryThing(root);
                 }
                 file.delete();
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("删除文件失败");
         }
     }
+
     /**
      * 创建目录
+     *
      * @param dir_path
      */
-    public static void mkDir(String dir_path) {
+    public static void mkDir(@NotNull String dir_path) {
         File myFolderPath = new File(dir_path);
         try {
             if (!myFolderPath.exists()) {
@@ -584,7 +596,7 @@ public class FileUtils {
     /**
      * 创建目录
      */
-    public static void mkFile(String file_path) {
+    public static void mkFile(@NotNull String file_path) {
         File myFolderPath = new File(file_path);
         try {
             if (!myFolderPath.exists()) {
@@ -602,12 +614,13 @@ public class FileUtils {
      * @param fileName
      * @return
      */
-    public static boolean isFileExist(String fileName) {
+    public static boolean isFileExist(@NotNull String fileName) {
         return new File(fileName).isFile();
     }
 
     /**
      * 得到文件后缀名
+     *
      * @param fileName
      * @return
      */
@@ -651,7 +664,7 @@ public class FileUtils {
      * @param dst
      * @throws Exception
      */
-    public static void copy(File src, File dst) throws Exception {
+    public static void copy(File src, @NotNull File dst) throws Exception {
         if (!src.exists()) {
             return;
         }
@@ -692,7 +705,7 @@ public class FileUtils {
     }
 
     //链接url下载图片
-    public static File downloadPicture(String urlList,String path) {
+    public static File downloadPicture(@NotNull String urlList, @NotNull String path) {
         URL url = null;
         try {
             url = new URL(urlList);
@@ -718,7 +731,7 @@ public class FileUtils {
         }
     }
 
-    public static boolean isEmpty(String str) {
+    public static boolean isEmpty(@Nullable String str) {
         return str == null || str.length() == 0;
     }
 

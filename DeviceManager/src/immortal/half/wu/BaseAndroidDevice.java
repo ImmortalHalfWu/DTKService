@@ -8,6 +8,7 @@ import java.awt.*;
 
 public class BaseAndroidDevice implements IAndroidDevice {
 
+    private static final String TAG = "BaseAndroidDevice";
     private String deviceId;
     private Point dxSize;
 
@@ -20,23 +21,28 @@ public class BaseAndroidDevice implements IAndroidDevice {
         return deviceId;
     }
 
+    @org.jetbrains.annotations.NotNull
     @Override
     public String[] getAllAppsPackage() {
         return ADBManager.getInstance().adbAllAppPackage(deviceId);
     }
 
     @Override
-    public boolean isInstallApp(String appPackageName) {
-        return ADBManager.getInstance().isInstallApp(deviceId, appPackageName);
+    public boolean isInstallApp(@org.jetbrains.annotations.NotNull String appPackageName) {
+        boolean installApp = ADBManager.getInstance().isInstallApp(deviceId, appPackageName);
+        LogUtil.i(TAG, "设备" + deviceId + "是否安装" + appPackageName + "  " + installApp);
+        return installApp;
     }
 
     @Override
-    public void installApp(String apkPath, String appPackageName) {
-        ADBManager.getInstance().installApp(deviceId, apkPath, appPackageName);
+    public void installApp(String apkPath, @org.jetbrains.annotations.NotNull String appPackageName) {
+        LogUtil.i(TAG, "设备" + deviceId +
+                "安装" + appPackageName + "  " +
+                ADBManager.getInstance().installApp(deviceId, apkPath, appPackageName));
     }
 
     @Override
-    public void uninstallApp(String appPackageName) {
+    public void uninstallApp(@org.jetbrains.annotations.NotNull String appPackageName) {
         ADBManager.getInstance().uninstallApp(deviceId, appPackageName);
     }
 
@@ -45,11 +51,13 @@ public class BaseAndroidDevice implements IAndroidDevice {
         ADBManager.getInstance().choiceTextInputKeyBoard(deviceId);
     }
 
+    @org.jetbrains.annotations.NotNull
     @Override
     public Point getDxSize() {
         return dxSize == null ? dxSize = ADBManager.getInstance().getDxSize(deviceId) : dxSize;
     }
 
+    @org.jetbrains.annotations.NotNull
     @Override
     public String toString() {
         return "BaseAndroidDevice{" +

@@ -1,5 +1,8 @@
 package immortal.half.wu.adbs;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,14 +10,16 @@ import java.util.List;
 public class ADBBuilder implements IADBBuilder {
 
 
+    @NotNull
     private final List<ADBMessageBean> adbMessageBeans;
 
     public ADBBuilder() {
         adbMessageBeans = new LinkedList<>();
     }
 
+    @NotNull
     @Override
-    public IADBBuilder addClick(Point point) {
+    public IADBBuilder addClick(@Nullable Point point) {
         if (point != null) {
             adbMessageBeans.add(ADBMessageBean.instanceClick(point));
             delayTime(200);
@@ -22,8 +27,9 @@ public class ADBBuilder implements IADBBuilder {
         return this;
     }
 
+    @NotNull
     @Override
-    public IADBBuilder addClick(Point point, int offsetX, int offsetY) {
+    public IADBBuilder addClick(@Nullable Point point, int offsetX, int offsetY) {
         if (point != null) {
             point.x += offsetX;
             point.y += offsetY;
@@ -31,8 +37,9 @@ public class ADBBuilder implements IADBBuilder {
         return addClick(point);
     }
 
+    @NotNull
     @Override
-    public IADBBuilder addClick(Point[] points) {
+    public IADBBuilder addClick(@NotNull Point[] points) {
         for (Point point :
                 points) {
             if (point != null) {
@@ -43,36 +50,41 @@ public class ADBBuilder implements IADBBuilder {
         return this;
     }
 
+    @NotNull
     @Override
-    public IADBBuilder addSwipe(Point start, Point end, int time) {
+    public IADBBuilder addSwipe(@Nullable Point start, @Nullable Point end, int time) {
         if (start != null && end != null) {
             adbMessageBeans.add(ADBMessageBean.instanceSwipe(start, end, time));
         }
         return this;
     }
 
+    @NotNull
     @Override
-    public IADBBuilder addText(String text) {
+    public IADBBuilder addText(@Nullable String text) {
         if (text != null) {
             adbMessageBeans.add(ADBMessageBean.instanceText(text));
         }
         return this;
     }
 
+    @NotNull
     @Override
     public IADBBuilder addBackClick() {
         adbMessageBeans.add(ADBMessageBean.instanceBackClick());
         return this;
     }
 
+    @NotNull
     @Override
-    public IADBBuilder addCallBack(ADBRunnable callBack) {
+    public IADBBuilder addCallBack(@Nullable ADBRunnable callBack) {
         if (callBack != null) {
             adbMessageBeans.add(ADBMessageBean.instanceCallBack(callBack));
         }
         return this;
     }
 
+    @NotNull
     @Override
     public IADBBuilder delayTime(long ms) {
         addCallBack(adbProcess -> {
@@ -140,18 +152,20 @@ public class ADBBuilder implements IADBBuilder {
         private ADBRunnable callback;
 
 
-
         private ADBMessageBean(ADBRunnable run) {
             this(TYPE_CALL_BACK, null, null, 0);
             this.callback = run;
         }
+
         private ADBMessageBean(String text) {
             this(TYPE_TEXT, null, null, 0);
             this.text = text;
         }
+
         private ADBMessageBean(Point point) {
             this(TYPE_CLICK, point, null, 0);
         }
+
         private ADBMessageBean(int type, Point pointStart, Point pointEnd, int swipeTime) {
             mType = type;
             this.pointStart = pointStart;

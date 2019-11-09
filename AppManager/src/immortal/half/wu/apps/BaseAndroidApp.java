@@ -1,22 +1,29 @@
 package immortal.half.wu.apps;
 
+import immortal.half.wu.LogUtil;
 import immortal.half.wu.adbs.ADBManager;
 import immortal.half.wu.apps.interfaces.IAndroidApp;
 import immortal.half.wu.apps.interfaces.IDevice;
-
+import org.jetbrains.annotations.NotNull;
 
 
 public abstract class BaseAndroidApp<T> implements IAndroidApp<T> {
 
+    private static final String TAG = "BaseAndroidApp";
+
+    @NotNull
     protected final IDevice deviceId;
     protected final String packageName;
     protected final String mainActivityPath;
 
     public BaseAndroidApp(IDevice deviceId, String packageName, String mainActivityPath) {
+        ADBManager.getInstance().startActivity(deviceId.getDeviceId(), packageName, mainActivityPath);
+        LogUtil.i(TAG, "创建" + deviceId + "下App实例：" +
+                ", packageName = " + packageName +
+                ", mainActivityPath = " + mainActivityPath);
         this.deviceId = deviceId;
         this.packageName = packageName;
         this.mainActivityPath = mainActivityPath;
-        ADBManager.getInstance().startActivity(deviceId.getDeviceId(), packageName, mainActivityPath);
     }
 
     @Override
@@ -24,6 +31,7 @@ public abstract class BaseAndroidApp<T> implements IAndroidApp<T> {
         return deviceId.getDeviceId();
     }
 
+    @NotNull
     @Override
     public IDevice getDevice() {
         return deviceId;
