@@ -42,9 +42,7 @@ public class ADBBuilder implements IADBBuilder {
     public IADBBuilder addClick(@NotNull Point[] points) {
         for (Point point :
                 points) {
-            if (point != null) {
-                adbMessageBeans.add(ADBMessageBean.instanceClick(point));
-            }
+            adbMessageBeans.add(ADBMessageBean.instanceClick(point));
 
         }
         return this;

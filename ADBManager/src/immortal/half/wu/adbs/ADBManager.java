@@ -62,10 +62,6 @@ public class ADBManager {
     }
 
     public String findTopActivity(String deviceAddr) {
-        /*
-    mResumedActivity: ActivityRecord{69d26d4 u0 com.taobao.idlefish/.post.activity.publishEntry.PublishEntryActivity t844}
-  ResumedActivity: ActivityRecord{69d26d4 u0 com.taobao.idlefish/.post.activity.publishEntry.PublishEntryActivity t844}
-         */
         try {
             String[] s = ADBUtils.findTopActivity(deviceAddr).split("/")[1].split(" ")[0].split("\\.");
             return s[s.length - 1];
@@ -76,10 +72,6 @@ public class ADBManager {
     }
 
     public String findTopActivityPath(String deviceAddr) {
-        /*
-    mResumedActivity: ActivityRecord{69d26d4 u0 com.taobao.idlefish/.post.activity.publishEntry.PublishEntryActivity t844}
-  ResumedActivity: ActivityRecord{69d26d4 u0 com.taobao.idlefish/.post.activity.publishEntry.PublishEntryActivity t844}
-         */
         return ADBUtils.findTopActivity(deviceAddr);
     }
 
