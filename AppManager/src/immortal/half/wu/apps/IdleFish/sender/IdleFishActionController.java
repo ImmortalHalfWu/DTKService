@@ -3,12 +3,13 @@ package immortal.half.wu.apps.IdleFish.sender;
 
 import immortal.half.wu.LogUtil;
 import immortal.half.wu.apps.IdleFish.beans.IdleFishProductBean;
+import immortal.half.wu.apps.IdleFish.beans.UserInfoBean;
 import immortal.half.wu.apps.IdleFish.sender.actions.*;
-import immortal.half.wu.apps.impls.PostedProductNames;
+import immortal.half.wu.apps.interfaces.IActionCallBack;
 import immortal.half.wu.apps.interfaces.IDevice;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Set;
+import java.util.List;
 
 public class IdleFishActionController {
     private static final String TAG = "IdleFishActionControlle";
@@ -22,7 +23,7 @@ public class IdleFishActionController {
         this.mainActivityPath = mainActivityPath;
     }
 
-    public void init() {
+    public void init(IActionCallBack<Boolean> callBack) {
         LogUtil.i(TAG, "初始化" + deviceId + "下IdleFishActionController");
         LogUtil.i(TAG, "开始" + deviceId + "下IdleFishActionController界面缓存");
         new ActionBuilder()
@@ -59,15 +60,30 @@ public class IdleFishActionController {
                 .addAction(PageActionHome.newGoHomeMyAction())
 
                 // 获取登录用户名称
-                .addAction(PageActionHomeMy.newFindUserInfoAction((name, postedNum) -> System.out.println(postedNum + "__" + name)))
+                .addAction(PageActionHomeMy.newFindUserInfoAction(new IActionCallBack<UserInfoBean>() {
+                    @Override
+                    public void onError(Exception e) {
+                        LogUtil.e(TAG, e);
+                    }
+
+                    @Override
+                    public void onComplete(UserInfoBean result) {
+                        System.out.println(result);
+                    }
+                }))
 
                 .addAction(PageActionHomeMy.newGoPostedAction())
 
                 // 获取已发布商品名称
-                .addAction(PageActionPosted.newFindPostedProductNamesAction(new PostedProductNames.CallBack() {
+                .addAction(PageActionPosted.newFindPostedProductNamesAction(new IActionCallBack<List<String>>() {
                     @Override
-                    public void names(Set<String> names) {
-                        System.out.println(names);
+                    public void onError(Exception e) {
+                        LogUtil.e(TAG, e);
+                    }
+
+                    @Override
+                    public void onComplete(List<String> result) {
+                        System.out.println(result);
                     }
                 }))
 
@@ -75,10 +91,16 @@ public class IdleFishActionController {
 //                .addAction(PageActionPosted.newRefreshPostedProductAction())
 //                .addAction(PageActionPosted.newRemovePostedProductAction("123"))
 
-                .build(deviceId, new IActionException() {
+                .build(deviceId, new IActionCallBack() {
                     @Override
-                    public void fail(Exception e) {
+                    public void onError(Exception e) {
                         LogUtil.e(TAG, "开始" + deviceId + "下IdleFishActionController界面缓存失败", e);
+                        callBack.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete(Object result) {
+
                     }
                 })
                 .run()
@@ -87,13 +109,7 @@ public class IdleFishActionController {
 
     }
 
-    @NotNull
-    private IActionException actionException = e -> {
-        LogUtil.e(TAG, "", e);
-    };
-
-
-    public void postProduct(@NotNull IdleFishProductBean product) {
+    public void postProduct(@NotNull IdleFishProductBean product, IActionCallBack<IdleFishProductBean> callBack) {
 
         LogUtil.i(TAG, "开始" + deviceId + "下商品发布：" + product);
 
@@ -122,17 +138,12 @@ public class IdleFishActionController {
 
                 .addAction(PageActionPostProductOther.newChoiceOtherAction())
         ;
-        actionBuilder.build(deviceId, new IActionException() {
-            @Override
-            public void fail(Exception e) {
-                LogUtil.e(TAG, deviceId + "下商品发布失败", e);
-            }
-        }).run();
+        actionBuilder.build(deviceId, callBack).run();
 
         LogUtil.i(TAG, deviceId + "下商品发布结束");
     }
 
-    public void deleteProduct(String productName) {
+    public void deleteProduct(String productName, IActionCallBack<String> callBack) {
 
         LogUtil.i(TAG, "开始" + deviceId + "删除商品：" + productName);
 
@@ -141,10 +152,16 @@ public class IdleFishActionController {
                 .addAction(PageActionHome.newGoHomeMyAction())
                 .addAction(PageActionHomeMy.newGoPostedAction())
                 .addAction(PageActionPosted.newRemovePostedProductAction(productName))
-                .build(deviceId, new IActionException() {
+                .build(deviceId, new IActionCallBack<String>() {
                     @Override
-                    public void fail(Exception e) {
+                    public void onError(Exception e) {
                         LogUtil.e(TAG, deviceId + "删除商品失败：" + productName, e);
+                        callBack.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete(String result) {
+                        callBack.onComplete(result);
                     }
                 }).run();
 
@@ -152,34 +169,46 @@ public class IdleFishActionController {
 
     }
 
-    public void getPostedProductsName(PostedProductNames.CallBack callBack) {
+    public void getPostedProductsName(IActionCallBack<List<String>> callBack) {
         LogUtil.i(TAG, "开始" + deviceId + "获取已发布商品");
         new ActionBuilder()
                 .addAction(PageActionHome.newGoHomeAction(packageName, mainActivityPath))
                 .addAction(PageActionHome.newGoHomeMyAction())
                 .addAction(PageActionHomeMy.newGoPostedAction())
                 .addAction(PageActionPosted.newFindPostedProductNamesAction(callBack))
-                .build(deviceId, new IActionException() {
+                .build(deviceId, new IActionCallBack<List<String>>() {
                     @Override
-                    public void fail(Exception e) {
+                    public void onError(Exception e) {
                         LogUtil.e(TAG, deviceId + "获取已发布商品失败", e);
+                        callBack.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete(List<String> result) {
+                        callBack.onComplete(result);
                     }
                 }).run();
         LogUtil.i(TAG, deviceId + "获取已发布商品结束");
 
     }
 
-    public void getUserName(PageActionHomeMy.UserInfoCallBack callBack) {
+    public void getUserName(IActionCallBack<UserInfoBean> callBack) {
         LogUtil.i(TAG, "开始" + deviceId + "获取App登录用户信息");
 
         new ActionBuilder()
                 .addAction(PageActionHome.newGoHomeAction(packageName, mainActivityPath))
                 .addAction(PageActionHome.newGoHomeMyAction())
                 .addAction(PageActionHomeMy.newFindUserInfoAction(callBack))
-                .build(deviceId, new IActionException() {
+                .build(deviceId, new IActionCallBack<UserInfoBean>() {
                     @Override
-                    public void fail(Exception e) {
+                    public void onError(Exception e) {
                         LogUtil.e(TAG, deviceId + "获取App登录用户信息失败", e);
+                        callBack.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete(UserInfoBean result) {
+                        callBack.onComplete(result);
                     }
                 }).run();
         LogUtil.i(TAG, deviceId + "获取App登录用户信息结束");
@@ -193,10 +222,15 @@ public class IdleFishActionController {
                 .addAction(PageActionHome.newGoHomeMyAction())
                 .addAction(PageActionHomeMy.newGoPostedAction())
                 .addAction(PageActionPosted.newRefreshPostedProductAction())
-                .build(device, new IActionException() {
+                .build(device, new IActionCallBack() {
                     @Override
-                    public void fail(Exception e) {
+                    public void onError(Exception e) {
                         LogUtil.e(TAG, deviceId + "刷新闲鱼已发布商品失败", e);
+                    }
+
+                    @Override
+                    public void onComplete(Object result) {
+
                     }
                 }).run();
         LogUtil.i(TAG, "开始" + deviceId + "刷新闲鱼已发布商品完成");
@@ -204,17 +238,22 @@ public class IdleFishActionController {
     }
 
 
-    public void isLogin(PageActionHomeMy.IsLoginCallBack callBack) {
+    public void isLogin(IActionCallBack<Boolean> callBack) {
         LogUtil.i(TAG, "开始" + deviceId + "查询是否已登录");
 
         new ActionBuilder()
                 .addAction(PageActionHome.newGoHomeAction(packageName, mainActivityPath))
                 .addAction(PageActionHome.newGoHomeMyAction())
                 .addAction(PageActionHomeMy.newIsLogin(callBack))
-                .build(deviceId, new IActionException() {
+                .build(deviceId, new IActionCallBack() {
                     @Override
-                    public void fail(Exception e) {
+                    public void onError(Exception e) {
                         LogUtil.e(TAG, "开始" + deviceId + "查询是否已登录失败", e);
+                    }
+
+                    @Override
+                    public void onComplete(Object result) {
+
                     }
                 }).run();
         LogUtil.i(TAG, "开始" + deviceId + "查询是否已登录结束");
@@ -226,10 +265,15 @@ public class IdleFishActionController {
 
         new ActionBuilder()
                 .addAction(PageActionHome.newGoHomeAction(packageName, mainActivityPath))
-                .build(deviceId, new IActionException() {
+                .build(deviceId, new IActionCallBack() {
                     @Override
-                    public void fail(Exception e) {
+                    public void onError(Exception e) {
                         LogUtil.e(TAG, deviceId + "启动主页面失败", e);
+                    }
+
+                    @Override
+                    public void onComplete(Object result) {
+
                     }
                 }).run();
         LogUtil.i(TAG, "开始" + deviceId + "启动主页面完成");

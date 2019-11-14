@@ -5,19 +5,20 @@ import immortal.half.wu.FileUtils;
 import immortal.half.wu.LogUtil;
 import immortal.half.wu.adbs.ADBManager;
 import immortal.half.wu.adbs.ADBRunnable;
-import immortal.half.wu.apps.IdleFish.beans.IdleFishProductBean;
 import immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerFactory;
 import immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerName;
-import immortal.half.wu.apps.IdleFish.sender.actions.PageActionHomeMy;
 import immortal.half.wu.apps.impls.PostedProductNames;
 import immortal.half.wu.apps.impls.PostedProductRefresh;
 import immortal.half.wu.apps.impls.PostedProductRemove;
+import immortal.half.wu.apps.impls.SimpleActionCallBack;
+import immortal.half.wu.apps.interfaces.IActionCallBack;
 import immortal.half.wu.apps.interfaces.IAndroidApp;
 import immortal.half.wu.apps.interfaces.IAndroidPager;
 import immortal.half.wu.apps.interfaces.IDevice;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.util.List;
 import java.util.Map;
 
 import static immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerFactory.*;
@@ -30,17 +31,36 @@ public class APP {
 
     public static void test2() {
 
-        IAndroidApp<IdleFishProductBean> idleFishAndroidApp1 = AppManager.getInstance().createIdleFishAndroidApp(
+        IAndroidApp idleFishAndroidApp1 = AppManager.getInstance().createIdleFishAndroidApp(
                 IDevice.create("5ENDU19214004179", ADBManager.getInstance().getDxSize("5ENDU19214004179"))
         );
 
         long l = System.currentTimeMillis();
         idleFishAndroidApp1.startApp();
-        idleFishAndroidApp1.isLogin(new PageActionHomeMy.IsLoginCallBack() {
+        idleFishAndroidApp1.isLogin(new IActionCallBack<Boolean>() {
             @Override
-            public void isLogin(boolean isLogin) {
-                LogUtil.i(TAG, isLogin);
-                idleFishAndroidApp1.refreshConnect();
+            public void onError(Exception e) {
+
+            }
+
+            @Override
+            public void onComplete(Boolean result) {
+                LogUtil.i(TAG, result);
+                if (result) {
+                    idleFishAndroidApp1.refreshConnect(new IActionCallBack<Boolean>() {
+                        @Override
+                        public void onError(Exception e) {
+
+                        }
+
+                        @Override
+                        public void onComplete(Boolean result) {
+
+                        }
+                    });
+                } else {
+                    LogUtil.i(TAG, "未登陆");
+                }
             }
         });
 //        idleFishAndroidApp1.startApp();
@@ -360,7 +380,17 @@ public class APP {
                     .addCallBack(new ADBRunnable() {
                         @Override
                         public void run(ADBManager adbProcess) {
-                            new PostedProductNames(deviceId, System.out::println).start();
+                            new PostedProductNames(deviceId, new IActionCallBack<List<String>>() {
+                                @Override
+                                public void onError(Exception e) {
+
+                                }
+
+                                @Override
+                                public void onComplete(List<String> result) {
+                                    LogUtil.i(TAG, result);
+                                }
+                            }).start();
                             AppManager.getInstance().createIdleFishAndroidApp(deviceId).toMainActivity();
                         }
                     })
@@ -580,7 +610,12 @@ public class APP {
             public Point getDxSize() {
                 return dxSize;
             }
-        }, System.out::println).start();
+        }, new SimpleActionCallBack<List<String>>() {
+            @Override
+            public void onComplete(List<String> result) {
+                LogUtil.i(TAG, result);
+            }
+        }).start();
     }
 
 

@@ -1,5 +1,6 @@
 package immortal.half.wu.apps.IdleFish.sender.actions;
 
+import immortal.half.wu.LogUtil;
 import immortal.half.wu.adbs.ADBManager;
 import immortal.half.wu.adbs.IADBBuilder;
 import immortal.half.wu.apps.IdleFish.pagers.AndroidIdleFishPagerName;
@@ -8,6 +9,8 @@ import immortal.half.wu.apps.interfaces.IDevice;
 import org.jetbrains.annotations.NotNull;
 
 public class SimpleAction implements IAction {
+
+    private static final String TAG = "SimpleAction";
 
     private static final int CHECK_TYPE_ACTIVITY_NAME = 0;
     private static final int CHECK_TYPE_XML = 1;
@@ -67,17 +70,21 @@ public class SimpleAction implements IAction {
     @Override
     public boolean check(@NotNull IDevice iDevice, IADBBuilder adbBuilder, @NotNull String xml) {
 
-        boolean checkResult;
-        if (checkType == 0) {
-            checkResult = ADBManager.getInstance().findTopActivity(iDevice.getDeviceId()).equals(checkString);
-        } else {
-            checkResult = xml.contains(checkString);
+        boolean checkResult = false;
+        try {
+            if (checkType == 0) {
+                checkResult = ADBManager.getInstance().findTopActivity(iDevice.getDeviceId()).equals(checkString);
+            } else {
+                checkResult = xml.contains(checkString);
+            }
+            if (!checkResult && checkFailAction != null) {
+                return checkFailAction.checkFailAction(iDevice, adbBuilder, xml);
+            }
+        } catch (Exception e) {
+            LogUtil.e(TAG, e);
         }
-        if (!checkResult && checkFailAction != null) {
-            return checkFailAction.checkFailAction(iDevice, adbBuilder, xml);
-        }
-        return checkResult;
 
+        return checkResult;
     }
 
 

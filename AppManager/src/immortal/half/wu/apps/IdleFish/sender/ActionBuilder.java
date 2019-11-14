@@ -1,5 +1,6 @@
 package immortal.half.wu.apps.IdleFish.sender;
 
+import immortal.half.wu.apps.interfaces.IActionCallBack;
 import immortal.half.wu.apps.interfaces.IDevice;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +21,7 @@ class ActionBuilder {
         return this;
     }
 
-    @NotNull Runnable build(@NotNull IDevice iDevice, IActionException actionException) {
+    @NotNull Runnable build(@NotNull IDevice iDevice, IActionCallBack actionException) {
         return new ActionRunner(iDevice, objects, actionException);
     }
 

@@ -2,13 +2,15 @@ package immortal.half.wu.apps.IdleFish;
 
 import immortal.half.wu.apps.BaseAndroidApp;
 import immortal.half.wu.apps.IdleFish.beans.IdleFishProductBean;
+import immortal.half.wu.apps.IdleFish.beans.UserInfoBean;
 import immortal.half.wu.apps.IdleFish.sender.IdleFishActionController;
-import immortal.half.wu.apps.IdleFish.sender.actions.PageActionHomeMy;
-import immortal.half.wu.apps.impls.PostedProductNames;
+import immortal.half.wu.apps.interfaces.IActionCallBack;
 import immortal.half.wu.apps.interfaces.IDevice;
 import org.jetbrains.annotations.NotNull;
 
-public class IdleFishAndroidApp extends BaseAndroidApp<IdleFishProductBean> {
+import java.util.List;
+
+public class IdleFishAndroidApp extends BaseAndroidApp {
 
     public final static String IDLE_FISH_PACKAGE_NAME = "com.taobao.idlefish";
     private final static String IDLE_FISH_MAIN_PATH = "com.taobao.fleamarket.home.activity.MainActivity";
@@ -24,13 +26,8 @@ public class IdleFishAndroidApp extends BaseAndroidApp<IdleFishProductBean> {
     }
 
     @Override
-    public void isLogin(PageActionHomeMy.IsLoginCallBack callBack) {
-        controller.isLogin(callBack);
-    }
-
-    @Override
-    public void refreshConnect() {
-        controller.init();
+    public void refreshConnect(IActionCallBack<Boolean> callBack) {
+        controller.init(callBack);
     }
 
     @Override
@@ -62,25 +59,38 @@ public class IdleFishAndroidApp extends BaseAndroidApp<IdleFishProductBean> {
         return true;
     }
 
-
     @Override
-    public void postProduct(@NotNull IdleFishProductBean product) {
-        controller.postProduct(product);
+    public void isLogin(IActionCallBack<Boolean> callBack) {
+        controller.isLogin(callBack);
     }
 
     @Override
-    public void deleteProduct(@NotNull String name) {
-        controller.deleteProduct(name);
+    public <T> void postProduct(T productBean, IActionCallBack<T> callBack) {
+        if (productBean instanceof IdleFishProductBean) {
+            controller.postProduct(
+                    (IdleFishProductBean)productBean,
+                    (IActionCallBack<IdleFishProductBean>)callBack);
+        }
     }
 
     @Override
-    public void getPostedProductsName(@NotNull PostedProductNames.CallBack callBack) {
+    public void deleteProduct(@NotNull String name, IActionCallBack<String> callBack) {
+        controller.deleteProduct(name, callBack);
+    }
+
+    @Override
+    public void getPostedProductsName(@NotNull IActionCallBack<List<String>> callBack) {
         controller.getPostedProductsName(callBack);
     }
 
     @Override
-    public void getUserName(@NotNull PageActionHomeMy.UserInfoCallBack callBack) {
-        controller.getUserName(callBack);
+    public <UserInfo> void getUserName(IActionCallBack<UserInfo> callBack) {
+        try {
+            IActionCallBack<UserInfoBean> userInfoCallBack = (IActionCallBack<UserInfoBean>) callBack;
+            controller.getUserName(userInfoCallBack);
+        } catch (Exception e) {
+            callBack.onError(e);
+        }
     }
 
     @Override

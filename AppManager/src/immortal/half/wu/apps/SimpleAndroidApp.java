@@ -1,18 +1,18 @@
 package immortal.half.wu.apps;
 
-import immortal.half.wu.apps.IdleFish.sender.actions.PageActionHomeMy;
-import immortal.half.wu.apps.impls.PostedProductNames;
+import immortal.half.wu.apps.interfaces.IActionCallBack;
 import immortal.half.wu.apps.interfaces.IDevice;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 
-public class SimpleAndroidApp<T> extends BaseAndroidApp<T> {
+public class SimpleAndroidApp extends BaseAndroidApp {
 
     private static SimpleAndroidApp simpleAndroidApp;
 
-    public static <T> SimpleAndroidApp<T> getInstance() {
+    public static SimpleAndroidApp getInstance() {
         if (simpleAndroidApp == null) {
             synchronized (SimpleAndroidApp.class) {
                 if (simpleAndroidApp == null) {
@@ -38,9 +38,10 @@ public class SimpleAndroidApp<T> extends BaseAndroidApp<T> {
         }, SimpleAndroidApp.class.getName(), SimpleAndroidApp.class.getName());
     }
 
-    @Override
-    public void refreshConnect() {
 
+    @Override
+    public void refreshConnect(IActionCallBack<Boolean> callBack) {
+        callBack.onError(new IllegalStateException("SimpleAndroidApp refreshConnect"));
     }
 
     @Override
@@ -54,28 +55,28 @@ public class SimpleAndroidApp<T> extends BaseAndroidApp<T> {
     }
 
     @Override
-    public void isLogin(@NotNull PageActionHomeMy.IsLoginCallBack callBack) {
-        callBack.isLogin(false);
+    public void isLogin(IActionCallBack<Boolean> callBack) {
+        callBack.onComplete(false);
     }
 
     @Override
-    public void postProduct(T product) {
-
+    public <T> void postProduct(T productBean, IActionCallBack<T> callBack) {
+        callBack.onError(new IllegalStateException("SimpleAndroidApp postProduct"));
     }
 
     @Override
-    public void deleteProduct(String name) {
-
+    public void deleteProduct(String name, IActionCallBack<String> callBack) {
+        callBack.onError(new IllegalStateException("SimpleAndroidApp deleteProduct"));
     }
 
     @Override
-    public void getPostedProductsName(@NotNull PostedProductNames.CallBack callBack) {
-        callBack.names(new HashSet<>(0));
+    public void getPostedProductsName(IActionCallBack<List<String>> callBack) {
+        callBack.onComplete(new ArrayList<>(0));
     }
 
     @Override
-    public void getUserName(@NotNull PageActionHomeMy.UserInfoCallBack callBack) {
-        callBack.result("", "");
+    public <UserInfo> void getUserName(IActionCallBack<UserInfo> callBack) {
+        callBack.onError(new IllegalStateException("SimpleAndroidApp getUserName"));
     }
 
     @Override

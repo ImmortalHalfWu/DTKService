@@ -7,7 +7,7 @@ import immortal.half.wu.apps.interfaces.IDevice;
 import org.jetbrains.annotations.NotNull;
 
 
-public abstract class BaseAndroidApp<T> implements IAndroidApp<T> {
+public abstract class BaseAndroidApp implements IAndroidApp {
 
     private static final String TAG = "BaseAndroidApp";
 

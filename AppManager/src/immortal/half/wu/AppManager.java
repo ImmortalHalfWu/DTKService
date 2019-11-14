@@ -1,7 +1,6 @@
 package immortal.half.wu;
 
 import immortal.half.wu.apps.AndroidAppFactory;
-import immortal.half.wu.apps.IdleFish.beans.IdleFishProductBean;
 import immortal.half.wu.apps.interfaces.IAndroidApp;
 import immortal.half.wu.apps.interfaces.IDevice;
 import org.jetbrains.annotations.NotNull;
@@ -32,11 +31,11 @@ public class AppManager {
     }
 
     @org.jetbrains.annotations.NotNull
-    public IAndroidApp<IdleFishProductBean> createIdleFishAndroidApp(@NotNull IDevice deviceID) {
+    public IAndroidApp createIdleFishAndroidApp(@NotNull IDevice deviceID) {
 
         LogUtil.i(TAG, "获取" + deviceID + "下闲鱼App实例");
         String key = deviceID + "idleFish";
-        IAndroidApp<IdleFishProductBean> iAndroidApp = androidAppMap.get(key);
+        IAndroidApp iAndroidApp = androidAppMap.get(key);
 
         if (iAndroidApp == null) {
             LogUtil.e(TAG, "获取" + deviceID + "下闲鱼App实例失败");

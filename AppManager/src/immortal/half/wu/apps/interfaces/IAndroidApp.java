@@ -1,10 +1,10 @@
 package immortal.half.wu.apps.interfaces;
 
-import immortal.half.wu.apps.IdleFish.sender.actions.PageActionHomeMy;
-import immortal.half.wu.apps.impls.PostedProductNames;
 import org.jetbrains.annotations.NotNull;
 
-public interface IAndroidApp<T> {
+import java.util.List;
+
+public interface IAndroidApp {
 
     String getDeviceId();
 
@@ -14,21 +14,21 @@ public interface IAndroidApp<T> {
 
     String getMainActivityPath();
 
-    void refreshConnect();
+    void refreshConnect(IActionCallBack<Boolean> callBack);
 
     boolean startApp();
 
     boolean toMainActivity();
 
-    void isLogin(PageActionHomeMy.IsLoginCallBack callBack);
+    void isLogin(IActionCallBack<Boolean> callBack);
 
-    void postProduct(T product);
+    <T> void postProduct(T productBean, IActionCallBack<T> callBack);
 
-    void deleteProduct(String name);
+    void deleteProduct(String name, IActionCallBack<String> callBack);
 
-    void getPostedProductsName(PostedProductNames.CallBack callBack);
+    void getPostedProductsName(IActionCallBack<List<String>> callBack);
 
-    void getUserName(PageActionHomeMy.UserInfoCallBack callBack);
+    <UserInfo> void getUserName(IActionCallBack<UserInfo> callBack);
 
     void refreshPostedProduct();
 

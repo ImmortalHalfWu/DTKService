@@ -3,6 +3,7 @@ package immortal.half.wu.apps.IdleFish.sender;
 
 import immortal.half.wu.adbs.ADBManager;
 import immortal.half.wu.adbs.IADBBuilder;
+import immortal.half.wu.apps.interfaces.IActionCallBack;
 import immortal.half.wu.apps.interfaces.IDevice;
 import immortal.half.wu.ui.UIProcessor;
 import org.jetbrains.annotations.NotNull;
@@ -15,9 +16,9 @@ class ActionRunner implements Runnable {
     private final IDevice iDevice;
     private final String deviceId;
     private final List<IAction> actions;
-    private final IActionException iActionException;
+    private final IActionCallBack iActionException;
 
-    ActionRunner(IDevice iDevice, List<IAction> actions, IActionException iActionException) {
+    ActionRunner(IDevice iDevice, List<IAction> actions, IActionCallBack iActionException) {
         this.iDevice = iDevice;
         this.actions = actions;
         this.iActionException = iActionException;
@@ -65,7 +66,7 @@ class ActionRunner implements Runnable {
     private void callBackException() {
 
         if (iActionException != null) {
-            iActionException.fail(new IllegalStateException("处理未完成，action回归检测到头部仍未处理"));
+            iActionException.onError(new IllegalStateException("处理未完成，action回归检测到头部仍未处理"));
         }
 
     }

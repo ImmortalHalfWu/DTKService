@@ -1,16 +1,19 @@
 package immortal.half.wu.apps.impls;
 
 import immortal.half.wu.apps.SimpleProcessPostedProductCallBack;
+import immortal.half.wu.apps.interfaces.IActionCallBack;
 import immortal.half.wu.apps.interfaces.IDevice;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class PostedProductNames extends SimpleProcessPostedProductCallBack {
 
-    private final CallBack callBack;
+    private final IActionCallBack<List<String>> callBack;
 
-    public PostedProductNames(IDevice deviceId, CallBack callBack) {
+    public PostedProductNames(IDevice deviceId, IActionCallBack<List<String>> callBack) {
         super(deviceId);
         this.callBack = callBack;
     }
@@ -20,13 +23,13 @@ public class PostedProductNames extends SimpleProcessPostedProductCallBack {
         if (isOver) {
             names.remove("擦亮");
             names.remove("更多");
-            callBack.names(names);
+            callBack.onComplete(new ArrayList<>(names));
         }
     }
 
     @Override
     public void notFound() {
-        callBack.names(names);
+        callBack.onComplete(new ArrayList<>(names));
     }
 
 
