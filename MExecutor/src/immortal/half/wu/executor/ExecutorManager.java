@@ -1,5 +1,6 @@
 package immortal.half.wu.executor;
 
+import immortal.half.wu.executor.interfaces.IRunnableListener;
 import immortal.half.wu.executor.interfaces.ITimeOutExecutorService;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,7 +35,8 @@ public class ExecutorManager {
                                     }
                                     return true;
                                 }
-
+                            },
+                            new IRunnableListener<Boolean>() {
                                 @Override
                                 public void onError(@NotNull Exception e) {
                                     System.out.println("job 运行异常" + e.getClass().getSimpleName());
@@ -44,7 +46,6 @@ public class ExecutorManager {
                                 public void onComplete(Boolean result) {
                                     System.out.println("job 运行结束" + result);
                                 }
-
                             },
                             150
                     );

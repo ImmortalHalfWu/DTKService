@@ -2,6 +2,7 @@ package immortal.half.wu.executor;
 
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
+import immortal.half.wu.executor.interfaces.IRunnableListener;
 import immortal.half.wu.executor.interfaces.ITimeOutExecutorService;
 
 import java.util.concurrent.*;
@@ -10,12 +11,18 @@ class TimeOutAdapter<T> implements Runnable {
 
     private @NotNull ExecutorService runExecutor;// 定义一个线程池
     private @NotNull ITimeOutExecutorService.TimeOutRunnable<T> job;
+    private @Nullable IRunnableListener<T> runResultListener;
     private @Nullable T jobResult;
     private final long outTime;
 
-    TimeOutAdapter(@NotNull ExecutorService pullExecutor, @NotNull ITimeOutExecutorService.TimeOutRunnable<T> job, long outTime) {
+    TimeOutAdapter(
+            @NotNull ExecutorService pullExecutor,
+            @NotNull ITimeOutExecutorService.TimeOutRunnable<T> job,
+            @Nullable IRunnableListener<T> runResultListener,
+            long outTime) {
         this.runExecutor = pullExecutor;
         this.job = job;
+        this.runResultListener = runResultListener;
         this.outTime = outTime;
     }
 
@@ -49,14 +56,13 @@ class TimeOutAdapter<T> implements Runnable {
         } catch (Exception e) {
             resultException = e;
         }
-        System.out.println("TimeOutAdapter回调异常：" + Thread.currentThread().getName());
 
-        if (job != null) {
+        if (runResultListener != null) {
             try {
                 if (resultException == null) {
-                    job.onComplete(jobResult);
+                    runResultListener.onComplete(jobResult);
                 } else {
-                    job.onError(resultException);
+                    runResultListener.onError(resultException);
                 }
             } catch (Exception e) {
                 System.out.println("TimeOutAdapter回调异常：" + e.getMessage());

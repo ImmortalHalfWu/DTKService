@@ -38,11 +38,13 @@ public class AppManager {
         IAndroidApp iAndroidApp = androidAppMap.get(key);
 
         if (iAndroidApp == null) {
-            LogUtil.e(TAG, "获取" + deviceID + "下闲鱼App实例失败");
+            LogUtil.e(TAG, "获取" + deviceID + "下闲鱼缓存实例，尝试新建");
             iAndroidApp = AndroidAppFactory.createIdleFishAndroidApp(deviceID);
+            LogUtil.i(TAG, "新建" + deviceID + "下闲鱼App实例成功：" + iAndroidApp.getClass().getSimpleName());
+        } else {
+            LogUtil.i(TAG, "获取" + deviceID + "下闲鱼App实例成功");
         }
 
-        LogUtil.i(TAG, "获取" + deviceID + "下闲鱼App实例成功");
         androidAppMap.put(key, iAndroidApp);
         return iAndroidApp;
 

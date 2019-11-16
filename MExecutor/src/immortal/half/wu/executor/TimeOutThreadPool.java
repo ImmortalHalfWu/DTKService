@@ -1,7 +1,9 @@
 package immortal.half.wu.executor;
 
-import com.sun.istack.internal.NotNull;
+import immortal.half.wu.executor.interfaces.IRunnableListener;
 import immortal.half.wu.executor.interfaces.ITimeOutExecutorService;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -41,7 +43,7 @@ class TimeOutThreadPool implements ITimeOutExecutorService {
     }
 
     @Override
-    public boolean awaitTermination(long timeout, @org.jetbrains.annotations.NotNull @NotNull TimeUnit unit) throws InterruptedException {
+    public boolean awaitTermination(long timeout, @NotNull TimeUnit unit) throws InterruptedException {
         return postExecutor.awaitTermination(timeout, unit);
     }
 
@@ -92,20 +94,18 @@ class TimeOutThreadPool implements ITimeOutExecutorService {
     }
 
     @Override
-    public <T> TimeOutRunnable<T> executeTimeOut60s(TimeOutRunnable<T> run) {
-        return executeTimeOut(run, 60 * 1000);
+    public <T> void executeTimeOut60s(@NotNull TimeOutRunnable<T> run, @Nullable IRunnableListener<T> runResultListener) {
+        executeTimeOut(run, runResultListener, 60 * 1000);
     }
 
     @Override
-    public <T> TimeOutRunnable<T> executeTimeOut120s(TimeOutRunnable<T> run) {
-        return executeTimeOut(run, 2 * 60 * 1000);
+    public <T> void executeTimeOut120s(@NotNull TimeOutRunnable<T> run, @Nullable IRunnableListener<T> runResultListener) {
+        executeTimeOut(run, runResultListener, 2 * 60 * 1000);
     }
 
     @Override
-    public <T> TimeOutRunnable<T> executeTimeOut(TimeOutRunnable<T> run, long outTimeMs) {
-//        System.out.println("executeTimeOut : " + Thread.currentThread().getName());
-        execute(new TimeOutAdapter<>(pullExecutor, run, outTimeMs));
-        return run;
+    public <T> void executeTimeOut(@NotNull TimeOutRunnable<T> run, @Nullable IRunnableListener<T> runResultListener, long outTimeMs) {
+        execute(new TimeOutAdapter<>(pullExecutor, run, runResultListener, outTimeMs));
     }
 
 }
