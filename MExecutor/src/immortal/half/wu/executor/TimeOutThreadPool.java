@@ -1,6 +1,7 @@
 package immortal.half.wu.executor;
 
-import immortal.half.wu.executor.interfaces.IRunnableListener;
+import immortal.half.wu.executor.interfaces.IJobListener;
+import immortal.half.wu.executor.interfaces.IJobWithTimeOut;
 import immortal.half.wu.executor.interfaces.ITimeOutExecutorService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -94,18 +95,18 @@ class TimeOutThreadPool implements ITimeOutExecutorService {
     }
 
     @Override
-    public <T> void executeTimeOut60s(@NotNull TimeOutRunnable<T> run, @Nullable IRunnableListener<T> runResultListener) {
+    public <T> void executeTimeOut60s(@NotNull IJobWithTimeOut<T> run, @Nullable IJobListener<T> runResultListener) {
         executeTimeOut(run, runResultListener, 60 * 1000);
     }
 
     @Override
-    public <T> void executeTimeOut120s(@NotNull TimeOutRunnable<T> run, @Nullable IRunnableListener<T> runResultListener) {
+    public <T> void executeTimeOut120s(@NotNull IJobWithTimeOut<T> run, @Nullable IJobListener<T> runResultListener) {
         executeTimeOut(run, runResultListener, 2 * 60 * 1000);
     }
 
     @Override
-    public <T> void executeTimeOut(@NotNull TimeOutRunnable<T> run, @Nullable IRunnableListener<T> runResultListener, long outTimeMs) {
-        execute(new TimeOutAdapter<>(pullExecutor, run, runResultListener, outTimeMs));
+    public <T> void executeTimeOut(@NotNull IJobWithTimeOut<T> run, @Nullable IJobListener<T> runResultListener, long outTimeMs) {
+        execute(new TimeOutAdapter<T>(pullExecutor, run, runResultListener, outTimeMs));
     }
 
 }

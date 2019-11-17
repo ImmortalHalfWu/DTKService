@@ -2,23 +2,25 @@ package immortal.half.wu.executor;
 
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
-import immortal.half.wu.executor.interfaces.IRunnableListener;
-import immortal.half.wu.executor.interfaces.ITimeOutExecutorService;
+import immortal.half.wu.executor.interfaces.IJobListener;
+import immortal.half.wu.executor.interfaces.IJobWithTimeOut;
 
 import java.util.concurrent.*;
 
 class TimeOutAdapter<T> implements Runnable {
 
     private @NotNull ExecutorService runExecutor;// 定义一个线程池
-    private @NotNull ITimeOutExecutorService.TimeOutRunnable<T> job;
-    private @Nullable IRunnableListener<T> runResultListener;
+    private @NotNull
+    IJobWithTimeOut<T> job;
+    private @Nullable
+    IJobListener<T> runResultListener;
     private @Nullable T jobResult;
     private final long outTime;
 
     TimeOutAdapter(
             @NotNull ExecutorService pullExecutor,
-            @NotNull ITimeOutExecutorService.TimeOutRunnable<T> job,
-            @Nullable IRunnableListener<T> runResultListener,
+            @NotNull IJobWithTimeOut<T> job,
+            @Nullable IJobListener<T> runResultListener,
             long outTime) {
         this.runExecutor = pullExecutor;
         this.job = job;

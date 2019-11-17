@@ -73,7 +73,7 @@ public class SimpleAction implements IAction {
         boolean checkResult = false;
         try {
             if (checkType == 0) {
-                checkResult = ADBManager.getInstance().findTopActivity(iDevice.getDeviceId()).equals(checkString);
+                checkResult = ADBManager.getInstance().findTopActivityName(iDevice.getDeviceId()).equals(checkString);
             } else {
                 checkResult = xml.contains(checkString);
             }

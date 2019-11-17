@@ -172,7 +172,7 @@ public class APP {
 //        postedProductRemove();
 
 
-//        String topActivity = ADBManager.getInstance().findTopActivity(s);
+//        String topActivity = ADBManager.getInstance().findTopActivityName(s);
 //
 //        System.out.println(topActivity);
 //        String fileName = s + "_" + topActivity+ ".xml";
@@ -622,7 +622,7 @@ public class APP {
     private static String uiCutXML() {
 
         String s = "5ENDU19214004179";
-        String topActivity = ADBManager.getInstance().findTopActivity(s);
+        String topActivity = ADBManager.getInstance().findTopActivityName(s);
 
         System.out.println(topActivity);
         String fileName = s + "_" + topActivity+ ".xml";

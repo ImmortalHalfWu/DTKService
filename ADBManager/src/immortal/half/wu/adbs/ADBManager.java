@@ -61,10 +61,10 @@ public class ADBManager {
         return ADBUtils.runInCmd(cmd);
     }
 
-    public String findTopActivity(String deviceAddr) {
+    public String findTopActivityName(String deviceAddr) {
         try {
-            String[] s = ADBUtils.findTopActivity(deviceAddr).split("/")[1].split(" ")[0].split("\\.");
-            return s[s.length - 1];
+            String[] split = findTopActivityPath(deviceAddr).split("\\.");
+            return split[split.length - 1];
         } catch (Exception ignored) {
         }
 
@@ -72,7 +72,13 @@ public class ADBManager {
     }
 
     public String findTopActivityPath(String deviceAddr) {
-        return ADBUtils.findTopActivity(deviceAddr);
+
+        try {
+            return ADBUtils.findTopActivity(deviceAddr).split("/")[1].split(" ")[0];
+        } catch (Exception ignored) {
+        }
+
+        return "";
     }
 
     @NotNull

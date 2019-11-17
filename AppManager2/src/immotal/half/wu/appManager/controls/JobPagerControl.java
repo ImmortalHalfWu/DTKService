@@ -9,8 +9,6 @@ import immotal.half.wu.appManager.AppManagerUtil;
 import immotal.half.wu.appManager.pagers.beans.DeviceInfoBean;
 import immotal.half.wu.appManager.pagers.intefaces.IPage;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,26 +19,14 @@ public class JobPagerControl<DoResultType> implements IJobWithTimeOut<DoResultTy
     private final @NotNull List<IPage<?>> iPages;
     private final @NotNull ADBManager adbManager;
     private final @NotNull DeviceInfoBean deviceInfoBean;
-    private final Class<DoResultType> resultTypeClass;
 
-    public static <T> IJobWithTimeOut<T> create(
-            @NotNull ADBManager adbManager,
-            @NotNull DeviceInfoBean deviceInfoBean) {
-
-        return new JobPagerControl<T>(adbManager, deviceInfoBean){};
-    }
-
-    private JobPagerControl(
+    public JobPagerControl(
             @NotNull ADBManager adbManager,
             @NotNull DeviceInfoBean deviceInfoBean) {
 
         this.adbManager = adbManager;
         this.deviceInfoBean = deviceInfoBean;
         this.iPages = new ArrayList<>();
-
-        Type type = getClass().getGenericSuperclass();
-        Type trueType = ((ParameterizedType) type).getActualTypeArguments()[0];
-        this.resultTypeClass = (Class<DoResultType>) trueType;
     }
 
     public void addPager(@Nullable IPage<?> page) {
@@ -59,13 +45,12 @@ public class JobPagerControl<DoResultType> implements IJobWithTimeOut<DoResultTy
             try {
 
                 LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务第" + (i + 1) + "次");
-                Object o = looperIPager();
+                DoResultType o = looperIPager();
                 LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务结束，结果：" + o);
-//                return resultTypeClass.cast(o);
-                return (DoResultType)"123";
+                return o;
 
             } catch (Exception e) {
-                LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务第" + (i + 1) + "次时捕获异常：" + e.getMessage() + "并重试");
+                LogUtil.e(AppManagerUtil.TAG, "轮询IPager任务第" + (i + 1) + "次时捕获异常：" + e.getMessage() + "并重试", e);
             }
 
         }
@@ -74,10 +59,14 @@ public class JobPagerControl<DoResultType> implements IJobWithTimeOut<DoResultTy
 
     }
 
-    private @Nullable Object looperIPager() {
+    private @Nullable DoResultType looperIPager() {
+
+        if (iPages.isEmpty()) {
+            throw new IllegalStateException("轮询IPager任务异常，任务队列为null ：" + iPages);
+        }
 
         String xml;
-        IPage page;
+        IPage page = null;
         Object result = null;
 
         for (IPage iPage : iPages) {
@@ -86,6 +75,7 @@ public class JobPagerControl<DoResultType> implements IJobWithTimeOut<DoResultTy
 
                 xml = AppManagerUtil.readUiInfo(deviceInfoBean, adbManager);
                 page = iPage;
+                result = null;
 
                 if (!page.check(xml, deviceInfoBean, adbManager)) {
                     LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务，check失败：" + iPage);
@@ -96,15 +86,16 @@ public class JobPagerControl<DoResultType> implements IJobWithTimeOut<DoResultTy
                 result = page.doPageProcess(xml, deviceInfoBean, adbManager);
                 LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务，process成功：" + iPage);
 
-//                if (result == null || (result instanceof Boolean && !((boolean) (result)))) {
-//                    break;
-//                }
-
             } while (!page.isComplete(xml, deviceInfoBean, adbManager));
 
         }
 
-        return result;
+        Class<DoResultType> resultType = page.getResultType();
+        if (resultType != null) {
+            return resultType.cast(result);
+        } else {
+            return (DoResultType) result;
+        }
 
     }
 }

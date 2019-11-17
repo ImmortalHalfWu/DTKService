@@ -1,6 +1,6 @@
 package immortal.half.wu.apps.interfaces;
 
-import immortal.half.wu.executor.interfaces.IRunnableListener;
+import immortal.half.wu.executor.interfaces.IJobListener;
 
-public interface IActionCallBack<resultType> extends IRunnableListener<resultType> {
+public interface IActionCallBack<resultType> extends IJobListener<resultType> {
 }

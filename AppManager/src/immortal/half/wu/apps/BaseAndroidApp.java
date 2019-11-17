@@ -84,7 +84,7 @@ public abstract class BaseAndroidApp implements IAndroidApp {
 //    }
 
     protected boolean mainActivityShowing() {
-        String topActivity = ADBManager.getInstance().findTopActivity(deviceId.getDeviceId());
+        String topActivity = ADBManager.getInstance().findTopActivityName(deviceId.getDeviceId());
         return topActivity != null && topActivity.length() != 0 && mainActivityPath.endsWith(topActivity);
     }
 }

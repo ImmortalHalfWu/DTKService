@@ -14,7 +14,7 @@ public class UIProcessor {
 
     @NotNull
     public static String getTopActivity(String devicesId) {
-        String topActivity = ADBManager.getInstance().findTopActivity(devicesId);
+        String topActivity = ADBManager.getInstance().findTopActivityName(devicesId);
         return topActivity == null ? "" : topActivity;
     }
 

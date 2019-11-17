@@ -2,7 +2,7 @@ package immortal.half.wu.executor.interfaces;
 
 import com.sun.istack.internal.Nullable;
 
-public interface IRunnableListener<resultType> {
+public interface IJobListener<resultType> {
 
     void onError(Exception e);
 

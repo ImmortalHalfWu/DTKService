@@ -1,6 +1,7 @@
 package immortal.half.wu.executor;
 
-import immortal.half.wu.executor.interfaces.IRunnableListener;
+import immortal.half.wu.executor.interfaces.IJobListener;
+import immortal.half.wu.executor.interfaces.IJobWithTimeOut;
 import immortal.half.wu.executor.interfaces.ITimeOutExecutorService;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,7 +20,7 @@ public class ExecutorManager {
                 for (int i1 = 0; i1 < 100; i1++) {
 
                     timeOutThreadPool.executeTimeOut(
-                            new ITimeOutExecutorService.TimeOutRunnable<Boolean>() {
+                            new IJobWithTimeOut<Boolean>() {
                                 int i = 0;
 
                                 @NotNull
@@ -36,7 +37,7 @@ public class ExecutorManager {
                                     return true;
                                 }
                             },
-                            new IRunnableListener<Boolean>() {
+                            new IJobListener<Boolean>() {
                                 @Override
                                 public void onError(@NotNull Exception e) {
                                     System.out.println("job 运行异常" + e.getClass().getSimpleName());

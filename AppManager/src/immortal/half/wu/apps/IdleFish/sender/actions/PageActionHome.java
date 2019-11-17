@@ -17,7 +17,7 @@ public class PageActionHome {
 
 
     private static boolean activityHidding(String deviceId, @NotNull String mainActivityPath) {
-        String topActivity = ADBManager.getInstance().findTopActivity(deviceId);
+        String topActivity = ADBManager.getInstance().findTopActivityName(deviceId);
         return topActivity == null || topActivity.length() == 0 || !mainActivityPath.endsWith(topActivity);
     }
 
