@@ -1,6 +1,7 @@
 package immotal.half.wu.appManager;
 
 import com.sun.istack.internal.NotNull;
+import immortal.half.wu.FileUtils;
 import org.dom4j.*;
 
 import java.awt.*;
@@ -149,8 +150,164 @@ public class XMLUtil {
     }
 
 
+    @NotNull
+    public static Map<String, String> getTextByUIXML(
+            @NotNull String xmlString,
+            @NotNull Map<String, Map<String, String>> pointFilterBean) {
+
+        if (!FileUtils.isEmpty(xmlString) && !pointFilterBean.isEmpty()) {
+
+            try {
+
+                return XMLUtil.findTextByAttrKeyValues(
+                        XMLUtil.findRootElement(xmlString),
+                        new HashMap<>(pointFilterBean.size()),
+                        pointFilterBean
+                );
+
+            } catch (DocumentException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        return new HashMap<>(0);
+    }
 
 
+    /**
+     * 获取文档中的所有指定元素
+     */
+    @NotNull
+    public static Map<String, String> findTextByAttrKeyValues(
+            @NotNull Element rootElement,
+            @NotNull Map<String, String> resultMap,
+            @NotNull Map<String, Map<String, String>> filterMap) {
+
+        loopXMLAllElement(0, rootElement, new LoopXMLNodeCallBack() {
+            @Override
+            public boolean element(int index, Element element) {
+
+
+                //当前节点的名称、文本内容和属性
+                Set<String> resultKeys = filterMap.keySet();
+
+                for (String resultKey :
+                        resultKeys) {
+
+                    if (resultMap.get(resultKey) != null) {
+                        continue;
+                    }
+
+                    Map<String, String> filterMaps = filterMap.get(resultKey);
+
+                    for (Iterator<String> iterator = filterMaps.keySet().iterator(); ; ) {
+
+                        String filterKey = iterator.next();
+
+                        Attribute attribute = element.attribute(QName.get(filterKey));
+
+                        if (attribute == null || !attribute.getValue().startsWith(filterMaps.get(filterKey))) {
+                            break;
+                        }
+
+
+                        if (!iterator.hasNext()) {
+                            resultMap.put(resultKey, element.attributeValue("text"));
+                            if (resultMap.size() == filterMap.size()) {
+                                return true;
+                            }
+                            break;
+                        }
+
+                    }
+                }
+
+                return resultMap.size() == filterMap.size();
+            }
+        });
+
+        return resultMap;
+    }
+
+    /**
+     * @param xml 根元素
+     * @param key         查找第一个，attr中包含指定键值对的元素
+     * @param value       键值对
+     * @return 查找第一个，attr中包含指定键值对的元素
+     */
+    public static Element findElementByNodeKeyValue(String xml, String key, String value) {
+
+        final Element[] result = new Element[1];
+
+        try {
+            loopXMLAllElement(0, findRootElement(xml), (index, element) -> {
+
+                Attribute attribute = element.attribute(key);
+                if (attribute != null && attribute.getValue() != null && attribute.getValue().equals(value)) {
+                    result[0] =  element;
+                    return true;
+                }
+                return false;
+            });
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+
+        return result[0];
+    }
+
+
+    /**
+     * 获取文档中的所有指定元素
+     *
+     * @param xml 根元素
+     * @param tagName     指定元素名称
+     * @return 文档中的所有指定元素
+     */
+    @NotNull
+    public static List<Element> findAllElementByTagName(Element rootElement, String tagName) {
+
+        List<Element> elements = new ArrayList<>();
+        loopXMLAllElement(0, rootElement, new LoopXMLNodeCallBack() {
+            @Override
+            public boolean element(int index, Element element) {
+                if (element.getName().equals(tagName)) {
+                    elements.add(element);
+                }
+                return false;
+            }
+        });
+        return elements;
+    }
+
+    /**
+     * @param nodes     指定元素列表
+     * @param filterMap 指定文本内容
+     * @return 删除元素列表中，content-desc 或 text 包含 指定string的元素 或者 为空
+     */
+    @NotNull
+    public static List<Element> removeElementByAttrTextWithNull(List<Element> nodes, @NotNull List<String> filterMap) {
+
+        List<Element> removeElement = new ArrayList<>();
+
+        String string;
+        for (Element element : nodes) {
+            if (!FileUtils.isEmpty(string = element.attribute("text").getValue()) || !FileUtils.isEmpty(string = element.attribute("content-desc").getValue())) {
+
+                for (String item : filterMap) {
+                    if (string.contains(item)) {
+                        removeElement.add(element);
+                    }
+                }
+
+            } else {
+                removeElement.add(element);
+            }
+        }
+        nodes.removeAll(removeElement);
+        return nodes;
+    }
 
 
 

@@ -7,7 +7,8 @@ import immotal.half.wu.appManager.pagers.beans.DeviceInfoBean;
 import immotal.half.wu.appManager.pagers.beans.PagerInfoBean;
 import immotal.half.wu.appManager.pagers.processs.BasePageProcess;
 
-import java.util.HashMap;
+import java.awt.*;
+import java.util.Collections;
 import java.util.Map;
 
 public class StartMainPageProcess extends BasePageProcess<Boolean> {
@@ -22,7 +23,7 @@ public class StartMainPageProcess extends BasePageProcess<Boolean> {
 
     @Override
     public Map<String, Map<String, String>> getUiFilter(String xml, PagerInfoBean pagerInfo, DeviceInfoBean deviceInfo, ADBManager adb) {
-        return new HashMap<>(0);
+        return Collections.emptyMap();
     }
 
     @Override
@@ -31,7 +32,7 @@ public class StartMainPageProcess extends BasePageProcess<Boolean> {
     }
 
     @Override
-    public Boolean doPageProcess(String xml, PagerInfoBean pagerInfo, DeviceInfoBean deviceInfo, ADBManager adb) {
+    public Boolean doPageProcess(String xml, Map<String, Point> pointMap, PagerInfoBean pagerInfo, DeviceInfoBean deviceInfo, ADBManager adb) {
 
         String deviceId = deviceInfo.getDeviceId();
 

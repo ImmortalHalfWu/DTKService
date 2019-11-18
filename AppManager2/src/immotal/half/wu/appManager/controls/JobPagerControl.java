@@ -78,13 +78,13 @@ public class JobPagerControl<DoResultType> implements IJobWithTimeOut<DoResultTy
                 result = null;
 
                 if (!page.check(xml, deviceInfoBean, adbManager)) {
-                    LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务，check失败：" + iPage);
+                    LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务，" + iPage + "check失败");
                     break;
                 }
 
-                LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务，check成功：" + iPage);
+                LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务，" + iPage + "check成功");
                 result = page.doPageProcess(xml, deviceInfoBean, adbManager);
-                LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务，process成功：" + iPage);
+                LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务," + iPage + "process成功：" + result );
 
             } while (!page.isComplete(xml, deviceInfoBean, adbManager));
 

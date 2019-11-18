@@ -1,5 +1,6 @@
 package immotal.half.wu.appManager.pagers.processs.idlefish;
 
+import com.sun.istack.internal.NotNull;
 import immortal.half.wu.adbs.ADBManager;
 import immotal.half.wu.appManager.pagers.PointFilterBuilder;
 import immotal.half.wu.appManager.pagers.beans.DeviceInfoBean;
@@ -9,15 +10,31 @@ import immotal.half.wu.appManager.pagers.processs.BasePageProcess;
 import java.awt.*;
 import java.util.Map;
 
-public class RemoveUpdatePageProcess extends BasePageProcess<Boolean> {
+public class MainPageProcess extends BasePageProcess<Boolean> {
 
-    private final static String PAGE_POINT_KEY_HOME_UPDATE = "暂不升级";
 
+    private final static String PAGE_POINT_KEY_HOME_POST = "发布";
+    private final static String PAGE_POINT_KEY_HOME_MY = "我的";
     private final static Map<String, Map<String, String>> filter = new PointFilterBuilder()
-            .addText(PAGE_POINT_KEY_HOME_UPDATE)
-            .addResourceId("com.taobao.idlefish:id/left")
-            .next(PAGE_POINT_KEY_HOME_UPDATE)
-            .create();
+                        .addResourceId("com.taobao.idlefish:id/post_click")
+                        .next(PAGE_POINT_KEY_HOME_POST)
+                        .addContentDesc("我的，")
+                        .next(PAGE_POINT_KEY_HOME_MY)
+                        .create();
+
+
+    private final String processType;
+    private MainPageProcess(@NotNull String processType) {
+        this.processType = processType;
+    }
+
+    public static BasePageProcess<Boolean> createToPostPageProcess() {
+        return new MainPageProcess(PAGE_POINT_KEY_HOME_POST);
+    }
+
+    public static BasePageProcess<Boolean> createToMyPageProcess() {
+        return new MainPageProcess(PAGE_POINT_KEY_HOME_MY);
+    }
 
     @Override
     public Map<String, Map<String, String>> getUiFilter(String xml, PagerInfoBean pagerInfo, DeviceInfoBean deviceInfo, ADBManager adb) {
@@ -26,11 +43,12 @@ public class RemoveUpdatePageProcess extends BasePageProcess<Boolean> {
 
     @Override
     public Boolean doPageProcess(String xml, Map<String, Point> pointMap, PagerInfoBean pagerInfo, DeviceInfoBean deviceInfo, ADBManager adb) {
-        Point point = pointMap.get(PAGE_POINT_KEY_HOME_UPDATE);
+        Point point = pointMap.get(processType);
         if (point != null) {
             adb.createBuild().addClick(point).send(deviceInfo.getDeviceId());
             return true;
         }
         return false;
     }
+
 }

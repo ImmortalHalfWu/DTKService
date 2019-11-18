@@ -46,7 +46,7 @@ public class DefaultPager<DoResultType> extends BasePager<DoResultType> {
             Set<String> keys = pointFilter.keySet();
 
             for (String key : keys) {
-                if (!xml.contains(key + "=\"" + pointFilter.get(key) + "\"")) {
+                if (!xml.contains(key + "=\"" + pointFilter.get(key))) {
                     return false;
                 }
             }
@@ -82,8 +82,6 @@ public class DefaultPager<DoResultType> extends BasePager<DoResultType> {
 
     @Override
     public String toString() {
-        return "DefaultPager{" +
-                "pagerInfoBean=" + pagerInfoBean +
-                '}';
+        return pagerInfoBean.getActivityDoc();
     }
 }
