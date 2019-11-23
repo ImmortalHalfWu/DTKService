@@ -1,5 +1,7 @@
 package immotal.half.wu.appManager.pagers.beans;
 
+import org.jetbrains.annotations.NotNull;
+
 public class PagerInfoBean {
 
     private final String activityNamePath;
@@ -18,6 +20,7 @@ public class PagerInfoBean {
         return activityDoc;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return "PagerInfoBean{" +

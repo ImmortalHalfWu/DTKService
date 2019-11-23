@@ -9,6 +9,8 @@ public interface ITimeOutExecutorService extends ExecutorService {
 
     <T> void executeTimeOut120s(IJobWithTimeOut<T> run, IJobListener<T> runResultListener);
 
+    <T> void executeTimeOut(IJobWithTimeOut<T> run, IJobListener<T> runResultListener);
+
     <T> void executeTimeOut(IJobWithTimeOut<T> run, IJobListener<T> runResultListener, long outTimeMs);
 
 }

@@ -11,7 +11,7 @@ import java.util.*;
 public class XMLUtil {
 
 
-    private static Element findRootElement(@NotNull String xml) throws DocumentException {
+    private static Element findRootElement(@org.jetbrains.annotations.NotNull @NotNull String xml) throws DocumentException {
         return DocumentHelper.parseText(xml).getRootElement();
     }
 
@@ -41,7 +41,7 @@ public class XMLUtil {
      * @param listener 接受回调
      * @throws DocumentException 文档解析异常
      */
-    public static void loopXMLAllAttr(String xmlString, LoopItemListener listener) throws DocumentException {
+    public static void loopXMLAllAttr(@org.jetbrains.annotations.NotNull String xmlString, @org.jetbrains.annotations.NotNull LoopItemListener listener) throws DocumentException {
 
         loopXMLAllElement(0, findRootElement(xmlString), (index, element) -> {
 
@@ -66,11 +66,10 @@ public class XMLUtil {
      * 获取文档中的所有指定元素
      *
      * @param rootElement 根元素
-     * @return 文档中的所有指定元素
      */
     private static void loopXMLAllElement(
             int elementIndex,
-            @NotNull Element rootElement,
+            @org.jetbrains.annotations.NotNull @NotNull Element rootElement,
             LoopXMLNodeCallBack callBack
     ) {
 
@@ -93,10 +92,11 @@ public class XMLUtil {
      * @param xmlString xml
      * @return 文档中的所有指定元素
      */
+    @org.jetbrains.annotations.NotNull
     @NotNull
-    static Map<String, Point> findAllPointByAttrKeyValue(
-            @NotNull String xmlString,
-            @NotNull Map<String, Map<String, String>> filterMap) throws DocumentException {
+    public static Map<String, Point> findAllPointByAttrKeyValue(
+            @org.jetbrains.annotations.NotNull @NotNull String xmlString,
+            @org.jetbrains.annotations.NotNull @NotNull Map<String, Map<String, String>> filterMap) throws DocumentException {
 
         Map<String, Point> resultMap = new HashMap<>();
 
@@ -105,7 +105,7 @@ public class XMLUtil {
                 findRootElement(xmlString),
                 new LoopXMLNodeCallBack() {
                     @Override
-                    public boolean element(int index, Element element) {
+                    public boolean element(int index, @org.jetbrains.annotations.NotNull Element element) {
 
                         //当前节点的名称、文本内容和属性
                         Set<String> resultKeys = filterMap.keySet();
@@ -124,14 +124,15 @@ public class XMLUtil {
                                 String filterKey = iterator.next();
 
                                 Attribute attribute = element.attribute(QName.get(filterKey));
-
                                 if (attribute == null || !attribute.getValue().startsWith(filterMaps.get(filterKey))) {
                                     break;
                                 }
 
+//                                LogUtil.i(AppManagerUtil.TAG, "找到" + filterKey + " = " + attribute.getValue());
                                 if (!iterator.hasNext()) {
                                     resultMap.put(resultKey, getElementBoundsCenter(element));
                                     if (resultMap.size() == filterMap.size()) {
+//                                        LogUtil.i(AppManagerUtil.TAG, "完成查找");
                                         return true;
                                     }
                                     break;
@@ -145,15 +146,47 @@ public class XMLUtil {
                 }
         );
 
-
         return resultMap;
     }
 
 
+    /**
+     * 获取文档中的所有指定元素
+     */
+    @org.jetbrains.annotations.NotNull
+    @NotNull
+    public static List<Point> findAllPointByAttrKeyValue(
+            @org.jetbrains.annotations.NotNull @NotNull String xml,
+            String key,
+            String value) {
+
+        List<Point> resultPoints = new ArrayList<>();
+        try {
+            loopXMLAllElement(0, findRootElement(xml), new LoopXMLNodeCallBack() {
+                @Override
+                public boolean element(int index, @org.jetbrains.annotations.NotNull Element element) {
+                    Attribute attribute = element.attribute(QName.get(key));
+
+                    if (attribute != null && attribute.getValue().equals(value)) {
+                        resultPoints.add(getElementBoundsCenter(element));
+                    }
+
+                    return false;
+                }
+            });
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+
+        return resultPoints;
+    }
+
+
+    @org.jetbrains.annotations.NotNull
     @NotNull
     public static Map<String, String> getTextByUIXML(
-            @NotNull String xmlString,
-            @NotNull Map<String, Map<String, String>> pointFilterBean) {
+            @org.jetbrains.annotations.NotNull @NotNull String xmlString,
+            @org.jetbrains.annotations.NotNull @NotNull Map<String, Map<String, String>> pointFilterBean) {
 
         if (!FileUtils.isEmpty(xmlString) && !pointFilterBean.isEmpty()) {
 
@@ -178,15 +211,16 @@ public class XMLUtil {
     /**
      * 获取文档中的所有指定元素
      */
+    @org.jetbrains.annotations.NotNull
     @NotNull
     public static Map<String, String> findTextByAttrKeyValues(
-            @NotNull Element rootElement,
-            @NotNull Map<String, String> resultMap,
-            @NotNull Map<String, Map<String, String>> filterMap) {
+            @org.jetbrains.annotations.NotNull @NotNull Element rootElement,
+            @org.jetbrains.annotations.NotNull @NotNull Map<String, String> resultMap,
+            @org.jetbrains.annotations.NotNull @NotNull Map<String, Map<String, String>> filterMap) {
 
         loopXMLAllElement(0, rootElement, new LoopXMLNodeCallBack() {
             @Override
-            public boolean element(int index, Element element) {
+            public boolean element(int index, @org.jetbrains.annotations.NotNull Element element) {
 
 
                 //当前节点的名称、文本内容和属性
@@ -236,7 +270,7 @@ public class XMLUtil {
      * @param value       键值对
      * @return 查找第一个，attr中包含指定键值对的元素
      */
-    public static Element findElementByNodeKeyValue(String xml, String key, String value) {
+    public static Element findElementByNodeKeyValue(@org.jetbrains.annotations.NotNull String xml, String key, String value) {
 
         final Element[] result = new Element[1];
 
@@ -261,17 +295,18 @@ public class XMLUtil {
     /**
      * 获取文档中的所有指定元素
      *
-     * @param xml 根元素
+     * @param rootElement 根元素
      * @param tagName     指定元素名称
      * @return 文档中的所有指定元素
      */
+    @org.jetbrains.annotations.NotNull
     @NotNull
-    public static List<Element> findAllElementByTagName(Element rootElement, String tagName) {
+    public static List<Element> findAllElementByTagName(@org.jetbrains.annotations.NotNull Element rootElement, String tagName) {
 
         List<Element> elements = new ArrayList<>();
         loopXMLAllElement(0, rootElement, new LoopXMLNodeCallBack() {
             @Override
-            public boolean element(int index, Element element) {
+            public boolean element(int index, @org.jetbrains.annotations.NotNull Element element) {
                 if (element.getName().equals(tagName)) {
                     elements.add(element);
                 }
@@ -286,8 +321,9 @@ public class XMLUtil {
      * @param filterMap 指定文本内容
      * @return 删除元素列表中，content-desc 或 text 包含 指定string的元素 或者 为空
      */
+    @org.jetbrains.annotations.NotNull
     @NotNull
-    public static List<Element> removeElementByAttrTextWithNull(List<Element> nodes, @NotNull List<String> filterMap) {
+    public static List<Element> removeElementByAttrTextWithNull(List<Element> nodes, @org.jetbrains.annotations.NotNull @NotNull List<String> filterMap) {
 
         List<Element> removeElement = new ArrayList<>();
 
@@ -308,6 +344,42 @@ public class XMLUtil {
         nodes.removeAll(removeElement);
         return nodes;
     }
+
+    /**
+     * 获取文档中的所有指定元素
+     */
+    public static Point findPointByAttrKeyValueEndWith(
+            @org.jetbrains.annotations.NotNull String xml,
+            String key,
+            @org.jetbrains.annotations.NotNull @NotNull String value) {
+
+        final Point[] point = {new Point(0, 0)};
+
+        try {
+            loopXMLAllElement(0, findRootElement(xml), new LoopXMLNodeCallBack() {
+                @Override
+                public boolean element(int index, @org.jetbrains.annotations.NotNull Element element) {
+                    Attribute attribute = element.attribute(QName.get(key));
+                    if (attribute != null && attribute.getValue().endsWith(value)) {
+                        Point elementBoundsCenter = getElementBoundsCenter(element);
+                        if (elementBoundsCenter.x != 0 && elementBoundsCenter.y != 0) {
+                            point[0] = elementBoundsCenter;
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            });
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+
+        return point[0];
+    }
+
+
+
+
 
 
 
@@ -338,7 +410,7 @@ public class XMLUtil {
      * @param element 指定元素
      * @return 获取指定元素bounds属性记录的中心位置
      */
-    public static Point getElementBoundsCenter(@NotNull Element element) {
+    public static Point getElementBoundsCenter(@org.jetbrains.annotations.NotNull @NotNull Element element) {
         if (attrBoundsIsNull(element)) {
             return new Point(0, 0);
         }
@@ -354,7 +426,7 @@ public class XMLUtil {
 
 
 
-    public static Point getElementLeftTopPoint(@NotNull Element element) {
+    public static Point getElementLeftTopPoint(@org.jetbrains.annotations.NotNull @NotNull Element element) {
         if (attrBoundsIsNull(element)) {
             return new Point(0, 0);
         }
@@ -366,7 +438,7 @@ public class XMLUtil {
         return new Point(left, top);
     }
 
-    public static Point getElementRightBottomPoint(@NotNull Element element) {
+    public static Point getElementRightBottomPoint(@org.jetbrains.annotations.NotNull @NotNull Element element) {
         if (attrBoundsIsNull(element)) {
             return new Point(0, 0);
         }
@@ -379,6 +451,7 @@ public class XMLUtil {
 
     }
 
+    @org.jetbrains.annotations.NotNull
     @NotNull
     private static String[] getElementBoundsSplit(Element element) {
 

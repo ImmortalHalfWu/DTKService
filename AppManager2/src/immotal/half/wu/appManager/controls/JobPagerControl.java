@@ -16,6 +16,7 @@ public class JobPagerControl<DoResultType> implements IJobWithTimeOut<DoResultTy
 
     private final static int tryAgainCount = 3;
 
+    @org.jetbrains.annotations.NotNull
     private final @NotNull List<IPage<?>> iPages;
     private final @NotNull ADBManager adbManager;
     private final @NotNull DeviceInfoBean deviceInfoBean;
@@ -29,7 +30,7 @@ public class JobPagerControl<DoResultType> implements IJobWithTimeOut<DoResultTy
         this.iPages = new ArrayList<>();
     }
 
-    public void addPager(@Nullable IPage<?> page) {
+    public void addPager(@org.jetbrains.annotations.Nullable @Nullable IPage<?> page) {
         if (page != null) {
             iPages.add(page);
         }
@@ -42,24 +43,19 @@ public class JobPagerControl<DoResultType> implements IJobWithTimeOut<DoResultTy
 
         for (int i = 0; i < tryAgainCount; i++) {
 
-            try {
-
-                LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务第" + (i + 1) + "次");
-                DoResultType o = looperIPager();
-                LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务结束，结果：" + o);
+            LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务第" + (i + 1) + "次");
+            DoResultType o = looperIPager();
+            LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务结束，结果：" + o);
+            if (o != null) {
                 return o;
-
-            } catch (Exception e) {
-                LogUtil.e(AppManagerUtil.TAG, "轮询IPager任务第" + (i + 1) + "次时捕获异常：" + e.getMessage() + "并重试", e);
             }
-
         }
 
         throw new IllegalStateException("轮询IPager任务失败，未得到正确结果：" + iPages);
 
     }
 
-    private @Nullable DoResultType looperIPager() {
+    private @Nullable DoResultType looperIPager() throws InterruptedException {
 
         if (iPages.isEmpty()) {
             throw new IllegalStateException("轮询IPager任务异常，任务队列为null ：" + iPages);
@@ -72,18 +68,31 @@ public class JobPagerControl<DoResultType> implements IJobWithTimeOut<DoResultTy
         for (IPage iPage : iPages) {
 
             do {
-
+                if (Thread.currentThread().isInterrupted()) {
+                    throw new InterruptedException();
+                }
                 xml = AppManagerUtil.readUiInfo(deviceInfoBean, adbManager);
                 page = iPage;
-                result = null;
 
                 if (!page.check(xml, deviceInfoBean, adbManager)) {
                     LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务，" + iPage + "check失败");
-                    break;
+//                    throw new IllegalStateException("轮询IPager任务，" + iPage + "check失败");
+                    return null;
+//                    break;
                 }
 
                 LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务，" + iPage + "check成功");
+
+                if (Thread.currentThread().isInterrupted()) {
+                    throw new InterruptedException();
+                }
+
                 result = page.doPageProcess(xml, deviceInfoBean, adbManager);
+
+                if (Thread.currentThread().isInterrupted()) {
+                    throw new InterruptedException();
+                }
+
                 LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务," + iPage + "process成功：" + result );
 
             } while (!page.isComplete(xml, deviceInfoBean, adbManager));

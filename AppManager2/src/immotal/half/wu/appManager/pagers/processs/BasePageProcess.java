@@ -5,6 +5,8 @@ import immotal.half.wu.appManager.AppManagerUtil;
 import immotal.half.wu.appManager.pagers.beans.DeviceInfoBean;
 import immotal.half.wu.appManager.pagers.beans.PagerInfoBean;
 import immotal.half.wu.appManager.pagers.intefaces.IPageProcess;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.lang.reflect.ParameterizedType;
@@ -23,11 +25,13 @@ public abstract class BasePageProcess<DoResultType> implements IPageProcess<DoRe
         return true;
     }
 
+    @Nullable
     @Override
-    public DoResultType doPageProcess(String xml, PagerInfoBean pagerInfo, DeviceInfoBean deviceInfo, ADBManager adb) {
+    public DoResultType doPageProcess(@NotNull String xml, PagerInfoBean pagerInfo, DeviceInfoBean deviceInfo, ADBManager adb) throws InterruptedException {
 
+        Map<String, Map<String, String>> uiFilter = getUiFilter(xml, pagerInfo, deviceInfo, adb);
         Map<String, Point> uiPointWithSaveCache = AppManagerUtil.getUiPointWithSaveCache(
-                xml, getUiFilter(xml, pagerInfo, deviceInfo, adb), pagerInfo, deviceInfo, getClass().getSimpleName()
+                xml, uiFilter, pagerInfo, deviceInfo, uiFilter.toString()
         );
 
         return doPageProcess(
@@ -39,6 +43,7 @@ public abstract class BasePageProcess<DoResultType> implements IPageProcess<DoRe
         );
     }
 
+    @NotNull
     @Override
     public Class<DoResultType> getResultType() {
         Type type = getClass().getGenericSuperclass();
@@ -51,6 +56,7 @@ public abstract class BasePageProcess<DoResultType> implements IPageProcess<DoRe
         }
     }
 
-    public abstract DoResultType doPageProcess(String xml, Map<String, Point> pointMap, PagerInfoBean pagerInfo, DeviceInfoBean deviceInfo, ADBManager adb);
+    @Nullable
+    public abstract DoResultType doPageProcess(String xml, Map<String, Point> pointMap, PagerInfoBean pagerInfo, DeviceInfoBean deviceInfo, ADBManager adb) throws InterruptedException;
 
 }

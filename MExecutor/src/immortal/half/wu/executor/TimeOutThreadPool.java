@@ -96,7 +96,7 @@ class TimeOutThreadPool implements ITimeOutExecutorService {
 
     @Override
     public <T> void executeTimeOut60s(@NotNull IJobWithTimeOut<T> run, @Nullable IJobListener<T> runResultListener) {
-        executeTimeOut(run, runResultListener, 60 * 1000);
+        executeTimeOut(run, runResultListener, 11 * 1000);
     }
 
     @Override
@@ -105,8 +105,13 @@ class TimeOutThreadPool implements ITimeOutExecutorService {
     }
 
     @Override
+    public <T> void executeTimeOut(@NotNull IJobWithTimeOut<T> run, @Nullable IJobListener<T> runResultListener) {
+        executeTimeOut(run, runResultListener, Integer.MAX_VALUE);
+    }
+
+    @Override
     public <T> void executeTimeOut(@NotNull IJobWithTimeOut<T> run, @Nullable IJobListener<T> runResultListener, long outTimeMs) {
-        execute(new TimeOutAdapter<T>(pullExecutor, run, runResultListener, outTimeMs));
+        execute(new TimeOutAdapter<>(pullExecutor, run, runResultListener, outTimeMs));
     }
 
 }

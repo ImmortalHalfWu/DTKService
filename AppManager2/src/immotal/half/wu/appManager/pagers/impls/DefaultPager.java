@@ -5,6 +5,7 @@ import immortal.half.wu.adbs.ADBManager;
 import immotal.half.wu.appManager.pagers.beans.DeviceInfoBean;
 import immotal.half.wu.appManager.pagers.beans.PagerInfoBean;
 import immotal.half.wu.appManager.pagers.intefaces.IPageProcess;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Set;
@@ -29,9 +30,9 @@ public class DefaultPager<DoResultType> extends BasePager<DoResultType> {
 
     @Override
     public boolean check(
-            @NotNull String xml,
-            @NotNull DeviceInfoBean deviceInfo,
-            @NotNull ADBManager adb) {
+            @org.jetbrains.annotations.NotNull @NotNull String xml,
+            @org.jetbrains.annotations.NotNull @NotNull DeviceInfoBean deviceInfo,
+            @org.jetbrains.annotations.NotNull @NotNull ADBManager adb) {
 
         if (pageProcess.checkPager(xml, pagerInfoBean, deviceInfo, adb)) {
             return true;
@@ -56,8 +57,9 @@ public class DefaultPager<DoResultType> extends BasePager<DoResultType> {
         return adb.findTopActivityPath(deviceInfo.getDeviceId()).equals(pagerInfoBean.getActivityNamePath());
     }
 
+    @Nullable
     @Override
-    public DoResultType doPageProcess(String xml, DeviceInfoBean deviceInfo, ADBManager adb) {
+    public DoResultType doPageProcess(String xml, DeviceInfoBean deviceInfo, ADBManager adb) throws InterruptedException {
         if (pageProcess != null) {
             return pageProcess.doPageProcess(xml, pagerInfoBean, deviceInfo, adb);
         }
@@ -72,6 +74,7 @@ public class DefaultPager<DoResultType> extends BasePager<DoResultType> {
         return true;
     }
 
+    @Nullable
     @Override
     public Class<DoResultType> getResultType() {
         if (pageProcess != null) {

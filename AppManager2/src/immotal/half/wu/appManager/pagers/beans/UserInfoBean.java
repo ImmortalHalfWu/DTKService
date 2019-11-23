@@ -1,5 +1,7 @@
 package immotal.half.wu.appManager.pagers.beans;
 
+import org.jetbrains.annotations.NotNull;
+
 public class UserInfoBean {
 
     private final String name;
@@ -18,6 +20,7 @@ public class UserInfoBean {
         return postedNum;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return "UserInfoBean{" +

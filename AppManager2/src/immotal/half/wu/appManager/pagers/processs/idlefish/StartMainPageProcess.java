@@ -6,6 +6,7 @@ import immotal.half.wu.appManager.AppManagerUtil;
 import immotal.half.wu.appManager.pagers.beans.DeviceInfoBean;
 import immotal.half.wu.appManager.pagers.beans.PagerInfoBean;
 import immotal.half.wu.appManager.pagers.processs.BasePageProcess;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.Collections;
@@ -21,6 +22,7 @@ public class StartMainPageProcess extends BasePageProcess<Boolean> {
         this.appPackage = appPackage;
     }
 
+    @NotNull
     @Override
     public Map<String, Map<String, String>> getUiFilter(String xml, PagerInfoBean pagerInfo, DeviceInfoBean deviceInfo, ADBManager adb) {
         return Collections.emptyMap();
@@ -31,8 +33,9 @@ public class StartMainPageProcess extends BasePageProcess<Boolean> {
         return true;
     }
 
+    @NotNull
     @Override
-    public Boolean doPageProcess(String xml, Map<String, Point> pointMap, PagerInfoBean pagerInfo, DeviceInfoBean deviceInfo, ADBManager adb) {
+    public Boolean doPageProcess(String xml, Map<String, Point> pointMap, PagerInfoBean pagerInfo, @NotNull DeviceInfoBean deviceInfo, @NotNull ADBManager adb) throws InterruptedException {
 
         String deviceId = deviceInfo.getDeviceId();
 
@@ -49,12 +52,7 @@ public class StartMainPageProcess extends BasePageProcess<Boolean> {
         do {
 
             adb.startActivity(deviceInfo.getDeviceId(), appPackage, mainActivityNamePath);
-
-            try {
-                Thread.sleep(delayTime);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            Thread.sleep(delayTime);
 
         } while (!checkTopActivity(deviceId, adb));
 

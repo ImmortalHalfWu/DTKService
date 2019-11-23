@@ -12,6 +12,7 @@ import java.util.Set;
 
 public abstract class SimpleProcessPostedProductCallBack implements ProcessPostedProductCallBack {
 
+    @org.jetbrains.annotations.NotNull
     @NotNull
     protected final Set<String> names;
     final DeviceInfoBean deviceId;

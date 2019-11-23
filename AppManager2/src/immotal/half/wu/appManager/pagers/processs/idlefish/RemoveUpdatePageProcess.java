@@ -5,6 +5,7 @@ import immotal.half.wu.appManager.pagers.PointFilterBuilder;
 import immotal.half.wu.appManager.pagers.beans.DeviceInfoBean;
 import immotal.half.wu.appManager.pagers.beans.PagerInfoBean;
 import immotal.half.wu.appManager.pagers.processs.BasePageProcess;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.Map;
@@ -25,12 +26,19 @@ public class RemoveUpdatePageProcess extends BasePageProcess<Boolean> {
     }
 
     @Override
-    public Boolean doPageProcess(String xml, Map<String, Point> pointMap, PagerInfoBean pagerInfo, DeviceInfoBean deviceInfo, ADBManager adb) {
-        Point point = pointMap.get(PAGE_POINT_KEY_HOME_UPDATE);
-        if (point != null) {
-            adb.createBuild().addClick(point).send(deviceInfo.getDeviceId());
-            return true;
+    public boolean checkPager(String xml, PagerInfoBean pagerInfo, DeviceInfoBean deviceInfo, ADBManager adb) {
+        return true;
+    }
+
+    @NotNull
+    @Override
+    public Boolean doPageProcess(@NotNull String xml, @NotNull Map<String, Point> pointMap, PagerInfoBean pagerInfo, @NotNull DeviceInfoBean deviceInfo, @NotNull ADBManager adb) {
+        if (xml.contains(PAGE_POINT_KEY_HOME_UPDATE) && xml.contains("com.taobao.idlefish:id/left")) {
+            Point point = pointMap.get(PAGE_POINT_KEY_HOME_UPDATE);
+            if (point != null) {
+                adb.createBuild().addClick(point).send(deviceInfo.getDeviceId());
+            }
         }
-        return false;
+        return true;
     }
 }

@@ -35,17 +35,19 @@ public class AppManagerUtil {
                         deviceInfo.getDeviceDx();
         String filePath = FileUtils.DIR_PATH_XML + fileName + ".xml";
 
+        String fileContent;
         return adb.androidUIXML(deviceInfo.getDeviceId(), fileName, filePath) ?
-                FileUtils.readFile(filePath).replaceAll("&#10;", "") : "";
+                (fileContent = FileUtils.readFile(filePath)) == null ? "" : fileContent.replaceAll("&#10;", "") : "";
     }
 
 
     /**
      * @return 获取xml中符合约束的point点，先取缓存
      */
+    @org.jetbrains.annotations.NotNull
     public static @NotNull Map<String, Point> getUiPoint(
-            @NotNull String xmlString,
-            @NotNull Map<String, Map<String, String>> filterMap,
+            @org.jetbrains.annotations.NotNull @NotNull String xmlString,
+            @org.jetbrains.annotations.NotNull @NotNull Map<String, Map<String, String>> filterMap,
             @NotNull PagerInfoBean pagerInfoBean,
             @NotNull DeviceInfoBean deviceInfoBean,
             @NotNull String key) {
@@ -58,9 +60,10 @@ public class AppManagerUtil {
         }
     }
 
+    @org.jetbrains.annotations.NotNull
     public static @NotNull Map<String, Point> getUiPointWithSaveCache(
-            @NotNull String xmlString,
-            @NotNull Map<String, Map<String, String>> filterMap,
+            @org.jetbrains.annotations.NotNull @NotNull String xmlString,
+            @org.jetbrains.annotations.NotNull @NotNull Map<String, Map<String, String>> filterMap,
             @NotNull PagerInfoBean pagerInfoBean,
             @NotNull DeviceInfoBean deviceInfoBean,
             @NotNull String key) {
@@ -72,9 +75,9 @@ public class AppManagerUtil {
 
 
     public static void processPostedProduct(
-            @NotNull String uiXmlString,
+            @org.jetbrains.annotations.NotNull @NotNull String uiXmlString,
             @NotNull DeviceInfoBean deviceId,
-            @Nullable ProcessPostedProductCallBack callBack) {
+            @org.jetbrains.annotations.Nullable @Nullable ProcessPostedProductCallBack callBack) {
 
         if (callBack == null) {
             return;
@@ -112,6 +115,9 @@ public class AppManagerUtil {
             objects.add("编辑");
             objects.add("已擦亮");
             objects.add("刚刚擦亮");
+            objects.add("去发布");
+            objects.add("再发个宝贝");
+
 
             List<Element> elements = XMLUtil.removeElementByAttrTextWithNull(
                     items,

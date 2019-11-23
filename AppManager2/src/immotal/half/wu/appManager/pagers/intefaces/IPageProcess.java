@@ -23,11 +23,12 @@ public interface IPageProcess<DoResultType> {
             @NotNull DeviceInfoBean deviceInfo,
             @NotNull ADBManager adb);
 
+    @org.jetbrains.annotations.Nullable
     @Nullable DoResultType doPageProcess(
             @NotNull String xml,
             @NotNull PagerInfoBean pagerInfo,
             @NotNull DeviceInfoBean deviceInfo,
-            @NotNull ADBManager adb);
+            @NotNull ADBManager adb) throws InterruptedException;
 
     boolean isComplete(
             @NotNull String xml,
@@ -36,6 +37,7 @@ public interface IPageProcess<DoResultType> {
             @NotNull ADBManager adb
     );
 
+    @org.jetbrains.annotations.NotNull
     @Nullable Class<DoResultType> getResultType();
 
 }

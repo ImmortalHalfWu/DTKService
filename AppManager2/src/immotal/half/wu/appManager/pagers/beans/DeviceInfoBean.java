@@ -1,5 +1,7 @@
 package immotal.half.wu.appManager.pagers.beans;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.awt.*;
 
 public class DeviceInfoBean {
@@ -20,6 +22,7 @@ public class DeviceInfoBean {
         return deviceDx;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return "DeviceInfoBean{" +

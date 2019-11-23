@@ -53,9 +53,11 @@ class TimeOutAdapter<T> implements Runnable {
             future = runExecutor.submit(callable);// 将任务提交到线程池中
             resultException = future.get(outTime, TimeUnit.MILLISECONDS);// 设定在X秒的时间内完成
         } catch (TimeoutException e) {// 超时异常
+            System.out.println(job.toString() + "运行超时，退出运行");
             future.cancel(true);// 中断执行此任务的线程
             resultException = e;
         } catch (Exception e) {
+            System.out.println("TimeOutAdapter运行异常：" + e.getMessage());
             resultException = e;
         }
 

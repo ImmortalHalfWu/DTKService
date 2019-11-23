@@ -16,36 +16,42 @@ public class PointFilterBuilder {
         filterMap = new HashMap<>();
     }
 
+    @org.jetbrains.annotations.NotNull
     @NotNull
     public PointFilterBuilder addContentDesc(String contentDesc) {
         filterMap.put("content-desc", contentDesc);
         return this;
     }
 
+    @org.jetbrains.annotations.NotNull
     @NotNull
     public PointFilterBuilder addText(String text) {
         filterMap.put("text", text);
         return this;
     }
 
+    @org.jetbrains.annotations.NotNull
     @NotNull
     public PointFilterBuilder addResourceId(String resourceId) {
         filterMap.put("resource-id", resourceId);
         return this;
     }
 
+    @org.jetbrains.annotations.NotNull
     @NotNull
     public PointFilterBuilder addClass(String className) {
         filterMap.put("class", className);
         return this;
     }
 
+    @org.jetbrains.annotations.NotNull
     @NotNull
     public PointFilterBuilder addIndex(String index) {
         filterMap.put("index", index);
         return this;
     }
 
+    @org.jetbrains.annotations.NotNull
     @NotNull
     public PointFilterBuilder next(String key) {
         if (filterMap.size() > 0 && !FileUtils.isEmpty(key)) {

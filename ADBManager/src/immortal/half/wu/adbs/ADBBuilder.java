@@ -22,7 +22,7 @@ public class ADBBuilder implements IADBBuilder {
     public IADBBuilder addClick(@Nullable Point point) {
         if (point != null) {
             adbMessageBeans.add(ADBMessageBean.instanceClick(point));
-            delayTime(200);
+//            delayTime(200);
         }
         return this;
     }

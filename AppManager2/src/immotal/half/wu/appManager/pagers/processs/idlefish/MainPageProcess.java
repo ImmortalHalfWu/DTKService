@@ -41,8 +41,9 @@ public class MainPageProcess extends BasePageProcess<Boolean> {
         return filter;
     }
 
+    @org.jetbrains.annotations.NotNull
     @Override
-    public Boolean doPageProcess(String xml, Map<String, Point> pointMap, PagerInfoBean pagerInfo, DeviceInfoBean deviceInfo, ADBManager adb) {
+    public Boolean doPageProcess(String xml, @org.jetbrains.annotations.NotNull Map<String, Point> pointMap, PagerInfoBean pagerInfo, @org.jetbrains.annotations.NotNull DeviceInfoBean deviceInfo, @org.jetbrains.annotations.NotNull ADBManager adb) {
         Point point = pointMap.get(processType);
         if (point != null) {
             adb.createBuild().addClick(point).send(deviceInfo.getDeviceId());
