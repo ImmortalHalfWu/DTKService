@@ -78,10 +78,12 @@ public class IdleFishModel {
                 ImageTagPageProcess.createInputTag(tag));
     }
 
-    @org.jetbrains.annotations.NotNull DefaultPager<Boolean> 选择第一个imgTAG = IPagerFactory.create(
-            IDLE_FISH_POSTED_IMG_TAG,
-            "选择第一个img TAG",
-            ImageTagPageProcess.createChoiceTag());
+    @org.jetbrains.annotations.NotNull DefaultPager<Boolean> 选择第一个imgTAG(@NotNull String tag) {
+        return IPagerFactory.create(
+                        IDLE_FISH_POSTED_IMG_TAG,
+                        "选择第一个img TAG",
+                        ImageTagPageProcess.createChoiceTag(tag));
+    }
 
     @org.jetbrains.annotations.NotNull DefaultPager<Boolean> 前往发布商品信息页 = IPagerFactory.create(
             IDLE_FISH_POSTED_IMG_PROCESS,

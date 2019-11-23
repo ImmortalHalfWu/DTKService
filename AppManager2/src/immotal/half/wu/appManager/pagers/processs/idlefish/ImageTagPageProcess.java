@@ -7,6 +7,7 @@ import immotal.half.wu.appManager.pagers.beans.DeviceInfoBean;
 import immotal.half.wu.appManager.pagers.beans.PagerInfoBean;
 import immotal.half.wu.appManager.pagers.processs.BasePageProcess;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.Map;
@@ -41,11 +42,12 @@ public class ImageTagPageProcess {
         };
     }
 
-    public static BasePageProcess<Boolean> createChoiceTag() {
+    public static BasePageProcess<Boolean> createChoiceTag(String tagName) {
         return new BasePageProcess<Boolean>() {
-            @NotNull
+
+            @Nullable
             @Override
-            public Boolean doPageProcess(@NotNull String xml, Map<String, Point> pointMap, PagerInfoBean pagerInfo, @NotNull DeviceInfoBean deviceInfo, @NotNull ADBManager adb) {
+            public Boolean doPageProcess(@NotNull String xml, PagerInfoBean pagerInfo, DeviceInfoBean deviceInfo, ADBManager adb) throws InterruptedException {
                 Point firstLinePoint = XMLUtil.findPointByAttrKeyValueEndWith(
                         xml,
                         "text",
@@ -58,9 +60,18 @@ public class ImageTagPageProcess {
                 return false;
             }
 
+            @NotNull
+            @Override
+            public Boolean doPageProcess(@NotNull String xml, Map<String, Point> pointMap, PagerInfoBean pagerInfo, @NotNull DeviceInfoBean deviceInfo, @NotNull ADBManager adb) {
+                return true;
+            }
+
             @Override
             public Map<String, Map<String, String>> getUiFilter(String xml, PagerInfoBean pagerInfo, DeviceInfoBean deviceInfo, ADBManager adb) {
-                return filter;
+                return new PointFilterBuilder()
+                        .addText(tagName + "自定义标签")
+                        .next(tagName + tagName.hashCode())
+                        .create();
             }
         };
     }

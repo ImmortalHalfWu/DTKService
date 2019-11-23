@@ -61,7 +61,7 @@ public class JobPagerControl<DoResultType> implements IJobWithTimeOut<DoResultTy
             throw new IllegalStateException("轮询IPager任务异常，任务队列为null ：" + iPages);
         }
 
-        String xml;
+        String xml = null;
         IPage page = null;
         Object result = null;
 
@@ -71,17 +71,22 @@ public class JobPagerControl<DoResultType> implements IJobWithTimeOut<DoResultTy
                 if (Thread.currentThread().isInterrupted()) {
                     throw new InterruptedException();
                 }
-                xml = AppManagerUtil.readUiInfo(deviceInfoBean, adbManager);
+
                 page = iPage;
 
-                if (!page.check(xml, deviceInfoBean, adbManager)) {
-                    LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务，" + iPage + "check失败");
+                if (xml != null && page.check(xml, deviceInfoBean, adbManager)) {
+                    LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务，" + iPage + "复用xml check成功");
+                } else {
+                    xml = AppManagerUtil.readUiInfo(deviceInfoBean, adbManager);
+                    if (!page.check(xml, deviceInfoBean, adbManager)) {
+                        LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务，" + iPage + "check失败");
 //                    throw new IllegalStateException("轮询IPager任务，" + iPage + "check失败");
-                    return null;
+                        return null;
 //                    break;
+                    }
+                    LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务，" + iPage + "check成功");
                 }
 
-                LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务，" + iPage + "check成功");
 
                 if (Thread.currentThread().isInterrupted()) {
                     throw new InterruptedException();

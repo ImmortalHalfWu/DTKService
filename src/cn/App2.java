@@ -239,7 +239,7 @@ public class App2 {
         DefaultPager<Boolean> 选择第一个imgTAG = IPagerFactory.create(
                 IDLE_FISH_POSTED_IMG_TAG,
                 "选择第一个img TAG",
-                ImageTagPageProcess.createChoiceTag());
+                ImageTagPageProcess.createChoiceTag("tag2"));
 
         DefaultPager<Boolean> 前往发布商品信息页 = IPagerFactory.create(
                 IDLE_FISH_POSTED_IMG_PROCESS,

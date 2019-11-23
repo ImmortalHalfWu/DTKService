@@ -62,7 +62,7 @@ public class FishIdleApp implements IApp<IdleFishProductBean, UserInfoBean> {
         for (String tag : imgTag) {
             control.addPager(idleFishControl.前往图片标签选择页);
             control.addPager(idleFishControl.输入商品Tag(tag));
-            control.addPager(idleFishControl.选择第一个imgTAG);
+            control.addPager(idleFishControl.选择第一个imgTAG(tag));
         }
 
         control.addPager(idleFishControl.前往发布商品信息页);
