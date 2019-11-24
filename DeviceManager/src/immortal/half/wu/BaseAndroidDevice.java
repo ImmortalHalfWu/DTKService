@@ -8,7 +8,6 @@ import java.awt.*;
 
 public class BaseAndroidDevice implements IAndroidDevice {
 
-    private static final String TAG = "BaseAndroidDevice";
     private String deviceId;
     private Point dxSize;
 
@@ -30,13 +29,13 @@ public class BaseAndroidDevice implements IAndroidDevice {
     @Override
     public boolean isInstallApp(@org.jetbrains.annotations.NotNull String appPackageName) {
         boolean installApp = ADBManager.getInstance().isInstallApp(deviceId, appPackageName);
-        LogUtil.i(TAG, "设备" + deviceId + "是否安装" + appPackageName + "  " + installApp);
+        LogUtil.i(DeviceManagerUtil.TAG, "设备" + deviceId + "是否安装" + appPackageName + "  " + installApp);
         return installApp;
     }
 
     @Override
     public void installApp(String apkPath, @org.jetbrains.annotations.NotNull String appPackageName) {
-        LogUtil.i(TAG, "设备" + deviceId +
+        LogUtil.i(DeviceManagerUtil.TAG, "设备" + deviceId +
                 "安装" + appPackageName + "  " +
                 ADBManager.getInstance().installApp(deviceId, apkPath, appPackageName));
     }

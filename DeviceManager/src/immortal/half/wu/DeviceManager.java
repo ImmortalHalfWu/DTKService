@@ -1,6 +1,6 @@
 package immortal.half.wu;
 
-import immortal.half.wu.adbs.ADBManager;
+import immortal.half.wu.devices.DevicesStatueReader;
 import immortal.half.wu.devices.interfaces.IAndroidDevice;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,16 +11,18 @@ import java.util.Map;
 
 public class DeviceManager {
 
-    private static final String TAG = "DeviceManager";
-    
     private static DeviceManager instance;
 
     @NotNull
     private final Map<String, IAndroidDevice> androidDevices;
 
+    @NotNull
+    private final List<IDeviceConnectListener> deviceConnectListeners;
+
     private DeviceManager() {
+        DevicesStatueReader.getInstance().setListeners(mStatueListener);
         androidDevices = new HashMap<>();
-        ADBManager.getInstance();
+        deviceConnectListeners = new ArrayList<>();
     }
 
     public static DeviceManager getInstance() {
@@ -34,21 +36,46 @@ public class DeviceManager {
         return instance;
     }
 
+    public void registerDeviceConnectListener(IDeviceConnectListener listener) {
+        if (listener != null) {
+            deviceConnectListeners.add(listener);
+        }
+    }
+
     @NotNull
     public List<IAndroidDevice> getAllAndroidDevice() {
+        ArrayList<IAndroidDevice> iAndroidDevices = new ArrayList<>(androidDevices.values());
+        LogUtil.i(DeviceManagerUtil.TAG,"获取所有Android设备：" + iAndroidDevices);
+        return iAndroidDevices;
+    }
 
-        String[] deviceIds = ADBManager.getInstance().adbFindAllDevice();
-
-        for (String deviceId :
-                deviceIds) {
+    private DevicesStatueReader.StatueListener mStatueListener = new DevicesStatueReader.StatueListener() {
+        @Override
+        public void deviceConnect(String deviceId) throws Exception {
             if (!androidDevices.containsKey(deviceId)) {
-                androidDevices.put(deviceId, new BaseAndroidDevice(deviceId));
+
+                BaseAndroidDevice baseAndroidDevice = new BaseAndroidDevice(deviceId);
+                androidDevices.put(deviceId, baseAndroidDevice);
+
+                for (IDeviceConnectListener listener : deviceConnectListeners) {
+                    listener.deviceConnect(deviceId, baseAndroidDevice);
+                }
+
             }
         }
 
-        ArrayList<IAndroidDevice> iAndroidDevices = new ArrayList<>(androidDevices.values());
-        LogUtil.i(TAG,"获取所有Android设备：" + iAndroidDevices);
-        return iAndroidDevices;
-    }
+        @Override
+        public void deviceDisconnect(String deviceId) throws Exception {
+            if (androidDevices.containsKey(deviceId)) {
+
+                IAndroidDevice iAndroidDevice = androidDevices.get(deviceId);
+                androidDevices.remove(deviceId);
+
+                for (IDeviceConnectListener listener : deviceConnectListeners) {
+                    listener.deviceDisConnect(deviceId, iAndroidDevice);
+                }
+            }
+        }
+    };
 
 }
