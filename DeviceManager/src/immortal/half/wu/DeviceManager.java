@@ -73,6 +73,7 @@ public class DeviceManager {
 
                 for (IDeviceConnectListener listener : deviceConnectListeners) {
                     listener.deviceDisConnect(deviceId, iAndroidDevice);
+                    iAndroidDevice.disconnect();
                 }
             }
         }

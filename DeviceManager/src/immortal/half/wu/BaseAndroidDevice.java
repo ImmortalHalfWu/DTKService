@@ -3,16 +3,21 @@ package immortal.half.wu;
 import com.sun.istack.internal.NotNull;
 import immortal.half.wu.adbs.ADBManager;
 import immortal.half.wu.devices.interfaces.IAndroidDevice;
+import immortal.half.wu.executor.ExecutorManager;
+import immortal.half.wu.executor.interfaces.ITimeOutExecutorService;
 
 import java.awt.*;
 
 public class BaseAndroidDevice implements IAndroidDevice {
 
-    private String deviceId;
-    private Point dxSize;
+    private final String deviceId;
+    private final Point dxSize;
+    private final ITimeOutExecutorService executorService;
 
     BaseAndroidDevice(@NotNull String deviceId) {
         this.deviceId = deviceId;
+        executorService = ExecutorManager.createTimeOutExecutorService(deviceId);
+        dxSize =  ADBManager.getInstance().getDxSize(deviceId);
     }
 
     @Override
@@ -53,7 +58,25 @@ public class BaseAndroidDevice implements IAndroidDevice {
     @org.jetbrains.annotations.NotNull
     @Override
     public Point getDxSize() {
-        return dxSize == null ? dxSize = ADBManager.getInstance().getDxSize(deviceId) : dxSize;
+        return dxSize;
+    }
+
+    @Override
+    public ITimeOutExecutorService getExecutorService() {
+        return executorService;
+    }
+
+    @Override
+    public void disconnect() {
+        try {
+            executorService.shutdownNow();
+            LogUtil.i(DeviceManagerUtil.TAG, "设备" + deviceId + "断开，释放线程池成功");
+        } catch (Exception e) {
+            LogUtil.i(DeviceManagerUtil.TAG, "设备" + deviceId + "断开，释放线程池失败：" + e.getMessage());
+            try {
+                executorService.shutdownNow();
+            } catch (Exception ignored) {}
+        }
     }
 
     @org.jetbrains.annotations.NotNull

@@ -40,7 +40,7 @@ public class App2 {
 
     public static void test() {
 
-        IApp<IdleFishProductBean, UserInfoBean> fishIdleApp = AppFactory.createFishIdleApp(deviceId);
+        IApp<IdleFishProductBean, UserInfoBean> fishIdleApp = AppFactory.createFishIdleApp(deviceId, ExecutorManager.createTimeOutExecutorService("App2.test"));
         ArrayList<File> files = new ArrayList<>(9);
         files.add(new File("123"));files.add(new File("123"));files.add(new File("123"));files.add(new File("123"));files.add(new File("123"));files.add(new File("123"));files.add(new File("123"));files.add(new File("123"));files.add(new File("123"));
         ArrayList<String> tags = new ArrayList<>(4);

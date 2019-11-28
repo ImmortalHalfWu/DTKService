@@ -1,7 +1,6 @@
 package immotal.half.wu.appManager.impls.idlefishs;
 
 import immortal.half.wu.adbs.ADBManager;
-import immortal.half.wu.executor.ExecutorManager;
 import immortal.half.wu.executor.interfaces.IJobListener;
 import immortal.half.wu.executor.interfaces.ITimeOutExecutorService;
 import immotal.half.wu.appManager.beans.IdleFishProductBean;
@@ -24,10 +23,10 @@ public class FishIdleApp implements IApp<IdleFishProductBean, UserInfoBean> {
     @NotNull
     private final ITimeOutExecutorService timeOutExecutorService;
 
-    public FishIdleApp(String deviceId) {
+    public FishIdleApp(@NotNull String deviceId, @NotNull ITimeOutExecutorService executorService) {
         idleFishControl = new IdleFishModel();
         deviceInfoBean = new DeviceInfoBean(deviceId, ADBManager.getInstance().getDxSize(deviceId));
-        timeOutExecutorService = ExecutorManager.createTimeOutExecutorService(deviceId);
+        timeOutExecutorService = executorService;
     }
 
     @Override
