@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 class ADBUtils {
     private static final String TAG = "ADB";
     private final static String ADB_PHONE_ROOT_DIR = "/sdcard/";
-    private final static String ADB = "adb -s ";
+    private static String ADB = "adb -s ";
     private final static String ADB_UI_AUTO_MATOR = " shell uiautomator dump " + ADB_PHONE_ROOT_DIR;
     private final static String ADB_PULL_FILE = " pull " + ADB_PHONE_ROOT_DIR;
     private final static String ADB_PUSH_FILE = " push ";
@@ -21,7 +21,6 @@ class ADBUtils {
     private final static String ADB_IDLE_FISH_IS_RUNNING = " shell dumpsys activity activities | grep ResumedActivity";
     private final static String ADB_IDLE_FISH_IS_INSTANCES = " shell pm list packages | grep com.taobao.idlefish";
     private final static String ADB_ALL_APP_PACKAGE = " shell pm list packages";
-    private final static String ADB_KEY_BOARD_IS_INSTANCES = " shell pm list packages | grep adbKeyBoardIsInstance";
     private final static String ADB_INSTANCES = " install -r ";
     private final static String ADB_IDLE_FISH_UNINSTANCES = " uninstall com.taobao.idlefish";
     private final static String ADB_UNINSTALL = " uninstall ";
@@ -33,8 +32,12 @@ class ADBUtils {
     private final static String ADB_DELETE_FILE = " shell rm ";
     private final static String ADB_TOP_ACTIVITY = " shell dumpsys activity activities | grep ResumedActivity ";
     private final static String ADB_SCAN_FILE = " shell am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file://";
-    private final static String ADB_CHANGE_KEY_BOARD = " shell ime set com.android.adbkeyboard/.AdbIME";
+    private final static String ADB_CHANGE_KEY_BOARD = " shell ime set ";
     private final static String ADB_WM_SIZE = " shell wm size";
+
+    static void setADBPath(String path) {
+        ADB = path + ADB;
+    }
 
     synchronized static boolean adbStartIdleFishMainActivity(String deviceAddr) {
         return runInCmd(ADB + deviceAddr + ADB_START_IDLE_FISH_MAIN_ACTIVITY, "Starting:");
@@ -58,10 +61,6 @@ class ADBUtils {
         return runInCmd(ADB + deviceAddr + ADB_IDLE_FISH_IS_INSTANCES, "com.taobao.idlefish");
     }
 
-    synchronized static boolean adbKeyBoardIsInstance(String deviceAddr) {
-        return runInCmd(ADB + deviceAddr + ADB_KEY_BOARD_IS_INSTANCES, "com.android.adbkeyboard");
-    }
-
     synchronized static boolean adbIdleFishUNInstance(String deviceAddr) {
         return runInCmd(ADB + deviceAddr + ADB_IDLE_FISH_UNINSTANCES, "com.taobao.idlefish");
     }
@@ -70,12 +69,8 @@ class ADBUtils {
         return runInCmd(ADB + deviceAddr + ADB_INSTANCES + apkPath, "com.taobao.idlefish");
     }
 
-    synchronized static boolean adbKeyBoardInstance(String deviceAddr, String apkPath) {
-        return runInCmd(ADB + deviceAddr + ADB_INSTANCES + apkPath, "com.android.adbkeyboard");
-    }
-
     synchronized static boolean adbInstallApk(String deviceAddr, String apkPath, @NotNull String packageName) {
-        return runInCmd(ADB + deviceAddr + ADB_INSTANCES + apkPath, packageName);
+        return runInCmd(ADB + deviceAddr + ADB_INSTANCES + apkPath, "Install");
     }
 
     synchronized static boolean adbUNInstallApk(String deviceAddr, @NotNull String packageName) {
@@ -137,8 +132,8 @@ class ADBUtils {
         return runInCmd(ADB + deviceAddr + ADB_INPUT_KEY + key, "");
     }
 
-    synchronized static boolean adbChangeKeyBoard(String deviceAddr) {
-        return runInCmd(ADB + deviceAddr + ADB_CHANGE_KEY_BOARD, "selected");
+    synchronized static boolean adbChangeKeyBoard(String deviceAddr, String keyBoardName) {
+        return runInCmd(ADB + deviceAddr + ADB_CHANGE_KEY_BOARD + keyBoardName, "selected");
     }
 
     synchronized static String adbWmSize(String deviceId) {
@@ -172,9 +167,8 @@ class ADBUtils {
                 return erroResult;
             }
 
-            String result = readCMDResult(process.getInputStream());
-//            MLog.logi("执行结果：" + result);
-            return result;
+            //            MLog.logi("执行结果：" + result);
+            return readCMDResult(process.getInputStream());
 
         } catch (IOException e) {
             e.printStackTrace();

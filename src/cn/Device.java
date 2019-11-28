@@ -1,30 +1,29 @@
 package cn;
 
-import immortal.half.wu.DeviceManager;
-import immortal.half.wu.IDeviceConnectListener;
-import immortal.half.wu.LogUtil;
+import immortal.half.wu.IPhoneConnectListener;
+import immortal.half.wu.PhoneManager;
 import immortal.half.wu.devices.interfaces.IAndroidDevice;
 
 public class Device {
 
     public static void test() {
 
-        DeviceManager.getInstance().registerDeviceConnectListener(new IDeviceConnectListener() {
+        PhoneManager.getInstance().registerDeviceConnectListener(new IPhoneConnectListener() {
             @Override
             public void deviceConnect(String deviceId, IAndroidDevice androidDevice) throws Exception {
-                LogUtil.i("Device", "有设备连接：" + deviceId + "___" + androidDevice.toString());
-                LogUtil.i("Device", DeviceManager.getInstance().getAllAndroidDevice());
+//                LogUtil.i("Device", "有设备连接：" + deviceId + "___" + androidDevice.toString());
+//                LogUtil.i("Device", PhoneManager.getInstance().getAllAndroidDevice());
 
             }
 
             @Override
             public void deviceDisConnect(String deviceId, IAndroidDevice androidDevice) throws Exception {
-                LogUtil.i("Device", "有设备断开连接：" + deviceId + "___" + androidDevice.toString());
-                LogUtil.i("Device", DeviceManager.getInstance().getAllAndroidDevice());
+//                LogUtil.i("Device", "有设备断开连接：" + deviceId + "___" + androidDevice.toString());
+//                LogUtil.i("Device", PhoneManager.getInstance().getAllAndroidDevice());
             }
         });
 
-//        List<IAndroidDevice> allAndroidDevice = DeviceManager.getInstance().getAllAndroidDevice();
+//        List<IAndroidDevice> allAndroidDevice = PhoneManager.getInstance().getAllAndroidDevice();
 //        for (IAndroidDevice androidDevice :
 //                allAndroidDevice) {
 //            Point dxSize = androidDevice.getDxSize();

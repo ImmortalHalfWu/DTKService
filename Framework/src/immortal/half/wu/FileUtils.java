@@ -28,11 +28,6 @@ public class FileUtils {
     public final static String FILE_NAME_NEW_PRODUCT_JSON = "NewProductJson.json";
     public final static String FILE_NAME_POSTED_PRODUCT_JSON = "PostedProductJson.json";
 
-    public final static String FILE_NAME_KEY_BOARD_APK = "ADBKeyboard.apk";
-    public final static String FILE_NAME_ADB_MAC = "ADB_MAC.zip";
-    public final static String FILE_NAME_ADB_WIN = "ADB_WIN.zip";
-
-
     public static void init() {
         mkDir(DIR_PATH_IMG);
         mkDir(DIR_PATH_XML);
@@ -42,20 +37,6 @@ public class FileUtils {
         mkDir(DIR_PATH_OTHER);
         mkDir(DIR_PATH_ADB);
     }
-
-
-    static String getResPath() {
-        return FileUtils.class.getResource("res").getPath();
-    }
-
-    public static String getKeyboardAPKPath() {
-        return FileUtils.class.getResource("res/" + FILE_NAME_KEY_BOARD_APK).getPath();
-    }
-
-    public static String getADBZipPath() {
-        return FileUtils.class.getResource("res/" + FILE_NAME_ADB_MAC).getPath();
-    }
-
 
     /**
      * 获取windows/linux的项目根目录

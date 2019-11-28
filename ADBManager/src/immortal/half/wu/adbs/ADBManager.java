@@ -1,12 +1,10 @@
 package immortal.half.wu.adbs;
 
+import immortal.half.wu.ADBInit;
 import immortal.half.wu.FileUtils;
-import immortal.half.wu.OSInfo;
-import immortal.half.wu.utils.ZIPUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
-import java.io.File;
 import java.util.ArrayList;
 
 public class ADBManager {
@@ -25,29 +23,14 @@ public class ADBManager {
     }
 
     private ADBManager() {
-        initFile();
+        init();
     }
 
-    private void initFile() {
+    private void init() {
 
         FileUtils.init();
-
-        try {
-            FileUtils.copy(new File(FileUtils.getKeyboardAPKPath()), new File(FileUtils.DIR_PATH_OTHER + FileUtils.FILE_NAME_KEY_BOARD_APK));
-
-            if (OSInfo.isWindows()) {
-                FileUtils.copy(new File(FileUtils.getADBZipPath()), new File(FileUtils.DIR_PATH_OTHER + FileUtils.FILE_NAME_ADB_WIN));
-                ZIPUtil.unZip(new File(FileUtils.DIR_PATH_OTHER + FileUtils.FILE_NAME_ADB_WIN), FileUtils.DIR_PATH_ADB);
-            }
-
-            if (OSInfo.isMacOS() || OSInfo.isMacOSX()) {
-                FileUtils.copy(new File(FileUtils.getADBZipPath()), new File(FileUtils.DIR_PATH_OTHER + FileUtils.FILE_NAME_ADB_MAC));
-                ZIPUtil.unZip(new File(FileUtils.DIR_PATH_OTHER + FileUtils.FILE_NAME_ADB_MAC), FileUtils.DIR_PATH_ADB);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        String path_adb = ADBInit.init().getPATH_ADB();
+        ADBUtils.setADBPath(path_adb);
 
     }
 
@@ -55,10 +38,6 @@ public class ADBManager {
     @NotNull
     public IADBBuilder createBuild() {
         return new ADBBuilder();
-    }
-
-    public String runInCmd(String cmd) {
-        return ADBUtils.runInCmd(cmd);
     }
 
     public String findTopActivityName(String deviceAddr) {
@@ -119,15 +98,17 @@ public class ADBManager {
         ADBUtils.adbUNInstallApk(deviceId, appPackageName);
     }
 
-    public void choiceTextInputKeyBoard(String deviceId) {
-        ADBUtils.adbChangeKeyBoard(deviceId);
+    public void choiceTextInputKeyBoard(String deviceId, String keyBoardName) {
+        ADBUtils.adbChangeKeyBoard(deviceId, keyBoardName);
     }
 
     @NotNull
     public Point getDxSize(String deviceId) {
         String size = ADBUtils.adbWmSize(deviceId)
                 .replace("Physical size: ", "")
-                .replace("\n", "").replace("\t", "");
+                .replace("\n", "")
+                .replace("\r", "")
+                .replace("\t", "");
         String[] xes = size.split("x");
         return new Point(Integer.parseInt(xes[0]), Integer.parseInt(xes[1]));
     }
@@ -143,4 +124,5 @@ public class ADBManager {
     public boolean closeApp(String deviceAddr, String packageName) {
         return ADBUtils.closeApp(deviceAddr, packageName);
     }
+
 }

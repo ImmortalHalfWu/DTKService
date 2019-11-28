@@ -8,6 +8,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * see AppControl
+ */
+@Deprecated
 public class AppManager {
 
     private static final String TAG = "AppManager";
