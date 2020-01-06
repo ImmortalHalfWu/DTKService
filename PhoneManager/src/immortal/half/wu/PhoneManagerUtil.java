@@ -12,16 +12,13 @@ public class PhoneManagerUtil {
 
     static void initPhoneDevice(IAndroidDevice device) {
 
-        ADBManager adb = ADBManager.getInstance();
         String deviceId = device.getDeviceId();
 
         if (!device.isInstallApp(ADB_KEY_BOARD_PACKAGE)) {
             LogUtil.i(TAG, "为" + deviceId + "安装ADB键盘，并切换");
-            adb.installApp(
-                    deviceId,
-                    PhoneManagerUtil.class.getResource("res/ADBKeyboard.apk").getPath(),
-                    ADB_KEY_BOARD_PACKAGE
-            );
+
+            device.installApp(PhoneManagerUtil.class.getResource("res/ADBKeyboard.apk").getPath(),
+                    ADB_KEY_BOARD_PACKAGE);
 
             if (!device.isInstallApp(ADB_KEY_BOARD_PACKAGE)) {
                 LogUtil.i(TAG, "为" + deviceId + "安装ADB键盘失败！");

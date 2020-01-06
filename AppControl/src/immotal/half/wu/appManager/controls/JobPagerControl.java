@@ -75,7 +75,7 @@ public class JobPagerControl<DoResultType> implements IJobWithTimeOut<DoResultTy
                 page = iPage;
 
                 if (xml != null && page.check(xml, deviceInfoBean, adbManager)) {
-                    LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务，" + iPage + "复用xml check成功");
+//                    LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务，" + iPage + "复用xml check成功");
                 } else {
                     xml = AppManagerUtil.readUiInfo(deviceInfoBean, adbManager);
                     if (!page.check(xml, deviceInfoBean, adbManager)) {
@@ -84,7 +84,7 @@ public class JobPagerControl<DoResultType> implements IJobWithTimeOut<DoResultTy
                         return null;
 //                    break;
                     }
-                    LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务，" + iPage + "check成功");
+//                    LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务，" + iPage + "check成功");
                 }
 
 
@@ -98,7 +98,7 @@ public class JobPagerControl<DoResultType> implements IJobWithTimeOut<DoResultTy
                     throw new InterruptedException();
                 }
 
-                LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务," + iPage + "process成功：" + result );
+//                LogUtil.d(AppManagerUtil.TAG, "轮询IPager任务," + iPage + "process成功：" + result );
 
             } while (!page.isComplete(xml, deviceInfoBean, adbManager));
 

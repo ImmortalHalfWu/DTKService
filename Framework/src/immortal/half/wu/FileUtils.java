@@ -193,11 +193,8 @@ public class FileUtils {
 
     /**
      * 读取文件
-     *
-     * @param Path
-     * @return
      */
-    @Nullable
+    @NotNull
     public static String readFile(@NotNull String Path) {
         BufferedReader reader = null;
         String laststr = "";
@@ -232,7 +229,6 @@ public class FileUtils {
      *
      * @param folderPath 路径
      * @param queryStr   模糊查询字符串
-     * @return
      */
     @NotNull
     public static HashMap<String, Object> getFilesName(@NotNull String folderPath, String queryStr) {
@@ -270,9 +266,6 @@ public class FileUtils {
 
     /**
      * 以行为单位读取文件，读取到最后一行
-     *
-     * @param filePath
-     * @return
      */
     @NotNull
     public static List<String> readFileContent(@NotNull String filePath) {
@@ -303,10 +296,6 @@ public class FileUtils {
 
     /**
      * 读取指定行数据 ，注意：0为开始行
-     *
-     * @param filePath
-     * @param lineNumber
-     * @return
      */
     public static String readLineContent(@NotNull String filePath, int lineNumber) {
         BufferedReader reader = null;
@@ -686,13 +675,19 @@ public class FileUtils {
     }
 
     //链接url下载图片
-    public static File downloadPicture(@NotNull String urlList, @NotNull String path) {
-        URL url = null;
+    public static File downloadPicture(@NotNull String urlList) {
+        URL url;
         try {
-            url = new URL(urlList);
-            DataInputStream dataInputStream = new DataInputStream(url.openStream());
 
-            File file = new File(path);
+            url = new URL(urlList);
+            String savePath = DIR_PATH_IMG + new File(url.getFile()).getName();
+            File file = new File(savePath);
+            if (file.exists() && file.delete()) {
+                LogUtil.d("downloadPicture", "图片存在并删除");
+//                return file;
+            }
+
+            DataInputStream dataInputStream = new DataInputStream(url.openStream());
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             ByteArrayOutputStream output = new ByteArrayOutputStream();
 

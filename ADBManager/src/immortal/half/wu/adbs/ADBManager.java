@@ -125,4 +125,12 @@ public class ADBManager {
         return ADBUtils.closeApp(deviceAddr, packageName);
     }
 
+    public boolean adbPushFile(String deviceAddr, @NotNull String fromPath, String toFileName) {
+        return ADBUtils.adbPushFile(deviceAddr, fromPath, toFileName);
+    }
+
+    public boolean adbScanFile(String deviceAddr, String fileName) {
+        return ADBUtils.adbScanFile(deviceAddr, fileName);
+    }
+
 }

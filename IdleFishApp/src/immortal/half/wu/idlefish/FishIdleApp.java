@@ -11,6 +11,7 @@ import immotal.half.wu.appManager.pagers.beans.DeviceInfoBean;
 import immotal.half.wu.appManager.pagers.beans.UserInfoBean;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,12 +51,21 @@ class FishIdleApp implements IApp<IdleFishProductBean, UserInfoBean> {
 
     @Override
     public void postProduct(@NotNull IdleFishProductBean idleFishProductBean, @NotNull IAppCallBack<Boolean> callBack) {
+
+        List<File> imageList = idleFishProductBean.getImageList();
+        ADBManager adb = ADBManager.getInstance();
+        for (File imgFile :
+                imageList) {
+            adb.adbPushFile(deviceInfoBean.getDeviceId(), imgFile.getAbsolutePath(), imgFile.getName());
+            adb.adbScanFile(deviceInfoBean.getDeviceId(), imgFile.getName());
+        }
+
         JobPagerControl<Boolean> control = new JobPagerControl<>(ADBManager.getInstance(), deviceInfoBean);
         control.addPager(idleFishControl.去主页面);
         control.addPager(idleFishControl.取消升级);
         control.addPager(idleFishControl.前往发布类型选择页);
         control.addPager(idleFishControl.前往发布闲置);
-        control.addPager(idleFishControl.发布闲置图片选择imgs(idleFishProductBean.getImageList().size()));
+        control.addPager(idleFishControl.发布闲置图片选择imgs(9));
         control.addPager(idleFishControl.前往图片编辑页);
 
         List<String> imgTag = idleFishProductBean.getImgTag();

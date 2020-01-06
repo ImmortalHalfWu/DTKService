@@ -55,14 +55,20 @@ public class ImageTagPageProcess {
 
                 if (firstLinePoint != null) {
                     adb.createBuild().addClick(firstLinePoint).send(deviceInfo.getDeviceId());
-                    return true;
+                } else {
+                    adb.createBuild().addBackClick().send(deviceInfo.getDeviceId());
                 }
-                return false;
+                return true;
             }
 
             @NotNull
             @Override
             public Boolean doPageProcess(@NotNull String xml, Map<String, Point> pointMap, PagerInfoBean pagerInfo, @NotNull DeviceInfoBean deviceInfo, @NotNull ADBManager adb) {
+                return true;
+            }
+
+            @Override
+            public boolean checkPager(String xml, PagerInfoBean pagerInfo, DeviceInfoBean deviceInfo, ADBManager adb) {
                 return true;
             }
 

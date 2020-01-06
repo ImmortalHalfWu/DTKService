@@ -16,7 +16,7 @@ public class PostProductNumKeyProcess extends BasePageProcess<Boolean> {
     private final static String PAGE_POINT_KEY_BOARD_OK = "确认";
     private final static Map<String, Map<String, String>> filter =
             new PointFilterBuilder()
-                    .addText("0").next("0")
+                    .addText("0").addIndex("10").next("0")
                     .addText("1").next("1")
                     .addText("2").next("2")
                     .addText("3").next("3")

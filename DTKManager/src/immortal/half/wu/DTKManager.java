@@ -5,6 +5,7 @@ import immortal.half.wu.beans.results.*;
 import immortal.half.wu.http.MHttpClient;
 import immortal.half.wu.http.SimpleCallBack;
 import immortal.half.wu.utils.FinalString;
+import immortal.half.wu.utils.Keys;
 import immortal.half.wu.utils.SignMD5Util;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,6 +25,10 @@ public class DTKManager {
                 dtkManager = new DTKManager(appSecret, appKey);
             }
         }
+    }
+
+    public static void init() {
+        init(Keys.Key, Keys.Value);
     }
 
     private DTKManager(String appSecret, String appKey) {

@@ -1,8 +1,8 @@
 package cn;
 
 import immortal.half.wu.DTKManager;
-import immortal.half.wu.beans.params.builds.ParamsProductSearchBeanBuilder;
-import immortal.half.wu.beans.results.JsonProductSearchBean;
+import immortal.half.wu.beans.params.builds.ParamsProductInfoBeanBuilder;
+import immortal.half.wu.beans.results.JsonProductInfoBean;
 import immortal.half.wu.http.SimpleCallBack;
 import immortal.half.wu.utils.JsonUtil;
 import okhttp3.Call;
@@ -29,18 +29,18 @@ public class DTK {
 //        }, new ParamsProductListBeanBuilder().createParamsProductListBean("1"));
 //
 //
-//        DTKManager.getProductInfo(new SimpleCallBack<JsonProductInfoBean>() {
-//            @Override
-//            public void onResponse(Call call, JsonProductInfoBean resultBean, String resultString) throws IOException {
-//                System.out.println(resultString);
-//                System.out.println(JsonUtil.toJson(resultBean));
-//            }
-//
-//            @Override
-//            public void onFail(Call call, IOException e) {
-//
-//            }
-//        }, new ParamsProductInfoBeanBuilder().setId("22645522").createParamsProductInfoBean());
+        DTKManager.getProductInfo(new SimpleCallBack<JsonProductInfoBean>() {
+            @Override
+            public void onResponse(Call call, JsonProductInfoBean resultBean, String resultString) throws IOException {
+                System.out.println(resultString);
+                System.out.println(JsonUtil.toJson(resultBean));
+            }
+
+            @Override
+            public void onFail(Call call, IOException e) {
+
+            }
+        }, new ParamsProductInfoBeanBuilder().setId("23621527").createParamsProductInfoBean());
 
 
 //        DTKManager.getProductCategorys(new SimpleCallBack<JsonProductCategoryBean>() {
@@ -112,18 +112,18 @@ public class DTK {
 //        }, new ParamsProduct9BeanBuilder().createParamsProduct9Bean("100", "2", "2"));
 
 
-        DTKManager.getProductForSearch(new SimpleCallBack<JsonProductSearchBean>() {
-            @Override
-            public void onResponse(Call call, JsonProductSearchBean resultBean, String resultString) throws IOException {
-                System.out.println(resultString);
-                System.out.println(JsonUtil.toJson(resultBean));
-            }
-
-            @Override
-            public void onFail(Call call, IOException e) {
-
-            }
-        }, new ParamsProductSearchBeanBuilder().createParamsProductSearchBean(0, 1, 20, "Aola'KD洗发水持久留香"));
+//        DTKManager.getProductForSearch(new SimpleCallBack<JsonProductSearchBean>() {
+//            @Override
+//            public void onResponse(Call call, JsonProductSearchBean resultBean, String resultString) throws IOException {
+//                System.out.println(resultString);
+//                System.out.println(JsonUtil.toJson(resultBean));
+//            }
+//
+//            @Override
+//            public void onFail(Call call, IOException e) {
+//
+//            }
+//        }, new ParamsProductSearchBeanBuilder().createParamsProductSearchBean(0, 1, 20, "袜子"));
 
 
 //        DTKManager.getUrlConvert(new SimpleCallBack<JsonUrlConvertBean>() {

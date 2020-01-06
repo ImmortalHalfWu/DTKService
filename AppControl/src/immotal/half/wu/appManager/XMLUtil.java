@@ -1,6 +1,7 @@
 package immotal.half.wu.appManager;
 
 import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 import immortal.half.wu.FileUtils;
 import org.dom4j.*;
 
@@ -348,12 +349,12 @@ public class XMLUtil {
     /**
      * 获取文档中的所有指定元素
      */
-    public static Point findPointByAttrKeyValueEndWith(
+    public static @Nullable Point findPointByAttrKeyValueEndWith(
             @org.jetbrains.annotations.NotNull String xml,
             String key,
             @org.jetbrains.annotations.NotNull @NotNull String value) {
 
-        final Point[] point = {new Point(0, 0)};
+        final Point[] point = new Point[1];
 
         try {
             loopXMLAllElement(0, findRootElement(xml), new LoopXMLNodeCallBack() {

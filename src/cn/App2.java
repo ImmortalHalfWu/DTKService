@@ -1,5 +1,6 @@
 package cn;
 
+import immortal.half.wu.FileUtils;
 import immortal.half.wu.LogUtil;
 import immortal.half.wu.adbs.ADBManager;
 import immortal.half.wu.executor.ExecutorManager;
@@ -33,9 +34,16 @@ public class App2 {
         ADBManager.getInstance();
         IApp<IdleFishProductBean, UserInfoBean> fishIdleApp = IdleFishAppFactory.createFishIdleApp(deviceId, ExecutorManager.createTimeOutExecutorService("App2.test"));
         ArrayList<File> files = new ArrayList<>(9);
-        files.add(new File("123"));files.add(new File("123"));files.add(new File("123"));files.add(new File("123"));files.add(new File("123"));files.add(new File("123"));files.add(new File("123"));files.add(new File("123"));files.add(new File("123"));
-        ArrayList<String> tags = new ArrayList<>(4);
-        tags.add("tag1");tags.add("tag2");tags.add("tag3");tags.add("tag4");
+
+        String[] imgUrls = "//img.alicdn.com/imgextra/i1/4003406273/O1CN01k8lZZc1wD55u1WvKK_!!4003406273.jpg,//img.alicdn.com/imgextra/i2/4003406273/O1CN01kpqp6o1wD55ReJnfZ_!!4003406273.jpg,//img.alicdn.com/imgextra/i1/4003406273/O1CN013cx1Vz1wD55TvoP6v_!!4003406273.jpg,//img.alicdn.com/imgextra/i1/4003406273/O1CN01FxwYQq1wD55iPU1ib_!!4003406273.jpg,//img.alicdn.com/imgextra/i1/4003406273/O1CN01Rh5FrT1wD55QJrAht_!!4003406273.jpg,//img.alicdn.com/imgextra/i3/4003406273/O1CN01Jt3sbV1wD55Q4XYEX_!!4003406273.jpg,//img.alicdn.com/imgextra/i4/4003406273/O1CN014iVrXE1wD55P5skLh_!!4003406273.jpg,//img.alicdn.com/imgextra/i4/4003406273/O1CN01C4oQSt1wD55UfBCp2_!!4003406273.jpg,//img.alicdn.com/imgextra/i4/4003406273/O1CN01Vf2BL21wD55P5qXCC_!!4003406273.jpg,//img.alicdn.com/imgextra/i1/4003406273/O1CN01UqqEsT1wD55SCHfEz_!!4003406273.jpg,//img.alicdn.com/imgextra/i2/4003406273/O1CN01n2ImIB1wD55SCFNrm_!!4003406273.jpg,//img.alicdn.com/imgextra/i3/4003406273/O1CN01JuNxcX1wD55Q4WTlR_!!4003406273.jpg,//img.alicdn.com/imgextra/i1/4003406273/O1CN01ank8Ai1wD55P5rPEW_!!4003406273.jpg,//img.alicdn.com/imgextra/i3/4003406273/O1CN01V0346P1wD55T9fXKs_!!4003406273.jpg,//img.alicdn.com/imgextra/i3/4003406273/O1CN01d41N671wD55Tvn41k_!!4003406273.jpg".split(",");
+
+        for (String url :
+                imgUrls) {
+            files.add(FileUtils.downloadPicture("https:" + url));
+        }
+
+        ArrayList<String> tags = new ArrayList<>(0);
+//        tags.add("tag1");tags.add("tag2");tags.add("tag3");tags.add("tag4");
 
         IdleFishProductBean idleFishProductBean = new IdleFishProductBean(
                 "title", "info",
