@@ -29,7 +29,7 @@ public class ImageTagPageProcess {
             public Boolean doPageProcess(String xml, @org.jetbrains.annotations.NotNull @NotNull Map<String, Point> pointMap, PagerInfoBean pagerInfo, @org.jetbrains.annotations.NotNull @NotNull DeviceInfoBean deviceInfo, @org.jetbrains.annotations.NotNull @NotNull ADBManager adb) {
                 Point point = pointMap.get(PAGE_POINT_KEY_POST_PRODUCT_TAG_EDIT);
                 if (point != null) {
-                    adb.createBuild().addClick(point).addText(tagName).send(deviceInfo.getDeviceId());
+                    adb.createBuild().addClick(new Point(point.x, point.y + 20)).addText(tagName).send(deviceInfo.getDeviceId());
                     return true;
                 }
                 return false;
@@ -37,13 +37,18 @@ public class ImageTagPageProcess {
 
             @Override
             public Map<String, Map<String, String>> getUiFilter(String xml, PagerInfoBean pagerInfo, DeviceInfoBean deviceInfo, ADBManager adb) {
-                return filter;
+                 return filter;
             }
         };
     }
 
+
     public static BasePageProcess<Boolean> createChoiceTag(@org.jetbrains.annotations.NotNull String tagName) {
         return new BasePageProcess<Boolean>() {
+
+            private PointFilterBuilder pointFilterBuilder = new PointFilterBuilder()
+                    .addText(tagName + "自定义标签")
+                    .next(tagName + tagName.hashCode());
 
             @Nullable
             @Override
@@ -67,17 +72,14 @@ public class ImageTagPageProcess {
                 return true;
             }
 
-            @Override
-            public boolean checkPager(String xml, PagerInfoBean pagerInfo, DeviceInfoBean deviceInfo, ADBManager adb) {
-                return true;
-            }
+//            @Override
+//            public boolean checkPager(String xml, PagerInfoBean pagerInfo, DeviceInfoBean deviceInfo, ADBManager adb) {
+//                return true;
+//            }
 
             @Override
             public Map<String, Map<String, String>> getUiFilter(String xml, PagerInfoBean pagerInfo, DeviceInfoBean deviceInfo, ADBManager adb) {
-                return new PointFilterBuilder()
-                        .addText(tagName + "自定义标签")
-                        .next(tagName + tagName.hashCode())
-                        .create();
+                return pointFilterBuilder.create();
             }
         };
     }
